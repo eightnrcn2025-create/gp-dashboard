@@ -989,15 +989,24 @@ function renderPieChart(sources) {
         return name + '  ' + pct + '%';
       }
     },
-    graphic: [{
-      type: 'text', left: '50%', top: '37%',
-      style: { text: total.toLocaleString(), font: 'bold 20px sans-serif', fill: '#e6edf3', textAlign: 'center' },
-      z: 100
-    },{
-      type: 'text', left: '50%', top: '48%',
-      style: { text: '昨日总计', font: '11px sans-serif', fill: '#6e7681', textAlign: 'center' },
-      z: 100
-    }],
+    title: [
+      {
+        text: total.toLocaleString(),
+        left: '50%',
+        top: '36%',
+        textAlign: 'center',
+        textVerticalAlign: 'middle',
+        textStyle: { fontSize: 22, fontWeight: 'bold', color: '#ffffff' }
+      },
+      {
+        text: '昨日总计',
+        left: '50%',
+        top: '47%',
+        textAlign: 'center',
+        textVerticalAlign: 'middle',
+        textStyle: { fontSize: 12, fontWeight: 'normal', color: '#888888' }
+      }
+    ],
     series: [{
       type: 'pie',
       radius: ['38%', '60%'],

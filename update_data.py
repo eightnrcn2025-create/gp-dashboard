@@ -65,21 +65,28 @@ PUBLISHER_GAMES = [
 ]
 
 def clean_name(name: str) -> str:
-    """去除游戏名中的括号内容（含全角/方括号）和空白，便于模糊匹配"""
-    return re.sub(r'[（(【\[].*?[）)\]】]|\s+', '', name)
+    """
+    去掉括号内容（含全角/半角/方括号）和多余空白，便于模糊匹配。
+    注意：必须先去掉括号内容再去空白，防止括号开头的游戏名被清洗成空字符串
+    后与所有白名单关键词产生假阳性匹配（"" in any_str 永远为 True）。
+    """
+    # 第1步：删除括号 + 括号内的内容（包括嵌套括号的情况）
+    result = re.sub(r'[（(【\[][^）)\]】]*[）)\]】]', '', name)
+    # 第2步：删除空白
+    result = re.sub(r'\s+', '', result).strip()
+    # 第3步：若清洗后为空（如整个名字就是括号内容），退回仅删空白的版本
+    return result if result else re.sub(r'\s+', '', name).strip()
 
 def is_publisher_game(game_name: str) -> bool:
     """
     游戏名匹配厂商游戏白名单：
-    1. 先做 clean_name 去掉括号/空格后再比较
-    2. 双向包含：白名单词 in 游戏名，或 游戏名 in 白名单词
+    1. clean_name 去掉括号内容/空白后比较（防空字符串假阳性）
+    2. 白名单关键词 in 游戏名（正向匹配）—— 不做反向匹配，避免空字符串误判
     """
     cleaned = clean_name(game_name)
-    for kw in PUBLISHER_GAMES:
-        kw_c = clean_name(kw)
-        if kw_c in cleaned or cleaned in kw_c:
-            return True
-    return False
+    if not cleaned:
+        return False
+    return any(clean_name(kw) in cleaned for kw in PUBLISHER_GAMES)
 
 # ── 日志 ──────────────────────────────────────────────────────────────────────
 def log(msg, level="INFO"):
@@ -658,6 +665,36 @@ def main():
         "traffic_source":            api_data.get("traffic_source") or last.get("traffic_source", []),
         "detail_table":              detail_table or last.get("detail_table", []),
     }
+
+    # ── 强制兜底：从 detail_table 重建 TOP5（防止 Playwright 分类失败导致空列表）──
+    final_detail = output["detail_table"]
+    if final_detail and (not output["publisher_game_top5"] or not output["solo_game_top5"]):
+        log("=== 从 detail_table 重建 TOP5（兜底） ===")
+        game_sales_map: dict = {}
+        for row in final_detail:
+            name = str(row.get("game", ""))
+            if not name or name == "所有游戏（汇总）":
+                continue
+            sales = float(row.get("sales", 0) or 0)
+            game_sales_map[name] = game_sales_map.get(name, 0) + sales
+
+        fb_pub, fb_solo = [], []
+        for name, sales in game_sales_map.items():
+            entry = {"game": name, "sales": round(sales, 2)}
+            (fb_pub if is_publisher_game(name) else fb_solo).append(entry)
+
+        fb_pub.sort(key=lambda x: x["sales"],  reverse=True)
+        fb_solo.sort(key=lambda x: x["sales"], reverse=True)
+        for i, item in enumerate(fb_pub[:5]):  item["rank"] = i + 1
+        for i, item in enumerate(fb_solo[:5]): item["rank"] = i + 1
+
+        log(f"  兜底厂商TOP5 : {[x['game'] for x in fb_pub[:5]]}")
+        log(f"  兜底单机TOP5 : {[x['game'] for x in fb_solo[:5]]}")
+
+        if not output["publisher_game_top5"]:
+            output["publisher_game_top5"] = fb_pub[:5]
+        if not output["solo_game_top5"]:
+            output["solo_game_top5"] = fb_solo[:5]
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
