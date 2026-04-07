@@ -117,10 +117,11 @@ body {
 /* ── KPI Cards ───────────────────────────────────────────────────────────── */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 14px; margin-bottom: 22px;
 }
-@media (max-width:1280px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width:1400px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width:1000px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width:768px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .kpi-card {
@@ -141,12 +142,19 @@ body {
 .kpi-card.orange { border-left-color: var(--orange); }
 .kpi-card.purple { border-left-color: var(--purple); }
 .kpi-card.red    { border-left-color: var(--red);    }
+.kpi-card.yellow { border-left-color: var(--yellow); }
+.kpi-card.cyan   { border-left-color: var(--cyan);   }
 
 .kpi-card.blue:hover   { box-shadow: 0 8px 28px rgba(56,139,253,.18); }
 .kpi-card.green:hover  { box-shadow: 0 8px 28px rgba(63,185,80,.18); }
 .kpi-card.orange:hover { box-shadow: 0 8px 28px rgba(255,107,53,.18); }
 .kpi-card.purple:hover { box-shadow: 0 8px 28px rgba(163,113,247,.18); }
 .kpi-card.red:hover    { box-shadow: 0 8px 28px rgba(248,81,73,.18); }
+.kpi-card.yellow:hover { box-shadow: 0 8px 28px rgba(227,179,65,.18); }
+.kpi-card.cyan:hover   { box-shadow: 0 8px 28px rgba(121,192,255,.18); }
+
+.kpi-card.yellow .kpi-source::before { color: var(--yellow); }
+.kpi-card.cyan   .kpi-source::before { color: var(--cyan); }
 
 .kpi-icon-wrap {
   position: absolute; right: 14px; top: 14px;
@@ -202,8 +210,27 @@ body {
   white-space: nowrap;
 }
 .chart-body  { padding: 6px; }
+.chart-h220  { width: 100%; height: 220px; }
+.chart-h260  { width: 100%; height: 260px; }
 .chart-h300  { width: 100%; height: 300px; }
 .chart-h340  { width: 100%; height: 340px; }
+
+/* ── Ranking Badge ───────────────────────────────────────────────────────── */
+.rank-hint {
+  font-size: 11px; color: var(--text3); padding: 4px 16px 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.rank-hint::before { content: '👆'; }
+
+/* ── Heatmap Week Label ──────────────────────────────────────────────────── */
+.heatmap-legend {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 6px; padding: 0 18px 10px; font-size: 11px; color: var(--text3);
+}
+.heatmap-legend-cells { display: flex; gap: 3px; align-items: center; }
+.heatmap-legend-cell {
+  width: 12px; height: 12px; border-radius: 2px;
+}
 
 /* ── Empty chart state ───────────────────────────────────────────────────── */
 .chart-empty {
@@ -413,6 +440,22 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
       <div class="kpi-delta flat">下单数 ÷ UV</div>
       <div class="kpi-source">后台订单 ÷ 流量计算</div>
     </div>
+    <!-- 本月累计 -->
+    <div class="kpi-card yellow" id="kcard5">
+      <div class="kpi-icon-wrap">📆</div>
+      <div class="kpi-label">本月累计销售额</div>
+      <div class="kpi-value skeleton skeleton-value" id="kpiMonthly" style="display:block"></div>
+      <div class="kpi-delta flat">本月至今汇总</div>
+      <div class="kpi-source">Google Sheets 汇总数据</div>
+    </div>
+    <!-- 活跃游戏数 -->
+    <div class="kpi-card cyan" id="kcard6">
+      <div class="kpi-icon-wrap">🎮</div>
+      <div class="kpi-label">活跃游戏数量</div>
+      <div class="kpi-value skeleton skeleton-value" id="kpiActiveGames" style="display:block"></div>
+      <div class="kpi-delta flat">昨日有交易记录</div>
+      <div class="kpi-source">后台游戏统计 API</div>
+    </div>
   </div>
 
   <!-- Line + Pie -->
@@ -467,6 +510,44 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
         <div class="card-badge">7-Day Trend</div>
       </div>
       <div class="chart-body"><div class="chart-h300" id="areaChart"></div></div>
+    </div>
+  </div>
+
+  <!-- Top Games Ranking + Heatmap -->
+  <div class="chart-grid-2">
+    <!-- 游戏排行榜 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="card-title-dot" style="background:linear-gradient(180deg,#e3b341,#f0c64e)"></span>
+          销售额 TOP 5 游戏
+        </div>
+        <div class="card-badge">昨日排行 · 点击筛选明细</div>
+      </div>
+      <div class="chart-body"><div class="chart-h260" id="topGamesChart"></div></div>
+      <div class="rank-hint">点击条形可在下方明细表中自动筛选该游戏</div>
+    </div>
+    <!-- 周环比热力图 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="card-title-dot" style="background:linear-gradient(180deg,#FF6B35,#e05020)"></span>
+          周环比热力图
+        </div>
+        <div class="card-badge">近8周 · 颜色越深销售越高</div>
+      </div>
+      <div class="chart-body"><div class="chart-h260" id="heatmapChart"></div></div>
+      <div class="heatmap-legend">
+        <span>少</span>
+        <div class="heatmap-legend-cells">
+          <div class="heatmap-legend-cell" style="background:#1c1c24"></div>
+          <div class="heatmap-legend-cell" style="background:#4a1e0a"></div>
+          <div class="heatmap-legend-cell" style="background:#7f3010"></div>
+          <div class="heatmap-legend-cell" style="background:#c05020"></div>
+          <div class="heatmap-legend-cell" style="background:#FF6B35"></div>
+        </div>
+        <span>多</span>
+      </div>
     </div>
   </div>
 
@@ -549,7 +630,7 @@ let sortCol      = 'date';
 let sortDir      = 'desc';
 let currentPage  = 1;
 let lineRange    = 30;
-let chartLine, chartPie, chartBar, chartArea;
+let chartLine, chartPie, chartBar, chartArea, chartTopGames, chartHeatmap;
 
 const pageSize = 10;
 const COLORS   = ['#388bfd','#3fb950','#e3b341','#f85149','#a371f7',
@@ -622,11 +703,13 @@ function renderAll(d) {
   document.getElementById('footerTime').textContent = '数据截至 ' + ts;
   document.getElementById('srcLastUpdate').textContent = '最后更新：' + ts;
 
-  renderKPI(d.kpi);
+  renderKPI(d.kpi, d.monthly_total, d.active_games);
   renderLineChart(d.daily_sales, lineRange);
   renderPieChart(d.traffic_source);
   renderBarChart(d.game_compare);
   renderAreaChart(d.daily_sales);
+  renderTopGames(d.top_games || (d.game_compare || []).slice(0, 5).map((g, i) => ({rank: i+1, game: g.game, sales: g.value, growth: 0})));
+  renderHeatmap(d.weekly_heatmap || d.daily_sales);
   initTable(d.detail_table);
 }
 
@@ -662,13 +745,12 @@ function fmtMoneyPlain(n) {
   return '¥' + n.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-function renderKPI(kpi) {
+function renderKPI(kpi, monthlyTotal, activeGames) {
   // Remove skeleton classes
   ['kpiTodaySales','kpiYesterdaySales','kpiGrowthRate','kpiTraffic','kpiConversion',
-   'kpiGrowthDelta','kpiGrowthStatus'].forEach(id => {
+   'kpiGrowthDelta','kpiGrowthStatus','kpiMonthly','kpiActiveGames'].forEach(id => {
     const el = document.getElementById(id);
-    el.classList.remove('skeleton','skeleton-value','skeleton-delta');
-    el.style.display = '';
+    if (el) { el.classList.remove('skeleton','skeleton-value','skeleton-delta'); el.style.display = ''; }
   });
 
   const gr = kpi.growth_rate;
@@ -703,6 +785,14 @@ function renderKPI(kpi) {
   // Growth rate card color pulse
   const grCard = document.getElementById('kcard2');
   grCard.style.borderLeftColor = gr > 0 ? 'var(--green)' : gr < 0 ? 'var(--red)' : 'var(--yellow)';
+
+  // Monthly total
+  const kpiM = document.getElementById('kpiMonthly');
+  if (kpiM) kpiM.innerHTML = fmtMoney(monthlyTotal || kpi.month_sales || 0) + '<span class="unit"> 元</span>';
+
+  // Active games
+  const kpiAG = document.getElementById('kpiActiveGames');
+  if (kpiAG) kpiAG.innerHTML = (activeGames || 0) + '<span class="unit"> 款</span>';
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -901,6 +991,192 @@ function renderAreaChart(daily) {
       }
     }]
   });
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  Top Games Ranking (Horizontal Bar)
+// ════════════════════════════════════════════════════════════════════
+function renderTopGames(games) {
+  const el = document.getElementById('topGamesChart');
+  if (!games || !games.length) { showEmpty(el); return; }
+
+  const top5     = games.slice(0, 5);
+  const reversed = [...top5].reverse(); // ECharts horizontal bar shows bottom-up
+  const names    = reversed.map(g => g.game.length > 13 ? g.game.slice(0, 13) + '…' : g.game);
+  const fullNames = reversed.map(g => g.game);
+  const values   = reversed.map(g => g.sales);
+  const growths  = reversed.map(g => g.growth || 0);
+  const ranks    = reversed.map(g => g.rank);
+
+  if (!chartTopGames) {
+    chartTopGames = echarts.init(el, null, { renderer: 'canvas' });
+    window.addEventListener('resize', () => chartTopGames.resize());
+  }
+
+  const barColors = ['#484f58','#484f58','#cd7f32','#adb5bd','#e3b341'];
+  // reversed: index 0 = rank5(bottom), index 4 = rank1(top)
+  // So color[0]=plain, color[4]=gold
+
+  chartTopGames.setOption({
+    backgroundColor: 'transparent',
+    grid: { top: 8, right: 110, bottom: 10, left: 8, containLabel: true },
+    tooltip: {
+      ...TOOLTIP, trigger: 'axis', axisPointer: { type: 'none' },
+      formatter(params) {
+        const i = params[0].dataIndex;
+        const gr = growths[i];
+        return `<b>NO.${ranks[i]}</b>&nbsp;${fullNames[i]}<br>` +
+          `昨日销售额：<b style="color:#e3b341">${fmtMoneyPlain(values[i])}</b>` +
+          (gr !== 0 ? `<br>环比：<span style="color:${gr > 0 ? '#3fb950' : '#f85149'}">${gr > 0 ? '▲' : '▼'} ${Math.abs(gr).toFixed(1)}%</span>` : '');
+      }
+    },
+    xAxis: {
+      type: 'value', ...axisStyle,
+      axisLabel: { color: '#6e7681', fontSize: 10, formatter: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+    },
+    yAxis: {
+      type: 'category', data: names,
+      axisLine:  { lineStyle: { color: '#21262d' } },
+      splitLine: { show: false },
+      axisLabel: {
+        color: '#c9d1d9', fontSize: 11,
+        formatter(val, idx) {
+          const rk = ranks[idx];
+          return rk === 1 ? `{gold|#1} ${val}` :
+                 rk === 2 ? `{silver|#2} ${val}` :
+                 rk === 3 ? `{bronze|#3} ${val}` :
+                            `{plain|#${rk}} ${val}`;
+        },
+        rich: {
+          gold:   { color: '#e3b341', fontWeight: 700 },
+          silver: { color: '#adb5bd', fontWeight: 700 },
+          bronze: { color: '#cd7f32', fontWeight: 700 },
+          plain:  { color: '#6e7681', fontWeight: 600 }
+        }
+      }
+    },
+    series: [{
+      type: 'bar',
+      data: values.map((v, i) => ({
+        value: v,
+        itemStyle: { color: barColors[i], borderRadius: [0, 6, 6, 0] }
+      })),
+      barMaxWidth: 38,
+      label: {
+        show: true, position: 'right', fontSize: 11, color: '#e6edf3',
+        formatter: p => fmtMoneyPlain(p.value)
+      }
+    }]
+  }, true);
+
+  // Click to filter table
+  chartTopGames.off('click');
+  chartTopGames.on('click', function(params) {
+    const fullName = fullNames[params.dataIndex];
+    const sel = document.getElementById('filterGame');
+    if (sel) {
+      sel.value = fullName;
+      currentPage = 1;
+      applyFilter();
+      document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  Weekly Heatmap
+// ════════════════════════════════════════════════════════════════════
+function renderHeatmap(data) {
+  const el = document.getElementById('heatmapChart');
+  if (!data || !data.length) { showEmpty(el); return; }
+
+  // Build date -> amount map
+  const amountMap = {};
+  data.forEach(d => { amountMap[d.date] = d.amount; });
+
+  // Find most recent date anchor
+  const allDates = data.map(d => d.date).sort();
+  const lastDateStr = allDates[allDates.length - 1];
+  const anchor = new Date(lastDateStr + 'T00:00:00');
+
+  // Find the Monday of anchor's week
+  const anchorDow = anchor.getDay(); // 0=Sun, 1=Mon...
+  const daysToMon = anchorDow === 0 ? -6 : 1 - anchorDow;
+  const weekStart = new Date(anchor);
+  weekStart.setDate(anchor.getDate() + daysToMon); // Monday of current week
+
+  // Go back 7 more weeks → startDate = 8 weeks ago Monday
+  const startDate = new Date(weekStart);
+  startDate.setDate(weekStart.getDate() - 7 * 7);
+
+  // Build week labels (Mon date of each week) and heatmap data
+  const weekLabels = [];
+  for (let w = 0; w < 8; w++) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate() + w * 7);
+    weekLabels.push(`${d.getMonth()+1}/${d.getDate()}`);
+  }
+
+  const dayLabels = ['周一','周二','周三','周四','周五','周六','周日'];
+  const heatData = [];
+
+  for (let i = 0; i < 56; i++) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate() + i);
+    const dateStr = d.toISOString().slice(0, 10);
+    const dow = d.getDay(); // 0=Sun
+    const dayIdx = dow === 0 ? 6 : dow - 1; // Mon=0, Sun=6
+    const weekIdx = Math.floor(i / 7);
+    const amount = amountMap[dateStr] || 0;
+    heatData.push([weekIdx, dayIdx, amount, dateStr]);
+  }
+
+  const maxAmount = Math.max(...heatData.map(d => d[2]), 1);
+
+  if (!chartHeatmap) {
+    chartHeatmap = echarts.init(el, null, { renderer: 'canvas' });
+    window.addEventListener('resize', () => chartHeatmap.resize());
+  }
+
+  const startDateRef = startDate; // closure for tooltip
+
+  chartHeatmap.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {
+      ...TOOLTIP, position: 'top',
+      formatter(p) {
+        const [wi, di, amount, dateStr] = p.data;
+        const dayName = ['周一','周二','周三','周四','周五','周六','周日'][di];
+        return `<b>${dateStr}</b>（${dayName}）<br>销售额：<b style="color:#FF6B35">${amount > 0 ? fmtMoneyPlain(amount) : '无数据'}</b>`;
+      }
+    },
+    grid: { top: 14, right: 14, bottom: 36, left: 46 },
+    xAxis: {
+      type: 'category', data: weekLabels,
+      splitArea: { show: false },
+      axisLine: { lineStyle: { color: '#21262d' } },
+      axisLabel: { color: '#6e7681', fontSize: 11 },
+      splitLine: { show: false }
+    },
+    yAxis: {
+      type: 'category', data: dayLabels,
+      splitArea: { show: false },
+      axisLine: { lineStyle: { color: '#21262d' } },
+      axisLabel: { color: '#8b949e', fontSize: 11 },
+      splitLine: { show: false }
+    },
+    visualMap: {
+      min: 0, max: maxAmount,
+      calculable: false, show: false,
+      inRange: { color: ['#1c1c24','#4a1e0a','#7f3010','#c05020','#FF6B35'] }
+    },
+    series: [{
+      type: 'heatmap',
+      data: heatData,
+      itemStyle: { borderRadius: 3, borderWidth: 2, borderColor: 'var(--bg2)' },
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(255,107,53,.6)' } }
+    }]
+  }, true);
 }
 
 // ════════════════════════════════════════════════════════════════════

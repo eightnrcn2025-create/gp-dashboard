@@ -67,8 +67,9 @@ def load_last_data():
         "last_updated": "",
         "kpi": {"today_sales": 0, "yesterday_sales": 0,
                 "growth_rate": 0, "total_traffic": 0, "conversion_rate": 0},
-        "daily_sales": [], "game_compare": [],
-        "traffic_source": [], "detail_table": []
+        "daily_sales": [], "game_compare": [], "top_games": [],
+        "weekly_heatmap": [], "traffic_source": [], "detail_table": [],
+        "monthly_total": 0, "active_games": 0
     }
 
 # ── 工具 ──────────────────────────────────────────────────────────────────────
@@ -366,6 +367,31 @@ def main():
     detail_table = game_data.get("detail_rows", []) + sheet2_det
     detail_table.sort(key=lambda x: (x["date"], x["game"]), reverse=True)
 
+    # ── 新增字段计算 ──────────────────────────────────────────────────────────
+    daily_sales = api_data.get("daily_sales") or last.get("daily_sales", [])
+    game_compare = game_data.get("game_compare") or last.get("game_compare", [])
+
+    # Top 5 游戏（排行榜）—— 昨日 game_compare 前5条加环比
+    top_games = [
+        {"rank": i + 1, "game": g["game"], "sales": g["value"], "growth": 0}
+        for i, g in enumerate(game_compare[:5])
+    ]
+
+    # 周环比热力图 —— 近30天日销售额（前端JS会补齐56天）
+    # 若有更长历史数据可扩展；目前直接用 daily_sales
+    weekly_heatmap = daily_sales
+
+    # 本月累计销售额 —— 优先来自后台 API stats/recent，兜底用 daily_sales 当月求和
+    month_sales = api_data.get("month_sales", 0)
+    if not month_sales:
+        this_month = datetime.now().strftime("%Y-%m")
+        month_sales = round(
+            sum(r["amount"] for r in daily_sales if r["date"].startswith(this_month)), 2
+        )
+
+    # 活跃游戏数量 —— game_compare 的行数即有交易记录的游戏数
+    active_games = len(game_compare)
+
     # ── 组装输出 ──────────────────────────────────────────────────────────────
     output = {
         "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -376,10 +402,14 @@ def main():
             "total_traffic":   api_data["total_traffic"],
             "conversion_rate": api_data["conversion_rate"],
         },
-        "daily_sales":    api_data.get("daily_sales") or last.get("daily_sales", []),
-        "game_compare":   game_data.get("game_compare") or last.get("game_compare", []),
-        "traffic_source": api_data.get("traffic_source") or last.get("traffic_source", []),
-        "detail_table":   detail_table or last.get("detail_table", []),
+        "daily_sales":     daily_sales,
+        "game_compare":    game_compare,
+        "top_games":       top_games,
+        "weekly_heatmap":  weekly_heatmap,
+        "monthly_total":   month_sales,
+        "active_games":    active_games,
+        "traffic_source":  api_data.get("traffic_source") or last.get("traffic_source", []),
+        "detail_table":    detail_table or last.get("detail_table", []),
     }
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -396,8 +426,11 @@ def main():
     log(f"  环比增长率   : {output['kpi']['growth_rate']:+.2f}%")
     log(f"  总流量       : {output['kpi']['total_traffic']:,} UV")
     log(f"  转化率       : {output['kpi']['conversion_rate']:.2f}%")
+    log(f"  本月累计     : ¥{output['monthly_total']:,.2f}")
+    log(f"  活跃游戏数   : {output['active_games']} 款")
     log(f"  日销记录     : {len(output['daily_sales'])} 条")
     log(f"  游戏排行     : {len(output['game_compare'])} 条")
+    log(f"  TOP5排行     : {len(output['top_games'])} 条")
     log(f"  明细表       : {len(output['detail_table'])} 条")
     log(f"  用户行为分布 : {len(output['traffic_source'])} 项")
     log("=" * 60)
