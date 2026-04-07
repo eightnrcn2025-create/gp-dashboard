@@ -33,13 +33,20 @@ SHEET2_GID = "866845188"
 # Gamepark 后台
 ADMIN_HOST  = "https://admin.gamepark.co"
 API_BASE    = f"{ADMIN_HOST}/api"
-# 全游戏付费排行（昨日，gameType 留空 = 全部，用 PUBLISHER_GAMES 白名单再分类）
+# 单机游戏付费排行（gameType=alone，后台直接过滤，结果最准确）
+STATS_URL_PAYMENT_SOLO = (
+    f"{ADMIN_HOST}/?time=1756199148799"
+    "#/statistics/game-statistics-more"
+    "?statType=payment&gameType=alone&timeFilter=yesterday"
+)
+# 全游戏付费排行（gameType 留空；注意 gameType=publisher 后台返回结果与 all 相同，
+# 所以"开发者游戏" = all 中不在 alone 中的游戏，用集合差求得）
 STATS_URL_PAYMENT_ALL = (
     f"{ADMIN_HOST}/?time=1756199148799"
     "#/statistics/game-statistics-more"
     "?statType=payment&gameType=&timeFilter=yesterday"
 )
-# 全游戏付费排行（近7天，厂商游戏无昨日数据时兜底）
+# 7天兜底（无昨日数据时）
 STATS_URL_PAYMENT_7D = (
     f"{ADMIN_HOST}/?time=1756199148799"
     "#/statistics/game-statistics-more"
@@ -230,9 +237,10 @@ def fetch_admin_api(last):
             ]
             log_ok(f"日销售额 → {len(result['daily_sales'])} 条（近30天）")
 
-        # ── 3. 流量汇总（今日 UV/PV/新注册/活跃/付费用户）───────────────────
+        # ── 3. 流量汇总（昨日 UV/PV/新注册/活跃/付费用户）
+        # 脚本于 00:05 运行，查 yesterday 而非 today，否则今日数据近乎为零
         summary_list = api_get(headers, "/admin/platform/userstats/summary",
-                                {"started_at": today, "ended_at": today})
+                                {"started_at": yesterday, "ended_at": yesterday})
         summary = {item["title"]: item.get("today", 0) for item in (summary_list or [])}
         uv            = int(summary.get("uv", 0))
         pv            = int(summary.get("pv", 0))
@@ -463,44 +471,43 @@ def fetch_admin_game_stats(last):
                     log_err(f"菜单导航失败: {e}")
                     return []
 
-            # ── 1. 昨日全游戏付费排行 ────────────────────────────────────────
-            # 方案A：直接 URL
-            payment_rows = scrape_game_table(STATS_URL_PAYMENT_ALL, "payment_all")
-            # 方案B：若方案A无结果，尝试菜单导航
-            if not payment_rows:
-                log_warn("直接URL无数据，改用菜单导航...")
-                payment_rows = scrape_via_menu("昨日")
-            # 方案C：若还无结果，改用7天直接URL
-            if not payment_rows:
-                log_warn("菜单导航也无数据，改用7天URL...")
-                payment_rows = scrape_game_table(STATS_URL_PAYMENT_7D, "payment_7d_fallback")
+            # ── 1. 单机游戏付费排行（gameType=alone，后台直接过滤最准确）────────
+            solo_rows = scrape_game_table(STATS_URL_PAYMENT_SOLO, "payment_solo")
+            if not solo_rows:
+                log_warn("单机URL无数据，尝试菜单导航...")
+                solo_rows = scrape_via_menu("昨日")
+            if not solo_rows:
+                log_warn("改用7天单机数据兜底...")
+                solo_rows = scrape_game_table(
+                    STATS_URL_PAYMENT_7D.replace("gameType=", "gameType=alone"), "solo_7d")
 
-            log(f"=== 最终原始付费数据共 {len(payment_rows)} 条游戏 ===")
-            for r in payment_rows:
-                print(f"原始游戏数据：{r['game']} | 销售额：{r['payment']}")
+            solo_names = {r["game"] for r in solo_rows}
+            log_ok(f"单机游戏 {len(solo_rows)} 款")
+            for r in solo_rows:
+                print(f"[单机] {r['game']} | ¥{r['payment']}")
 
-            # ── 2. 按 PUBLISHER_GAMES 白名单分类，打印每条结果 ───────────────
-            log("--- 游戏分类明细 ---")
-            solo_pool      = []
-            publisher_pool = []
-            for r in payment_rows:
-                is_pub = is_publisher_game(r["game"])
-                print(f"→ {'厂商游戏' if is_pub else '单机游戏'}: {r['game']}")
-                if is_pub:
-                    publisher_pool.append(r)
-                else:
-                    solo_pool.append(r)
+            # ── 2. 全游戏排行；开发者游戏 = all 中不在 alone 的游戏 ───────────
+            # （调试证实 gameType=publisher URL 返回结果与 gameType=all 相同，不能用）
+            all_rows = scrape_game_table(STATS_URL_PAYMENT_ALL, "payment_all")
+            if not all_rows:
+                all_rows = solo_rows  # 极端兜底
+            all_names  = {r["game"] for r in all_rows}
+            publisher_pool = [r for r in all_rows if r["game"] not in solo_names]
 
-            # ── 3. 若昨日无厂商游戏，改用7天数据兜底 ────────────────────────
+            log_ok(f"全部游戏 {len(all_rows)} 款 → 开发者游戏 {len(publisher_pool)} 款")
+            for r in publisher_pool:
+                print(f"[开发者] {r['game']} | ¥{r['payment']}")
+
+            # ── 3. 若开发者池为空，用7天数据兜底 ────────────────────────────
             if not publisher_pool:
-                log_warn("昨日无厂商游戏销售数据，改用近7天数据兜底...")
+                log_warn("昨日无开发者游戏数据，改用近7天兜底...")
                 rows_7d = scrape_game_table(STATS_URL_PAYMENT_7D, "payment_7d")
-                existing_names = {r["game"] for r in payment_rows}
-                for r in rows_7d:
-                    if is_publisher_game(r["game"]) and r["game"] not in existing_names:
-                        log(f"  [7天补充·厂商] {r['game']}  ¥{r['payment']}")
-                        publisher_pool.append(r)
-                log_ok(f"7天兜底后 → 厂商 {len(publisher_pool)} 款")
+                solo_names_7d = {r["game"] for r in solo_rows}
+                publisher_pool = [r for r in rows_7d if r["game"] not in solo_names_7d]
+                log_ok(f"7天兜底后 → 开发者 {len(publisher_pool)} 款")
+
+            # 合并all+solo去重，供 detail_table 用
+            payment_rows = list({r["game"]: r for r in (all_rows + solo_rows)}.values())
 
             # ── 4. 昨日全游戏访问量排行 ──────────────────────────────────────
             views_rows = scrape_game_table(STATS_URL_VIEWS_ALL, "views_all")
