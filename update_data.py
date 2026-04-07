@@ -59,9 +59,20 @@ FLOW_STATS_URL = (
 
 # ── 厂商游戏白名单（名称包含以下关键词 → 归为厂商游戏，其余为单机游戏）────────
 PUBLISHER_GAMES = [
-    "淫乱斗罗", "全明星動漫樂園", "次元色潮", "火影嬌妻村",
-    "海王传奇海王篇", "次元少女", "三国：红艳无双", "解禁無雙",
-    "火影色欲传", "三国：一统天下", "忍娘24", "口袋觉醒：成人版", "妻龙珠",
+    # 后台实际显示为简体中文，以下已校对（2026-04-07 debug 确认）
+    "淫乱斗罗",        # 调试确认 ✓
+    "全明星动漫乐园",  # 原繁体 全明星動漫樂園 → 简体
+    "次元色潮",
+    "火影娇妻村",      # 原繁体 火影嬌妻村 → 简体
+    "海王传奇海王篇",
+    "次元少女",
+    "三国：红艳无双",
+    "解禁无双",        # 原繁体 解禁無雙 → 简体，调试确认 ✓
+    "火影色欲传",
+    "三国：一统天下",
+    "忍娘24",
+    "口袋觉醒：成人版",
+    "妻龙珠",
 ]
 
 def clean_name(name: str) -> str:
@@ -352,18 +363,48 @@ def fetch_admin_game_stats(last):
                         })
                 return rows
 
-            def scrape_game_table(url, label, time_filter="昨日"):
-                """导航到 URL，点击时间筛选，截图，提取表格数据"""
+            def scrape_game_table(url, label, need_time_click=False):
+                """
+                导航到 URL，截图，用 .el-table__row 提取数据。
+                URL 里已含 timeFilter=xxx 时不需要点按钮（need_time_click=False）。
+                """
                 log(f"[{label}] 正在导航: {url}")
                 page.goto(url, wait_until="networkidle", timeout=40000)
-                time.sleep(5)          # 等足 5 秒确保 SPA 渲染完成
-                save_shot(page, f"game_statistics_{label}_before")
-
-                click_time_filter(time_filter)
-                time.sleep(3)
+                # 等 8 秒确保 Vue + Element UI 完全渲染
+                time.sleep(8)
                 save_shot(page, f"game_statistics_{label}")
 
-                rows = extract_tables_rows(label)
+                if need_time_click:
+                    click_time_filter("昨日")
+                    time.sleep(3)
+                    save_shot(page, f"game_statistics_{label}_after_click")
+
+                # 优先用 Element UI 行选择器
+                rows = []
+                el_rows = page.query_selector_all(".el-table__row")
+                if el_rows:
+                    log(f"[{label}] .el-table__row 找到 {len(el_rows)} 行")
+                    for tr in el_rows:
+                        cells = tr.query_selector_all("td")
+                        if len(cells) < 9:
+                            continue
+                        game_name = cells[2].inner_text().strip()
+                        if not game_name:
+                            continue
+                        payment = to_num(cells[8].inner_text())
+                        col4    = to_num(cells[4].inner_text())
+                        col6    = to_num(cells[6].inner_text())
+                        rows.append({
+                            "game": game_name,
+                            "uv":      int(col4),
+                            "orders":  int(col6),
+                            "payment": payment,
+                        })
+                else:
+                    # 降级：扫描所有 table
+                    log_warn(f"[{label}] .el-table__row 为空，降级扫描 tables")
+                    rows = extract_tables_rows(label)
+
                 log_ok(f"[{label}] 抓取 {len(rows)} 条")
                 for r in rows:
                     print(f"原始游戏数据：{r['game']} | 销售额：{r['payment']}")
@@ -394,10 +435,28 @@ def fetch_admin_game_stats(last):
                         except Exception:
                             pass
                     save_shot(page, "game_statistics_page")
-                    click_time_filter(time_filter)
+                    time.sleep(8)
+                    click_time_filter(time_filter)  # 菜单导航没有URL时间参数，需手动点击
                     time.sleep(3)
                     save_shot(page, "game_statistics_yesterday")
-                    rows = extract_tables_rows("menu_nav")
+                    # 菜单导航用 .el-table__row
+                    rows = []
+                    el_rows = page.query_selector_all(".el-table__row")
+                    for tr in el_rows:
+                        cells = tr.query_selector_all("td")
+                        if len(cells) < 9:
+                            continue
+                        gname = cells[2].inner_text().strip()
+                        if not gname:
+                            continue
+                        rows.append({
+                            "game": gname,
+                            "uv":      int(to_num(cells[4].inner_text())),
+                            "orders":  int(to_num(cells[6].inner_text())),
+                            "payment": to_num(cells[8].inner_text()),
+                        })
+                    if not rows:
+                        rows = extract_tables_rows("menu_nav")
                     log_ok(f"菜单导航抓取 {len(rows)} 条")
                     return rows
                 except Exception as e:

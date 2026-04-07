@@ -133,37 +133,56 @@
   ],
   "solo_game_top5": [
     {
+      "game": "欲界圣姬",
+      "sales": 3332.0,
       "rank": 1,
+      "growth": 0
+    },
+    {
       "game": "女神的最佳交易（Windows/安卓）",
       "sales": 1320.0,
-      "growth": 2.5
-    },
-    {
       "rank": 2,
-      "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-      "sales": 542.85,
-      "growth": -1.2
+      "growth": 0
     },
     {
+      "game": "青楼大掌柜",
+      "sales": 1303.6,
       "rank": 3,
-      "game": "爱欲之都 - 超大版本更新 ！！！ (Windows/安卓)",
-      "sales": 538.2,
-      "growth": 5.8
+      "growth": 0
     },
     {
+      "game": "魅惑前线",
+      "sales": 854.0,
       "rank": 4,
-      "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-      "sales": 533.25,
-      "growth": -3.1
+      "growth": 0
     },
     {
+      "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
+      "sales": 552.72,
       "rank": 5,
-      "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-      "sales": 445.5,
-      "growth": 12.3
+      "growth": 0
     }
   ],
-  "publisher_game_top5": [],
+  "publisher_game_top5": [
+    {
+      "game": "淫乱斗罗",
+      "sales": 801.0,
+      "rank": 1,
+      "growth": 0
+    },
+    {
+      "game": "解禁无双",
+      "sales": 793.0,
+      "rank": 2,
+      "growth": 0
+    },
+    {
+      "game": "全明星动漫乐园",
+      "sales": 512.0,
+      "rank": 3,
+      "growth": 0
+    }
+  ],
   "game_views_top5": [],
   "game_views_publisher_top5": [],
   "weekly_heatmap": [
