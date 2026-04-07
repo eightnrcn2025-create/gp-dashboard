@@ -44,6 +44,17 @@ STATS_URL_PUBLISHER = (
     "?statType=payment&gameType=publisher&timeFilter=yesterday"
 )
 
+# ── 厂商游戏白名单（名称包含以下关键词 → 归为厂商游戏，其余为单机游戏）────────
+PUBLISHER_GAMES = [
+    "淫乱斗罗", "全明星動漫樂園", "次元色潮", "火影嬌妻村",
+    "海王传奇海王篇", "次元少女", "三国：红艳无双", "解禁無雙",
+    "火影色欲传", "三国：一统天下", "忍娘24", "口袋觉醒：成人版", "妻龙珠",
+]
+
+def is_publisher_game(game_name: str) -> bool:
+    """游戏名称包含厂商游戏白名单中的任意关键词则返回 True"""
+    return any(kw in game_name for kw in PUBLISHER_GAMES)
+
 # ── 日志 ──────────────────────────────────────────────────────────────────────
 def log(msg, level="INFO"):
     ts   = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -267,7 +278,15 @@ def fetch_admin_game_stats(last):
 
             solo_rows      = scrape_game_table(STATS_URL_SOLO,      "solo")
             publisher_rows = scrape_game_table(STATS_URL_PUBLISHER,  "publisher")
-            game_rows = solo_rows  # detail_table 仍用单机数据
+
+            # 合并两批数据，按游戏名去重（取销售额较高的那条）
+            all_games_map = {}
+            for r in solo_rows + publisher_rows:
+                name = r["game"]
+                if name not in all_games_map or r["payment"] > all_games_map[name]["payment"]:
+                    all_games_map[name] = r
+            all_rows  = list(all_games_map.values())
+            game_rows = all_rows  # detail_table 使用全量数据
 
             browser.close()
 
@@ -278,8 +297,13 @@ def fetch_admin_game_stats(last):
                 for i, r in enumerate(sorted_rows[:5])
             ]
 
-        solo_top5      = rows_to_top5(solo_rows)
-        publisher_top5 = rows_to_top5(publisher_rows)
+        # 按 PUBLISHER_GAMES 白名单分类，而非依赖后台 gameType 参数
+        solo_pool      = [r for r in all_rows if not is_publisher_game(r["game"])]
+        publisher_pool = [r for r in all_rows if     is_publisher_game(r["game"])]
+
+        solo_top5      = rows_to_top5(solo_pool)
+        publisher_top5 = rows_to_top5(publisher_pool)
+        log_ok(f"分类结果 → 单机 {len(solo_pool)} 款 / 厂商 {len(publisher_pool)} 款")
 
         detail_rows = [{
             "date":       yesterday,
