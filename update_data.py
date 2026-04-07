@@ -293,38 +293,130 @@ def fetch_admin_game_stats(last):
 
             yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-            def scrape_game_table(url, label):
-                """抓取游戏统计表格，col2=游戏名 col4=主指标 col6=次指标 col8=金额"""
-                page.goto(url, wait_until="networkidle", timeout=30000)
-                time.sleep(4)
-                save_shot(page, f"data_page_{label}")
+            def click_time_filter(label_text="昨日"):
+                """尝试点击时间筛选按钮（昨日/7天等）"""
+                for sel in [
+                    f'button:has-text("{label_text}")',
+                    f'.el-button:has-text("{label_text}")',
+                    f'[class*="btn"]:has-text("{label_text}")',
+                    f'span:has-text("{label_text}")',
+                    f'li:has-text("{label_text}")',
+                ]:
+                    try:
+                        page.click(sel, timeout=2000)
+                        time.sleep(2)
+                        log(f"点击时间筛选「{label_text}」成功（{sel}）")
+                        return True
+                    except Exception:
+                        pass
+                log_warn(f"未找到时间筛选按钮「{label_text}」")
+                return False
+
+            def extract_tables_rows(label):
+                """从当前页面所有 table 中提取游戏统计行，打印页面文字辅助调试"""
                 tables = page.query_selector_all("table")
-                if len(tables) < 2:
-                    log_warn(f"{label}: 仅找到 {len(tables)} 个 table，跳过")
-                    return []
+                log(f"[{label}] 页面共 {len(tables)} 个 table")
+                # 打印页面文本前1500字（辅助调试）
+                try:
+                    txt = page.inner_text("body")
+                    log(f"[{label}] 页面文本前1500字:\n{txt[:1500]}")
+                except Exception:
+                    pass
+
                 rows = []
-                for tr in tables[1].query_selector_all("tr"):
-                    cells = tr.query_selector_all("td")
-                    if len(cells) < 5:
-                        continue
-                    game_name = cells[2].inner_text().strip()
-                    if not game_name:
-                        continue
-                    col4 = to_num(cells[4].inner_text())
-                    col6 = to_num(cells[6].inner_text()) if len(cells) > 6 else 0
-                    col8 = to_num(cells[8].inner_text()) if len(cells) > 8 else 0
-                    rows.append({
-                        "game": game_name,
-                        "uv":      int(col4),
-                        "orders":  int(col6),
-                        "payment": col8,
-                    })
-                log_ok(f"{label}: 抓取 {len(rows)} 条")
+                for t_idx, tbl in enumerate(tables):
+                    for tr in tbl.query_selector_all("tr"):
+                        cells = tr.query_selector_all("td")
+                        if len(cells) < 5:
+                            continue
+                        # 尝试不同列位置：找包含金额数字的行
+                        # 优先 col2=游戏名，尝试 col8 / col6 / col4 作为金额
+                        game_name = cells[2].inner_text().strip()
+                        if not game_name:
+                            continue
+                        # 尝试从多个列位找金额（销售额通常是最后几列最大的数）
+                        amounts = []
+                        for ci in [8, 6, 4]:
+                            if len(cells) > ci:
+                                v = to_num(cells[ci].inner_text())
+                                if v > 0:
+                                    amounts.append((ci, v))
+                        if not amounts:
+                            continue
+                        payment = amounts[0][1]   # 取第一个非零金额列
+                        col4    = to_num(cells[4].inner_text()) if len(cells) > 4 else 0
+                        col6    = to_num(cells[6].inner_text()) if len(cells) > 6 else 0
+                        rows.append({
+                            "game": game_name, "table_idx": t_idx,
+                            "uv": int(col4), "orders": int(col6), "payment": payment,
+                        })
                 return rows
 
-            # ── 1. 昨日全游戏付费排行（gameType 留空 = 全部游戏）────────────
+            def scrape_game_table(url, label, time_filter="昨日"):
+                """导航到 URL，点击时间筛选，截图，提取表格数据"""
+                log(f"[{label}] 正在导航: {url}")
+                page.goto(url, wait_until="networkidle", timeout=40000)
+                time.sleep(5)          # 等足 5 秒确保 SPA 渲染完成
+                save_shot(page, f"game_statistics_{label}_before")
+
+                click_time_filter(time_filter)
+                time.sleep(3)
+                save_shot(page, f"game_statistics_{label}")
+
+                rows = extract_tables_rows(label)
+                log_ok(f"[{label}] 抓取 {len(rows)} 条")
+                for r in rows:
+                    print(f"原始游戏数据：{r['game']} | 销售额：{r['payment']}")
+                return rows
+
+            def scrape_via_menu(time_filter="昨日"):
+                """方案B：通过左侧菜单导航到游戏统计页面"""
+                try:
+                    log("尝试菜单导航：数据统计 → 游戏统计")
+                    # 展开「数据统计」菜单
+                    for sel in ['li:has-text("数据统计")', '.el-menu-item:has-text("数据统计")',
+                                '[class*="menu"]:has-text("数据统计")', 'span:has-text("数据统计")']:
+                        try:
+                            page.click(sel, timeout=3000)
+                            time.sleep(1)
+                            log(f"点击「数据统计」成功（{sel}）")
+                            break
+                        except Exception:
+                            pass
+                    # 点击「游戏统计」子菜单
+                    for sel in ['li:has-text("游戏统计")', '.el-menu-item:has-text("游戏统计")',
+                                'a:has-text("游戏统计")', 'span:has-text("游戏统计")']:
+                        try:
+                            page.click(sel, timeout=3000)
+                            time.sleep(3)
+                            log(f"点击「游戏统计」成功（{sel}）")
+                            break
+                        except Exception:
+                            pass
+                    save_shot(page, "game_statistics_page")
+                    click_time_filter(time_filter)
+                    time.sleep(3)
+                    save_shot(page, "game_statistics_yesterday")
+                    rows = extract_tables_rows("menu_nav")
+                    log_ok(f"菜单导航抓取 {len(rows)} 条")
+                    return rows
+                except Exception as e:
+                    log_err(f"菜单导航失败: {e}")
+                    return []
+
+            # ── 1. 昨日全游戏付费排行 ────────────────────────────────────────
+            # 方案A：直接 URL
             payment_rows = scrape_game_table(STATS_URL_PAYMENT_ALL, "payment_all")
-            log(f"原始付费数据共 {len(payment_rows)} 条游戏：")
+            # 方案B：若方案A无结果，尝试菜单导航
+            if not payment_rows:
+                log_warn("直接URL无数据，改用菜单导航...")
+                payment_rows = scrape_via_menu("昨日")
+            # 方案C：若还无结果，改用7天直接URL
+            if not payment_rows:
+                log_warn("菜单导航也无数据，改用7天URL...")
+                payment_rows = scrape_game_table(STATS_URL_PAYMENT_7D, "payment_7d_fallback")
+
+            log(f"=== 最终原始付费数据共 {len(payment_rows)} 条游戏 ===")
             for r in payment_rows:
                 print(f"原始游戏数据：{r['game']} | 销售额：{r['payment']}")
 
