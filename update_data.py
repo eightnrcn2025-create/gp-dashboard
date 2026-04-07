@@ -33,15 +33,28 @@ SHEET2_GID = "866845188"
 # Gamepark 后台
 ADMIN_HOST  = "https://admin.gamepark.co"
 API_BASE    = f"{ADMIN_HOST}/api"
-STATS_URL_SOLO = (
+# 全游戏付费排行（昨日，gameType 留空 = 全部，用 PUBLISHER_GAMES 白名单再分类）
+STATS_URL_PAYMENT_ALL = (
     f"{ADMIN_HOST}/?time=1756199148799"
     "#/statistics/game-statistics-more"
-    "?statType=payment&gameType=alone&timeFilter=yesterday"
+    "?statType=payment&gameType=&timeFilter=yesterday"
 )
-STATS_URL_PUBLISHER = (
+# 全游戏付费排行（近7天，厂商游戏无昨日数据时兜底）
+STATS_URL_PAYMENT_7D = (
     f"{ADMIN_HOST}/?time=1756199148799"
     "#/statistics/game-statistics-more"
-    "?statType=payment&gameType=publisher&timeFilter=yesterday"
+    "?statType=payment&gameType=&timeFilter=7days"
+)
+# 全游戏访问量排行（昨日）
+STATS_URL_VIEWS_ALL = (
+    f"{ADMIN_HOST}/?time=1756199148799"
+    "#/statistics/game-statistics-more"
+    "?statType=views&gameType=&timeFilter=yesterday"
+)
+# 流量统计页
+FLOW_STATS_URL = (
+    f"{ADMIN_HOST}/?time=1756199148799"
+    "#/statistics/flow-statistics"
 )
 
 # ── 厂商游戏白名单（名称包含以下关键词 → 归为厂商游戏，其余为单机游戏）────────
@@ -196,6 +209,10 @@ def fetch_admin_api(last):
         active_users  = int(summary.get("active_user", 0))
         paid_users    = int(summary.get("recharged_count", 0))  # 充值用户数
         result["total_traffic"] = uv
+        result["pv"]            = pv
+        result["new_reg"]       = new_reg
+        result["active_users"]  = active_users
+        result["paid_users"]    = paid_users
         log_ok(f"流量汇总 → UV={uv}  PV={pv}  新注册={new_reg}  活跃={active_users}  付费={paid_users}")
 
         # ── 4. 转化率（付费用户 / UV）────────────────────────────────────────
@@ -220,14 +237,17 @@ def fetch_admin_api(last):
 
 
 # =============================================================================
-# 数据源二：后台 Playwright — 游戏付费排行（game_compare + detail_table）
+# 数据源二：后台 Playwright — 游戏付费/访问排行 + 流量统计页
 # =============================================================================
 def fetch_admin_game_stats(last):
-    log("=== [Playwright] 单机/厂商游戏排行 ===")
+    log("=== [Playwright] 游戏排行 + 流量统计 ===")
     fallback = {
-        "solo_game_top5":      last.get("solo_game_top5", []),
-        "publisher_game_top5": last.get("publisher_game_top5", []),
-        "detail_rows":         last.get("detail_table", []),
+        "solo_game_top5":            last.get("solo_game_top5", []),
+        "publisher_game_top5":       last.get("publisher_game_top5", []),
+        "game_views_top5":           last.get("game_views_top5", []),
+        "game_views_publisher_top5": last.get("game_views_publisher_top5", []),
+        "detail_rows":               last.get("detail_table", []),
+        "flow_stats":                last.get("traffic_stats", {}),
     }
     load_dotenv(ENV_FILE)
     account  = os.getenv("GAMEPARK_ACCOUNT", "")
@@ -241,6 +261,7 @@ def fetch_admin_game_stats(last):
             ctx  = browser.new_context(viewport={"width": 1440, "height": 900})
             page = ctx.new_page()
 
+            # ── 登录 ──────────────────────────────────────────────────────────
             page.goto(ADMIN_HOST, wait_until="networkidle", timeout=30000)
             time.sleep(1)
             page.fill('input[type="text"]',     account)
@@ -253,7 +274,7 @@ def fetch_admin_game_stats(last):
             yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
             def scrape_game_table(url, label):
-                """导航到指定排行URL，抓取游戏付费表格数据"""
+                """抓取游戏统计表格，col2=游戏名 col4=主指标 col6=次指标 col8=金额"""
                 page.goto(url, wait_until="networkidle", timeout=30000)
                 time.sleep(4)
                 save_shot(page, f"data_page_{label}")
@@ -264,70 +285,179 @@ def fetch_admin_game_stats(last):
                 rows = []
                 for tr in tables[1].query_selector_all("tr"):
                     cells = tr.query_selector_all("td")
-                    if len(cells) < 9:
+                    if len(cells) < 5:
                         continue
                     game_name = cells[2].inner_text().strip()
                     if not game_name:
                         continue
-                    uv      = int(to_num(cells[4].inner_text()))
-                    orders  = int(to_num(cells[6].inner_text()))
-                    payment = to_num(cells[8].inner_text())
-                    rows.append({"game": game_name, "uv": uv, "orders": orders, "payment": payment})
+                    col4 = to_num(cells[4].inner_text())
+                    col6 = to_num(cells[6].inner_text()) if len(cells) > 6 else 0
+                    col8 = to_num(cells[8].inner_text()) if len(cells) > 8 else 0
+                    rows.append({
+                        "game": game_name,
+                        "uv":      int(col4),
+                        "orders":  int(col6),
+                        "payment": col8,
+                    })
                 log_ok(f"{label}: 抓取 {len(rows)} 条")
                 return rows
 
-            solo_rows      = scrape_game_table(STATS_URL_SOLO,      "solo")
-            publisher_rows = scrape_game_table(STATS_URL_PUBLISHER,  "publisher")
+            # ── 1. 昨日全游戏付费排行（gameType 留空 = 全部游戏）────────────
+            payment_rows = scrape_game_table(STATS_URL_PAYMENT_ALL, "payment_all")
+            log(f"原始付费数据共 {len(payment_rows)} 条游戏：")
+            for r in payment_rows:
+                print(f"原始游戏数据：{r['game']} | 销售额：{r['payment']}")
 
-            # 合并两批数据，按游戏名去重（取销售额较高的那条）
-            all_games_map = {}
-            for r in solo_rows + publisher_rows:
-                name = r["game"]
-                if name not in all_games_map or r["payment"] > all_games_map[name]["payment"]:
-                    all_games_map[name] = r
-            all_rows  = list(all_games_map.values())
-            game_rows = all_rows  # detail_table 使用全量数据
+            # ── 2. 按 PUBLISHER_GAMES 白名单分类，打印每条结果 ───────────────
+            log("--- 游戏分类明细 ---")
+            solo_pool      = []
+            publisher_pool = []
+            for r in payment_rows:
+                is_pub = is_publisher_game(r["game"])
+                print(f"→ {'厂商游戏' if is_pub else '单机游戏'}: {r['game']}")
+                if is_pub:
+                    publisher_pool.append(r)
+                else:
+                    solo_pool.append(r)
+
+            # ── 3. 若昨日无厂商游戏，改用7天数据兜底 ────────────────────────
+            if not publisher_pool:
+                log_warn("昨日无厂商游戏销售数据，改用近7天数据兜底...")
+                rows_7d = scrape_game_table(STATS_URL_PAYMENT_7D, "payment_7d")
+                existing_names = {r["game"] for r in payment_rows}
+                for r in rows_7d:
+                    if is_publisher_game(r["game"]) and r["game"] not in existing_names:
+                        log(f"  [7天补充·厂商] {r['game']}  ¥{r['payment']}")
+                        publisher_pool.append(r)
+                log_ok(f"7天兜底后 → 厂商 {len(publisher_pool)} 款")
+
+            # ── 4. 昨日全游戏访问量排行 ──────────────────────────────────────
+            views_rows = scrape_game_table(STATS_URL_VIEWS_ALL, "views_all")
+            # views 表中 col4 = 访问量（存储在 uv 字段）
+            views_solo_pool = [r for r in views_rows if not is_publisher_game(r["game"])]
+            views_pub_pool  = [r for r in views_rows if     is_publisher_game(r["game"])]
+
+            def views_rows_to_top5(rows):
+                sorted_rows = sorted(rows, key=lambda x: x.get("uv", 0), reverse=True)
+                return [
+                    {"rank": i + 1, "game": r["game"], "views": r.get("uv", 0)}
+                    for i, r in enumerate(sorted_rows[:5])
+                ]
+
+            game_views_top5           = views_rows_to_top5(views_solo_pool)
+            game_views_publisher_top5 = views_rows_to_top5(views_pub_pool)
+
+            # ── 5. 流量统计页抓取 ─────────────────────────────────────────────
+            flow_stats = {}
+            FLOW_LABEL_MAP = {
+                "pv":              ["PV", "浏览量"],
+                "uv":              ["UV", "访客数"],
+                "ip":              ["IP数", "IP"],
+                "bounce_rate":     ["跳出率"],
+                "avg_duration":    ["平均访问时长", "访问时长"],
+                "total_users":     ["总注册用户数", "累计注册"],
+                "new_users":       ["新增注册用户数", "新增注册", "新注册"],
+                "active_users":    ["活跃用户数", "活跃用户"],
+                "paying_users":    ["充值用户数", "充值用户"],
+                "payment_amount":  ["充值额度", "充值金额"],
+                "order_count":     ["订单支付人数", "支付人数"],
+                "order_amount":    ["订单支付额度", "支付额度"],
+                "arpu":            ["ARPU"],
+                "avg_order_value": ["客单价"],
+            }
+            try:
+                page.goto(FLOW_STATS_URL, wait_until="networkidle", timeout=30000)
+                time.sleep(3)
+                # 点击"昨日"按钮
+                for sel in ['button:has-text("昨日")', '.el-button:has-text("昨日")',
+                            '[class*="btn"]:has-text("昨日")', 'span:has-text("昨日")']:
+                    try:
+                        page.click(sel, timeout=2000)
+                        time.sleep(2)
+                        log(f"流量统计：点击昨日按钮成功（{sel}）")
+                        break
+                    except Exception:
+                        pass
+                save_shot(page, "flow_stats")
+
+                # 方法1：查找统计卡片元素
+                for css in [".el-statistic", ".stat-item", ".data-item",
+                            "[class*='statistic']", "[class*='number-card']"]:
+                    items = page.query_selector_all(css)
+                    if items:
+                        log(f"流量统计 - {css} 找到 {len(items)} 个元素")
+                        for item in items:
+                            try:
+                                text = item.inner_text().strip()
+                                if not text:
+                                    continue
+                                log(f"  [{css}] {repr(text[:80])}")
+                                for field, labels in FLOW_LABEL_MAP.items():
+                                    for lbl in labels:
+                                        if lbl in text and field not in flow_stats:
+                                            nums = re.findall(r'[\d,]+\.?\d*', text)
+                                            if nums:
+                                                val = nums[0].replace(',', '')
+                                                flow_stats[field] = float(val) if '.' in val else int(val)
+                                            break
+                            except Exception:
+                                pass
+                        if flow_stats:
+                            break
+
+                # 方法2：扫描整页文本行
+                if not flow_stats:
+                    lines = [l.strip() for l in page.inner_text("body").split("\n") if l.strip()]
+                    for i, line in enumerate(lines):
+                        for field, labels in FLOW_LABEL_MAP.items():
+                            for lbl in labels:
+                                if lbl in line and field not in flow_stats:
+                                    for candidate in [line] + lines[i+1:i+3]:
+                                        nums = re.findall(r'[\d,]+\.?\d*', candidate)
+                                        if nums:
+                                            val = nums[0].replace(',', '')
+                                            flow_stats[field] = float(val) if '.' in val else int(val)
+                                            break
+                                    break
+
+                log_ok(f"流量统计页抓取结果（{len(flow_stats)} 项）: {flow_stats}")
+            except Exception as e:
+                log_err(f"流量统计页抓取失败: {e}")
+
+            # ── 6. 整理付费 TOP5 ──────────────────────────────────────────────
+            def rows_to_top5(rows):
+                sorted_rows = sorted(rows, key=lambda x: x["payment"], reverse=True)
+                return [
+                    {"rank": i + 1, "game": r["game"], "sales": r["payment"], "growth": 0}
+                    for i, r in enumerate(sorted_rows[:5])
+                ]
+
+            solo_top5      = rows_to_top5(solo_pool)
+            publisher_top5 = rows_to_top5(publisher_pool)
+
+            log_ok(f"分类结果 → 单机 {len(solo_pool)} 款 / 厂商 {len(publisher_pool)} 款")
+            log(f"  单机 TOP5   : {[r['game'] for r in solo_top5]}")
+            log(f"  厂商 TOP5   : {[r['game'] for r in publisher_top5]}")
+            log(f"  访问 TOP5   : {[r['game'] for r in game_views_top5]}")
+            log(f"  厂商访问TOP5: {[r['game'] for r in game_views_publisher_top5]}")
+
+            detail_rows = [{
+                "date":       yesterday,
+                "game":       r["game"],
+                "traffic":    r["uv"],
+                "sales":      r["payment"],
+                "conversion": round(r["orders"] / r["uv"] * 100, 2) if r["uv"] > 0 else 0,
+            } for r in payment_rows]
 
             browser.close()
 
-        def rows_to_top5(rows):
-            sorted_rows = sorted(rows, key=lambda x: x["payment"], reverse=True)
-            return [
-                {"rank": i + 1, "game": r["game"], "sales": r["payment"], "growth": 0}
-                for i, r in enumerate(sorted_rows[:5])
-            ]
-
-        # 按 PUBLISHER_GAMES 白名单分类，而非依赖后台 gameType 参数
-        log("--- 游戏分类明细 ---")
-        solo_pool      = []
-        publisher_pool = []
-        for r in all_rows:
-            if is_publisher_game(r["game"]):
-                log(f"  [厂商] {r['game']}  ¥{r['payment']}")
-                publisher_pool.append(r)
-            else:
-                log(f"  [单机] {r['game']}  ¥{r['payment']}")
-                solo_pool.append(r)
-
-        solo_top5      = rows_to_top5(solo_pool)
-        publisher_top5 = rows_to_top5(publisher_pool)
-        log_ok(f"分类结果 → 单机 {len(solo_pool)} 款 / 厂商 {len(publisher_pool)} 款")
-        log(f"  单机 TOP5  : {[r['game'] for r in solo_top5]}")
-        log(f"  厂商 TOP5  : {[r['game'] for r in publisher_top5]}")
-
-        detail_rows = [{
-            "date":       yesterday,
-            "game":       r["game"],
-            "traffic":    r["uv"],
-            "sales":      r["payment"],
-            "conversion": round(r["orders"] / r["uv"] * 100, 2) if r["uv"] > 0 else 0,
-        } for r in game_rows]
-
-        log_ok(f"单机 TOP5 → {len(solo_top5)} 条 | 厂商 TOP5 → {len(publisher_top5)} 条")
         return {
-            "solo_game_top5":      solo_top5,
-            "publisher_game_top5": publisher_top5,
-            "detail_rows":         detail_rows,
+            "solo_game_top5":            solo_top5,
+            "publisher_game_top5":       publisher_top5,
+            "game_views_top5":           game_views_top5,
+            "game_views_publisher_top5": game_views_publisher_top5,
+            "detail_rows":               detail_rows,
+            "flow_stats":                flow_stats,
         }
 
     except Exception as e:
@@ -436,8 +566,10 @@ def main():
     detail_table.sort(key=lambda x: (x["date"], x["game"]), reverse=True)
 
     # ── 新增字段计算 ──────────────────────────────────────────────────────────
-    solo_game_top5      = game_data.get("solo_game_top5")      or last.get("solo_game_top5", [])
-    publisher_game_top5 = game_data.get("publisher_game_top5") or last.get("publisher_game_top5", [])
+    solo_game_top5           = game_data.get("solo_game_top5")            or last.get("solo_game_top5", [])
+    publisher_game_top5      = game_data.get("publisher_game_top5")       or last.get("publisher_game_top5", [])
+    game_views_top5          = game_data.get("game_views_top5")           or last.get("game_views_top5", [])
+    game_views_publisher_top5= game_data.get("game_views_publisher_top5") or last.get("game_views_publisher_top5", [])
 
     # 周环比热力图 = daily_sales（前端JS自动补齐56天格子）
     weekly_heatmap = daily_sales
@@ -450,8 +582,43 @@ def main():
             sum(r["amount"] for r in daily_sales if r["date"].startswith(this_month)), 2
         )
 
-    # 活跃游戏数 = solo + publisher 总数
-    active_games = len(solo_game_top5) + len(publisher_game_top5)
+    # 活跃游戏数 = 昨日有付费记录的游戏数（排除汇总行）
+    detail_rows_raw = game_data.get("detail_rows", [])
+    active_games = len({
+        r["game"] for r in detail_rows_raw
+        if r.get("game") and r["game"] != "所有游戏（汇总）"
+    }) or (len(solo_game_top5) + len(publisher_game_top5))
+
+    # ── 流量统计（API + Playwright 流量页融合）────────────────────────────────
+    flow_stats    = game_data.get("flow_stats", {})
+    uv            = api_data.get("total_traffic", 0)
+    pv_val        = api_data.get("pv", 0)
+    new_reg       = api_data.get("new_reg", 0)
+    active_users  = api_data.get("active_users", 0)
+    paid_users    = api_data.get("paid_users", 0)
+    today_orders  = api_data.get("today_orders", 0)
+
+    traffic_stats = {
+        "pv":              int(flow_stats.get("pv",             pv_val)),
+        "uv":              int(flow_stats.get("uv",             uv)),
+        "ip":              int(flow_stats.get("ip",             0)),
+        "bounce_rate":     flow_stats.get("bounce_rate",        ""),
+        "avg_duration":    flow_stats.get("avg_duration",       ""),
+        "total_users":     int(flow_stats.get("total_users",    0)),
+        "new_users":       int(flow_stats.get("new_users",      new_reg)),
+        "active_users":    int(flow_stats.get("active_users",   active_users)),
+        "paying_users":    int(flow_stats.get("paying_users",   paid_users)),
+        "payment_amount":  round(float(flow_stats.get("payment_amount", today_sales)), 2),
+        "order_count":     int(flow_stats.get("order_count",    today_orders)),
+        "order_amount":    round(float(flow_stats.get("order_amount",  today_sales)), 2),
+        "arpu":            round(float(flow_stats.get("arpu",
+                               today_sales / active_users if active_users else 0)), 2),
+        "avg_order_value": round(float(flow_stats.get("avg_order_value",
+                               today_sales / today_orders if today_orders else 0)), 2),
+    }
+    log_ok(f"流量统计汇总 → UV={traffic_stats['uv']}  PV={traffic_stats['pv']}"
+           f"  新注册={traffic_stats['new_users']}  付费={traffic_stats['paying_users']}"
+           f"  ARPU=¥{traffic_stats['arpu']}  客单价=¥{traffic_stats['avg_order_value']}")
 
     # ── 组装输出 ──────────────────────────────────────────────────────────────
     update_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -466,14 +633,17 @@ def main():
             "total_traffic":   api_data["total_traffic"],
             "conversion_rate": api_data["conversion_rate"],
         },
-        "daily_sales":          daily_sales,
-        "solo_game_top5":       solo_game_top5,
-        "publisher_game_top5":  publisher_game_top5,
-        "weekly_heatmap":       weekly_heatmap,
-        "monthly_total":        month_sales,
-        "active_games":         active_games,
-        "traffic_source":       api_data.get("traffic_source") or last.get("traffic_source", []),
-        "detail_table":         detail_table or last.get("detail_table", []),
+        "daily_sales":               daily_sales,
+        "solo_game_top5":            solo_game_top5,
+        "publisher_game_top5":       publisher_game_top5,
+        "game_views_top5":           game_views_top5,
+        "game_views_publisher_top5": game_views_publisher_top5,
+        "weekly_heatmap":            weekly_heatmap,
+        "monthly_total":             month_sales,
+        "active_games":              active_games,
+        "traffic_stats":             traffic_stats,
+        "traffic_source":            api_data.get("traffic_source") or last.get("traffic_source", []),
+        "detail_table":              detail_table or last.get("detail_table", []),
     }
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -495,9 +665,20 @@ def main():
     log(f"  日销记录     : {len(output['daily_sales'])} 条")
     log(f"  单机 TOP5    : {len(output['solo_game_top5'])} 条")
     log(f"  厂商 TOP5    : {len(output['publisher_game_top5'])} 条")
+    log(f"  访问 TOP5    : {len(output['game_views_top5'])} 条")
     log(f"  明细表       : {len(output['detail_table'])} 条")
     log(f"  用户行为分布 : {len(output['traffic_source'])} 项")
+    log(f"  流量统计字段 : {list(output['traffic_stats'].keys())}")
     log("=" * 60)
+    # 打印所有新采集字段，确认写入正确
+    ts = output['traffic_stats']
+    print("=" * 50)
+    print("新增流量统计字段汇总：")
+    for k, v in ts.items():
+        print(f"  traffic_stats.{k} = {v}")
+    print(f"  game_views_top5           = {[r['game'] for r in output['game_views_top5']]}")
+    print(f"  game_views_publisher_top5 = {[r['game'] for r in output['game_views_publisher_top5']]}")
+    print("=" * 50)
 
 
 if __name__ == "__main__":

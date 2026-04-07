@@ -164,6 +164,8 @@
     }
   ],
   "publisher_game_top5": [],
+  "game_views_top5": [],
+  "game_views_publisher_top5": [],
   "weekly_heatmap": [
     {
       "date": "2026-02-09",
@@ -400,6 +402,22 @@
   ],
   "monthly_total": 26405.18,
   "active_games": 20,
+  "traffic_stats": {
+    "pv": 4483,
+    "uv": 4483,
+    "ip": 0,
+    "bounce_rate": "",
+    "avg_duration": "",
+    "total_users": 0,
+    "new_users": 232,
+    "active_users": 32,
+    "paying_users": 27,
+    "payment_amount": 4515.49,
+    "order_count": 159,
+    "order_amount": 4515.49,
+    "arpu": 141.11,
+    "avg_order_value": 28.4
+  },
   "traffic_source": [
     {
       "source": "仅浏览（未注册）",

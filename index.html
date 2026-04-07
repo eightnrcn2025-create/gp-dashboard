@@ -358,6 +358,35 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 .tag-live  { background: rgba(63,185,80,.15); color: var(--green); }
 .tag-daily { background: rgba(227,179,65,.15); color: var(--yellow); }
 
+/* ── Mini Traffic KPI Cards ──────────────────────────────────────────────── */
+.mini-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px; margin-bottom: 22px;
+}
+@media (max-width:1400px) { .mini-kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width:768px)  { .mini-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+.mini-kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px 10px 16px;
+  position: relative; overflow: hidden;
+  transition: box-shadow .2s, transform .15s;
+  border-left: 3px solid transparent;
+}
+.mini-kpi-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+.mini-kpi-card.blue   { border-left-color: var(--blue); }
+.mini-kpi-card.green  { border-left-color: var(--green); }
+.mini-kpi-card.orange { border-left-color: var(--orange); }
+.mini-kpi-card.purple { border-left-color: var(--purple); }
+.mini-kpi-card.red    { border-left-color: var(--red); }
+.mini-kpi-card.yellow { border-left-color: var(--yellow); }
+.mini-kpi-card.cyan   { border-left-color: var(--cyan); }
+.mini-kpi-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+.mini-kpi-value { font-size: 20px; font-weight: 700; color: #e6edf3; line-height: 1.2; }
+.mini-kpi-value .unit { font-size: 11px; color: var(--text2); font-weight: 400; margin-left: 1px; }
+
 /* ── Page Footer ─────────────────────────────────────────────────────────── */
 .footer {
   text-align: center; padding: 18px 32px;
@@ -455,6 +484,34 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
       <div class="kpi-value skeleton skeleton-value" id="kpiActiveGames" style="display:block"></div>
       <div class="kpi-delta flat">昨日有交易记录</div>
       <div class="kpi-source">后台游戏统计 API</div>
+    </div>
+  </div>
+
+  <!-- Traffic Stats Mini KPI -->
+  <div class="mini-kpi-grid" id="trafficStatsGrid">
+    <div class="mini-kpi-card purple">
+      <div class="mini-kpi-label">UV 访客数</div>
+      <div class="mini-kpi-value" id="tsUV">--</div>
+    </div>
+    <div class="mini-kpi-card blue">
+      <div class="mini-kpi-label">PV 浏览量</div>
+      <div class="mini-kpi-value" id="tsPV">--</div>
+    </div>
+    <div class="mini-kpi-card green">
+      <div class="mini-kpi-label">新增注册</div>
+      <div class="mini-kpi-value" id="tsNewUsers">--</div>
+    </div>
+    <div class="mini-kpi-card orange">
+      <div class="mini-kpi-label">充值用户</div>
+      <div class="mini-kpi-value" id="tsPayingUsers">--</div>
+    </div>
+    <div class="mini-kpi-card yellow">
+      <div class="mini-kpi-label">订单支付额</div>
+      <div class="mini-kpi-value" id="tsOrderAmount">--</div>
+    </div>
+    <div class="mini-kpi-card cyan">
+      <div class="mini-kpi-label">ARPU</div>
+      <div class="mini-kpi-value" id="tsARPU">--</div>
     </div>
   </div>
 
@@ -720,6 +777,7 @@ function renderAll(d) {
   document.getElementById('srcLastUpdate').textContent = '最后更新：' + updateTime;
 
   renderKPI(d.kpi, d.monthly_total, d.active_games);
+  renderTrafficStats(d.traffic_stats);
   renderLineChart(d.daily_sales, lineRange);
   renderPieChart(d.traffic_source);
   renderSoloTop5(d.solo_game_top5 || []);
@@ -759,6 +817,20 @@ function fmtMoney(n) {
 function fmtMoneyPlain(n) {
   if (n >= 10000) return (n / 10000).toFixed(2) + '万';
   return '¥' + n.toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  Traffic Stats Mini Cards
+// ════════════════════════════════════════════════════════════════════
+function renderTrafficStats(ts) {
+  if (!ts) return;
+  const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+  set('tsUV',          (ts.uv || 0).toLocaleString() + '<span class="unit"> UV</span>');
+  set('tsPV',          (ts.pv || 0).toLocaleString() + '<span class="unit"> PV</span>');
+  set('tsNewUsers',    (ts.new_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
+  set('tsPayingUsers', (ts.paying_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
+  set('tsOrderAmount', fmtMoney(ts.order_amount || ts.payment_amount || 0) + '<span class="unit"> 元</span>');
+  set('tsARPU',        '¥' + (ts.arpu || 0).toFixed(2));
 }
 
 function renderKPI(kpi, monthlyTotal, activeGames) {
@@ -905,26 +977,28 @@ function renderPieChart(sources) {
     }],
     series: [{
       type: 'pie',
-      radius: ['35%', '55%'],
-      center: ['50%', '50%'],
+      radius: ['30%', '50%'],
+      center: ['50%', '48%'],
       avoidLabelOverlap: true,
       data: sources.map((s, i) => ({ name: s.source, value: s.value, itemStyle: { color: COLORS[i % COLORS.length] } })),
       label: {
         show: true,
         position: 'outside',
-        formatter: '{b}\n{d}%',
-        fontSize: 11,
         rotate: 0,
-        align: 'center',
-        verticalAlign: 'middle',
-        color: '#c9d1d9'
+        formatter: function(params) {
+          return params.name + '\n' + params.percent.toFixed(1) + '%';
+        },
+        fontSize: 11,
+        color: '#cccccc',
+        alignTo: 'labelLine',
+        edgeDistance: '10%'
       },
       labelLine: {
         show: true,
         length: 12,
         length2: 8,
-        smooth: true,
-        lineStyle: { color: '#484f58', width: 1 }
+        smooth: 0.5,
+        lineStyle: { width: 1, color: '#666' }
       },
       emphasis: {
         itemStyle: { shadowBlur: 16, shadowColor: 'rgba(56,139,253,.35)' },
