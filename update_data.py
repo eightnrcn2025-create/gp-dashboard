@@ -64,9 +64,22 @@ PUBLISHER_GAMES = [
     "火影色欲传", "三国：一统天下", "忍娘24", "口袋觉醒：成人版", "妻龙珠",
 ]
 
+def clean_name(name: str) -> str:
+    """去除游戏名中的括号内容（含全角/方括号）和空白，便于模糊匹配"""
+    return re.sub(r'[（(【\[].*?[）)\]】]|\s+', '', name)
+
 def is_publisher_game(game_name: str) -> bool:
-    """游戏名称包含厂商游戏白名单中的任意关键词则返回 True"""
-    return any(kw in game_name for kw in PUBLISHER_GAMES)
+    """
+    游戏名匹配厂商游戏白名单：
+    1. 先做 clean_name 去掉括号/空格后再比较
+    2. 双向包含：白名单词 in 游戏名，或 游戏名 in 白名单词
+    """
+    cleaned = clean_name(game_name)
+    for kw in PUBLISHER_GAMES:
+        kw_c = clean_name(kw)
+        if kw_c in cleaned or cleaned in kw_c:
+            return True
+    return False
 
 # ── 日志 ──────────────────────────────────────────────────────────────────────
 def log(msg, level="INFO"):

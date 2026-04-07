@@ -214,6 +214,7 @@ body {
 .chart-h260  { width: 100%; height: 260px; }
 .chart-h300  { width: 100%; height: 300px; }
 .chart-h340  { width: 100%; height: 340px; }
+.chart-h380  { width: 100%; height: 380px; }
 
 /* ── Ranking Badge ───────────────────────────────────────────────────────── */
 .rank-hint {
@@ -542,7 +543,7 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
         </div>
         <div class="card-badge">后台 API · 今日实时</div>
       </div>
-      <div class="chart-body"><div class="chart-h340" id="pieChart"></div></div>
+      <div class="chart-body"><div class="chart-h380" id="pieChart"></div></div>
     </div>
   </div>
 
@@ -963,46 +964,69 @@ function renderPieChart(sources) {
     window.addEventListener('resize', () => chartPie.resize());
   }
 
+  const pieData = sources.map((s, i) => ({
+    name: s.source, value: s.value,
+    itemStyle: { color: COLORS[i % COLORS.length] }
+  }));
+  const totalVal = total;
+
   chartPie.setOption({
     backgroundColor: 'transparent',
-    tooltip: { ...TOOLTIP, trigger: 'item', formatter: p => `${p.name}<br>${p.value.toLocaleString()} 人 <b>(${p.percent}%)</b>` },
+    tooltip: {
+      ...TOOLTIP, trigger: 'item',
+      formatter: p => `${p.name}<br>${p.value.toLocaleString()} 人 <b>(${p.percent.toFixed(1)}%)</b>`
+    },
+    legend: {
+      orient: 'horizontal',
+      bottom: 0,
+      left: 'center',
+      itemWidth: 10, itemHeight: 10,
+      textStyle: { color: '#aaa', fontSize: 11 },
+      formatter: function(name) {
+        const item = pieData.find(d => d.name === name);
+        if (!item) return name;
+        const pct = totalVal ? (item.value / totalVal * 100).toFixed(1) : '0.0';
+        return name + '  ' + pct + '%';
+      }
+    },
     graphic: [{
-      type: 'text', left: '50%', top: '43%',
+      type: 'text', left: '50%', top: '37%',
       style: { text: total.toLocaleString(), font: 'bold 20px sans-serif', fill: '#e6edf3', textAlign: 'center' },
       z: 100
     },{
-      type: 'text', left: '50%', top: '54%',
+      type: 'text', left: '50%', top: '48%',
       style: { text: '昨日总计', font: '11px sans-serif', fill: '#6e7681', textAlign: 'center' },
       z: 100
     }],
     series: [{
       type: 'pie',
-      radius: ['30%', '50%'],
-      center: ['50%', '48%'],
+      radius: ['38%', '60%'],
+      center: ['50%', '45%'],
       avoidLabelOverlap: true,
-      data: sources.map((s, i) => ({ name: s.source, value: s.value, itemStyle: { color: COLORS[i % COLORS.length] } })),
+      minShowLabelAngle: 8,
+      data: pieData,
       label: {
         show: true,
         position: 'outside',
         rotate: 0,
         formatter: function(params) {
+          if (params.percent < 3) return '';
           return params.name + '\n' + params.percent.toFixed(1) + '%';
         },
         fontSize: 11,
-        color: '#cccccc',
-        alignTo: 'labelLine',
-        edgeDistance: '10%'
+        lineHeight: 16,
+        color: '#cccccc'
       },
       labelLine: {
         show: true,
-        length: 12,
-        length2: 8,
-        smooth: 0.5,
-        lineStyle: { width: 1, color: '#666' }
+        showAbove: true,
+        length: 10,
+        length2: 6,
+        smooth: true
       },
       emphasis: {
         itemStyle: { shadowBlur: 16, shadowColor: 'rgba(56,139,253,.35)' },
-        label: { show: true, fontSize: 13, color: '#e6edf3', fontWeight: 600 }
+        label: { show: true, fontSize: 13, fontWeight: 'bold', color: '#e6edf3' }
       }
     }]
   });
