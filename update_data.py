@@ -33,10 +33,15 @@ SHEET2_GID = "866845188"
 # Gamepark 后台
 ADMIN_HOST  = "https://admin.gamepark.co"
 API_BASE    = f"{ADMIN_HOST}/api"
-STATS_URL   = (
+STATS_URL_SOLO = (
     f"{ADMIN_HOST}/?time=1756199148799"
     "#/statistics/game-statistics-more"
     "?statType=payment&gameType=alone&timeFilter=yesterday"
+)
+STATS_URL_PUBLISHER = (
+    f"{ADMIN_HOST}/?time=1756199148799"
+    "#/statistics/game-statistics-more"
+    "?statType=payment&gameType=publisher&timeFilter=yesterday"
 )
 
 # ── 日志 ──────────────────────────────────────────────────────────────────────
@@ -64,10 +69,10 @@ def load_last_data():
         except Exception as e:
             log_warn(f"读取上次 data.json 失败: {e}")
     return {
-        "last_updated": "",
+        "last_updated": "", "data_date": "", "update_time": "",
         "kpi": {"today_sales": 0, "yesterday_sales": 0,
                 "growth_rate": 0, "total_traffic": 0, "conversion_rate": 0},
-        "daily_sales": [], "game_compare": [], "top_games": [],
+        "daily_sales": [], "solo_game_top5": [], "publisher_game_top5": [],
         "weekly_heatmap": [], "traffic_source": [], "detail_table": [],
         "monthly_total": 0, "active_games": 0
     }
@@ -151,13 +156,14 @@ def fetch_admin_api(last):
         headers = admin_login()
         log_ok("后台 API 登录成功")
 
-        # ── 1. 今日/昨日/本月订单统计 ─────────────────────────────────────
+        # ── 1. 昨日/前日/本月订单统计（脚本在 0:05 运行，以"昨日"为主数据）────
         stats = api_get(headers, "/admin/orders/stats/recent")
-        result["today_sales"]     = to_num(stats.get("today",    {}).get("total_amount", 0))
-        result["yesterday_sales"] = to_num(stats.get("yestoday", {}).get("total_amount", 0))
-        result["today_orders"]    = int(stats.get("today",    {}).get("total_count", 0))
+        # 脚本于凌晨运行，API 的 yestoday = 昨日完整数据 = data_date
+        result["today_sales"]     = to_num(stats.get("yestoday", {}).get("total_amount", 0))
+        result["yesterday_sales"] = to_num(stats.get("today",    {}).get("total_amount", 0))  # 暂存，稍后用 daily_sales[-2] 覆盖
+        result["today_orders"]    = int(stats.get("yestoday",    {}).get("total_count", 0))
         result["month_sales"]     = to_num(stats.get("month",    {}).get("total_amount", 0))
-        log_ok(f"订单统计 → 今日¥{result['today_sales']}  昨日¥{result['yesterday_sales']}")
+        log_ok(f"订单统计 → 昨日¥{result['today_sales']}  (data_date={yesterday})")
 
         # ── 2. 近30天每日订单（作为 daily_sales 主数据源）───────────────────
         daily_raw = api_get(headers, "/admin/orders/stats/recentDaily", {"period_type": "30d"})
@@ -206,10 +212,11 @@ def fetch_admin_api(last):
 # 数据源二：后台 Playwright — 游戏付费排行（game_compare + detail_table）
 # =============================================================================
 def fetch_admin_game_stats(last):
-    log("=== [Playwright] 游戏付费排行 ===")
+    log("=== [Playwright] 单机/厂商游戏排行 ===")
     fallback = {
-        "game_compare": last.get("game_compare", []),
-        "detail_rows":  last.get("detail_table", []),
+        "solo_game_top5":      last.get("solo_game_top5", []),
+        "publisher_game_top5": last.get("publisher_game_top5", []),
+        "detail_rows":         last.get("detail_table", []),
     }
     load_dotenv(ENV_FILE)
     account  = os.getenv("GAMEPARK_ACCOUNT", "")
@@ -232,38 +239,49 @@ def fetch_admin_game_stats(last):
             time.sleep(2)
             save_shot(page, "login_success")
 
-            page.goto(STATS_URL, wait_until="networkidle", timeout=30000)
-            time.sleep(4)
-            save_shot(page, "data_page")
-
-            tables = page.query_selector_all("table")
-            if len(tables) < 2:
-                raise ValueError(f"仅找到 {len(tables)} 个 table")
-
-            trs = tables[1].query_selector_all("tr")
             yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-            game_rows = []
 
-            for tr in trs:
-                cells = tr.query_selector_all("td")
-                if len(cells) < 9:
-                    continue
-                game_name = cells[2].inner_text().strip()
-                if not game_name:
-                    continue
-                uv      = int(to_num(cells[4].inner_text()))
-                orders  = int(to_num(cells[6].inner_text()))
-                payment = to_num(cells[8].inner_text())
-                game_rows.append({
-                    "game": game_name, "uv": uv,
-                    "orders": orders, "payment": payment
-                })
+            def scrape_game_table(url, label):
+                """导航到指定排行URL，抓取游戏付费表格数据"""
+                page.goto(url, wait_until="networkidle", timeout=30000)
+                time.sleep(4)
+                save_shot(page, f"data_page_{label}")
+                tables = page.query_selector_all("table")
+                if len(tables) < 2:
+                    log_warn(f"{label}: 仅找到 {len(tables)} 个 table，跳过")
+                    return []
+                rows = []
+                for tr in tables[1].query_selector_all("tr"):
+                    cells = tr.query_selector_all("td")
+                    if len(cells) < 9:
+                        continue
+                    game_name = cells[2].inner_text().strip()
+                    if not game_name:
+                        continue
+                    uv      = int(to_num(cells[4].inner_text()))
+                    orders  = int(to_num(cells[6].inner_text()))
+                    payment = to_num(cells[8].inner_text())
+                    rows.append({"game": game_name, "uv": uv, "orders": orders, "payment": payment})
+                log_ok(f"{label}: 抓取 {len(rows)} 条")
+                return rows
+
+            solo_rows      = scrape_game_table(STATS_URL_SOLO,      "solo")
+            publisher_rows = scrape_game_table(STATS_URL_PUBLISHER,  "publisher")
+            game_rows = solo_rows  # detail_table 仍用单机数据
 
             browser.close()
 
-        game_compare = [{"game": r["game"], "value": r["payment"]}
-                        for r in sorted(game_rows, key=lambda x: x["payment"], reverse=True)]
-        detail_rows  = [{
+        def rows_to_top5(rows):
+            sorted_rows = sorted(rows, key=lambda x: x["payment"], reverse=True)
+            return [
+                {"rank": i + 1, "game": r["game"], "sales": r["payment"], "growth": 0}
+                for i, r in enumerate(sorted_rows[:5])
+            ]
+
+        solo_top5      = rows_to_top5(solo_rows)
+        publisher_top5 = rows_to_top5(publisher_rows)
+
+        detail_rows = [{
             "date":       yesterday,
             "game":       r["game"],
             "traffic":    r["uv"],
@@ -271,12 +289,18 @@ def fetch_admin_game_stats(last):
             "conversion": round(r["orders"] / r["uv"] * 100, 2) if r["uv"] > 0 else 0,
         } for r in game_rows]
 
-        log_ok(f"游戏排行 → {len(game_compare)} 条")
-        return {"game_compare": game_compare, "detail_rows": detail_rows}
+        log_ok(f"单机 TOP5 → {len(solo_top5)} 条 | 厂商 TOP5 → {len(publisher_top5)} 条")
+        return {
+            "solo_game_top5":      solo_top5,
+            "publisher_game_top5": publisher_top5,
+            "detail_rows":         detail_rows,
+        }
 
     except Exception as e:
         log_err(f"Playwright 失败: {e}\n{traceback.format_exc()}")
         return fallback
+
+
 
 
 # =============================================================================
@@ -343,8 +367,10 @@ def fetch_sheet2_detail(last):
 # =============================================================================
 def main():
     t0 = datetime.now()
+    yesterday = (t0 - timedelta(days=1)).strftime("%Y-%m-%d")
     log("=" * 60)
-    log(f"开始执行数据更新  {t0.strftime('%Y-%m-%d %H:%M:%S')}")
+    log(f"正在抓取 [{yesterday}]（昨日）的数据...")
+    log(f"脚本执行时间：{t0.strftime('%Y-%m-%d %H:%M:%S')}")
     log("=" * 60)
 
     load_dotenv(ENV_FILE)
@@ -355,9 +381,17 @@ def main():
     game_data  = fetch_admin_game_stats(last)
     sheet2_det = fetch_sheet2_detail(last)
 
-    # ── 计算环比 ──────────────────────────────────────────────────────────────
-    today_sales     = api_data["today_sales"]
-    yesterday_sales = api_data["yesterday_sales"]
+    # ── 整理日销售数据 ──────────────────────────────────────────────────────
+    daily_sales = api_data.get("daily_sales") or last.get("daily_sales", [])
+
+    # ── 计算环比（昨日 vs 前日，两个完整日的对比）───────────────────────────
+    # api_data["today_sales"] = API的 yestoday（昨日完整数据）
+    # 前日销售 = daily_sales 倒数第二条（昨日之前一天）
+    today_sales = api_data["today_sales"]
+    if len(daily_sales) >= 2:
+        yesterday_sales = daily_sales[-2]["amount"]
+    else:
+        yesterday_sales = api_data.get("yesterday_sales", 0)
     growth_rate = (
         round((today_sales - yesterday_sales) / yesterday_sales * 100, 2)
         if yesterday_sales else 0.0
@@ -368,48 +402,44 @@ def main():
     detail_table.sort(key=lambda x: (x["date"], x["game"]), reverse=True)
 
     # ── 新增字段计算 ──────────────────────────────────────────────────────────
-    daily_sales = api_data.get("daily_sales") or last.get("daily_sales", [])
-    game_compare = game_data.get("game_compare") or last.get("game_compare", [])
+    solo_game_top5      = game_data.get("solo_game_top5")      or last.get("solo_game_top5", [])
+    publisher_game_top5 = game_data.get("publisher_game_top5") or last.get("publisher_game_top5", [])
 
-    # Top 5 游戏（排行榜）—— 昨日 game_compare 前5条加环比
-    top_games = [
-        {"rank": i + 1, "game": g["game"], "sales": g["value"], "growth": 0}
-        for i, g in enumerate(game_compare[:5])
-    ]
-
-    # 周环比热力图 —— 近30天日销售额（前端JS会补齐56天）
-    # 若有更长历史数据可扩展；目前直接用 daily_sales
+    # 周环比热力图 = daily_sales（前端JS自动补齐56天格子）
     weekly_heatmap = daily_sales
 
-    # 本月累计销售额 —— 优先来自后台 API stats/recent，兜底用 daily_sales 当月求和
+    # 本月累计销售额 = 后台 API month 字段，兜底用当月 daily_sales 求和
     month_sales = api_data.get("month_sales", 0)
     if not month_sales:
-        this_month = datetime.now().strftime("%Y-%m")
+        this_month = (datetime.now() - timedelta(days=1)).strftime("%Y-%m")  # 昨日所在月
         month_sales = round(
             sum(r["amount"] for r in daily_sales if r["date"].startswith(this_month)), 2
         )
 
-    # 活跃游戏数量 —— game_compare 的行数即有交易记录的游戏数
-    active_games = len(game_compare)
+    # 活跃游戏数 = solo + publisher 总数
+    active_games = len(solo_game_top5) + len(publisher_game_top5)
 
     # ── 组装输出 ──────────────────────────────────────────────────────────────
+    update_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     output = {
-        "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "last_updated":  update_ts,
+        "data_date":     yesterday,                        # 昨日日期（数据日期）
+        "update_time":   update_ts,                        # 脚本运行时间
         "kpi": {
-            "today_sales":     round(today_sales, 2),
-            "yesterday_sales": round(yesterday_sales, 2),
+            "today_sales":     round(today_sales, 2),      # 昨日完整销售额
+            "yesterday_sales": round(yesterday_sales, 2),  # 前日销售额（环比基准）
             "growth_rate":     growth_rate,
             "total_traffic":   api_data["total_traffic"],
             "conversion_rate": api_data["conversion_rate"],
         },
-        "daily_sales":     daily_sales,
-        "game_compare":    game_compare,
-        "top_games":       top_games,
-        "weekly_heatmap":  weekly_heatmap,
-        "monthly_total":   month_sales,
-        "active_games":    active_games,
-        "traffic_source":  api_data.get("traffic_source") or last.get("traffic_source", []),
-        "detail_table":    detail_table or last.get("detail_table", []),
+        "daily_sales":          daily_sales,
+        "solo_game_top5":       solo_game_top5,
+        "publisher_game_top5":  publisher_game_top5,
+        "weekly_heatmap":       weekly_heatmap,
+        "monthly_total":        month_sales,
+        "active_games":         active_games,
+        "traffic_source":       api_data.get("traffic_source") or last.get("traffic_source", []),
+        "detail_table":         detail_table or last.get("detail_table", []),
     }
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -417,20 +447,20 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     elapsed = (datetime.now() - t0).total_seconds()
-    total   = sum(len(output[k]) for k in ["daily_sales","game_compare","detail_table"])
+    total   = sum(len(output[k]) for k in ["daily_sales","detail_table"])
 
     log("=" * 60)
-    log_ok(f"更新完成，共处理 {total} 条数据，耗时 {elapsed:.1f}s")
-    log(f"  今日销售额   : ¥{output['kpi']['today_sales']:,.2f}")
-    log(f"  昨日销售额   : ¥{output['kpi']['yesterday_sales']:,.2f}")
-    log(f"  环比增长率   : {output['kpi']['growth_rate']:+.2f}%")
-    log(f"  总流量       : {output['kpi']['total_traffic']:,} UV")
-    log(f"  转化率       : {output['kpi']['conversion_rate']:.2f}%")
+    log_ok(f"更新完成  数据日期={output['data_date']}（昨日）  耗时 {elapsed:.1f}s")
+    log(f"  昨日销售额   : ¥{output['kpi']['today_sales']:,.2f}")
+    log(f"  前日销售额   : ¥{output['kpi']['yesterday_sales']:,.2f}")
+    log(f"  日环比       : {output['kpi']['growth_rate']:+.2f}%")
+    log(f"  昨日流量     : {output['kpi']['total_traffic']:,} UV")
+    log(f"  昨日转化率   : {output['kpi']['conversion_rate']:.2f}%")
     log(f"  本月累计     : ¥{output['monthly_total']:,.2f}")
     log(f"  活跃游戏数   : {output['active_games']} 款")
     log(f"  日销记录     : {len(output['daily_sales'])} 条")
-    log(f"  游戏排行     : {len(output['game_compare'])} 条")
-    log(f"  TOP5排行     : {len(output['top_games'])} 条")
+    log(f"  单机 TOP5    : {len(output['solo_game_top5'])} 条")
+    log(f"  厂商 TOP5    : {len(output['publisher_game_top5'])} 条")
     log(f"  明细表       : {len(output['detail_table'])} 条")
     log(f"  用户行为分布 : {len(output['traffic_source'])} 项")
     log("=" * 60)

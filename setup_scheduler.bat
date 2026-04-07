@@ -37,14 +37,14 @@ if not errorlevel 1 (
 
 REM 创建新计划任务
 REM   /sc DAILY    每天执行
-REM   /st 08:00    早上 8 点
+REM   /st 00:05    每日凌晨 0 点 5 分（留缓冲抓取昨日完整数据）
 REM   /rl HIGHEST  以最高权限运行，避免网络访问受限
 REM   /f           强制覆盖
 schtasks /create ^
     /tn "%TASK_NAME%" ^
     /tr "cmd /c \"cd /d \"%PROJECT_DIR%\" && %PYTHON_CMD% update_data.py >> \"%PROJECT_DIR%\logs\update_log.txt\" 2>&1\"" ^
     /sc DAILY ^
-    /st 08:00 ^
+    /st 00:05 ^
     /rl HIGHEST ^
     /f
 
@@ -59,7 +59,7 @@ echo.
 echo [OK] 定时任务创建成功！
 echo.
 echo   任务名称 : %TASK_NAME%
-echo   执行时间 : 每天 08:00
+echo   执行时间 : 每天 00:05（凌晨，抓取昨日完整数据）
 echo   项目路径 : %PROJECT_DIR%
 echo   日志文件 : %PROJECT_DIR%\logs\update_log.txt
 echo.

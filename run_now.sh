@@ -5,8 +5,10 @@
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+YESTERDAY=$(date -v-1d '+%Y-%m-%d' 2>/dev/null || date -d 'yesterday' '+%Y-%m-%d' 2>/dev/null || echo "昨日")
 echo "================================================"
 echo "  Gamepark 看板 - 立即执行数据更新"
+echo "  正在抓取 [$YESTERDAY] 数据，请稍候..."
 echo "================================================"
 echo ""
 
@@ -48,14 +50,14 @@ fi
 echo ""
 
 # =============================================================
-# crontab 定时任务配置说明（每天 08:00 自动执行）
+# crontab 定时任务配置说明（每天 00:05 自动执行，抓取昨日数据）
 # 执行以下命令添加定时任务：
 #
 #   crontab -e
 #
 # 然后在编辑器中添加以下一行：
 #
-#   0 8 * * * cd ~/Desktop/gp活动看板 && python3 update_data.py >> ~/Desktop/gp活动看板/logs/update_log.txt 2>&1
+#   5 0 * * * cd ~/Desktop/gp活动看板 && python3 update_data.py >> ~/Desktop/gp活动看板/logs/update_log.txt 2>&1
 #
 # 保存退出后，通过以下命令确认任务已添加：
 #   crontab -l

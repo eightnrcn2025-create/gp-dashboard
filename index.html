@@ -381,7 +381,7 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
     <div class="logo">GP</div>
     <div class="title-block">
       <h1>Gamepark 运营数据看板</h1>
-      <p>Operations BI Dashboard · <span id="lastUpdatedSm" style="color:var(--cyan)">--</span></p>
+      <p>Operations BI Dashboard · <span id="lastUpdatedSm" style="color:var(--cyan); font-size:12px">--</span></p>
     </div>
   </div>
   <div class="header-right">
@@ -400,42 +400,42 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 
   <!-- KPI -->
   <div class="kpi-grid">
-    <!-- 今日销售额 -->
+    <!-- 昨日销售额 -->
     <div class="kpi-card blue" id="kcard0">
       <div class="kpi-icon-wrap">💰</div>
-      <div class="kpi-label">今日销售额</div>
+      <div class="kpi-label">昨日销售额</div>
       <div class="kpi-value skeleton skeleton-value" id="kpiTodaySales" style="display:block"></div>
       <div class="kpi-delta skeleton skeleton-delta" id="kpiGrowthDelta" style="display:block"></div>
-      <div class="kpi-source" id="ks0">后台订单 API 实时</div>
+      <div class="kpi-source" id="ks0">后台订单 API · 昨日完整数据</div>
     </div>
-    <!-- 昨日销售额 -->
+    <!-- 前日销售额 -->
     <div class="kpi-card green" id="kcard1">
       <div class="kpi-icon-wrap">📅</div>
-      <div class="kpi-label">昨日销售额</div>
+      <div class="kpi-label">前日销售额</div>
       <div class="kpi-value skeleton skeleton-value" id="kpiYesterdaySales" style="display:block"></div>
       <div class="kpi-delta flat">环比基准</div>
-      <div class="kpi-source">后台订单 API · 完整日数据</div>
+      <div class="kpi-source">后台订单 API · 前日数据</div>
     </div>
-    <!-- 环比增长率 -->
+    <!-- 日环比增长率 -->
     <div class="kpi-card orange" id="kcard2">
       <div class="kpi-icon-wrap">📊</div>
       <div class="kpi-label">日环比增长率</div>
       <div class="kpi-value skeleton skeleton-value" id="kpiGrowthRate" style="display:block"></div>
       <div class="kpi-delta skeleton skeleton-delta" id="kpiGrowthStatus" style="display:block"></div>
-      <div class="kpi-source">今日 ÷ 昨日自动计算</div>
+      <div class="kpi-source">昨日 ÷ 前日自动计算</div>
     </div>
-    <!-- 总流量 -->
+    <!-- 昨日访客数 UV -->
     <div class="kpi-card purple" id="kcard3">
       <div class="kpi-icon-wrap">👥</div>
-      <div class="kpi-label">今日访客数 UV</div>
+      <div class="kpi-label">昨日访客数 UV</div>
       <div class="kpi-value skeleton skeleton-value" id="kpiTraffic" style="display:block"></div>
-      <div class="kpi-delta flat">流量统计页实时</div>
+      <div class="kpi-delta flat">昨日流量统计</div>
       <div class="kpi-source">后台流量统计 API</div>
     </div>
-    <!-- 转化率 -->
+    <!-- 昨日转化率 -->
     <div class="kpi-card red" id="kcard4">
       <div class="kpi-icon-wrap">🎯</div>
-      <div class="kpi-label">今日转化率</div>
+      <div class="kpi-label">昨日转化率</div>
       <div class="kpi-value skeleton skeleton-value" id="kpiConversion" style="display:block"></div>
       <div class="kpi-delta flat">下单数 ÷ UV</div>
       <div class="kpi-source">后台订单 ÷ 流量计算</div>
@@ -489,18 +489,36 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
     </div>
   </div>
 
-  <!-- Bar + Area -->
+  <!-- Solo + Publisher TOP5 -->
   <div class="chart-grid-2">
+    <!-- 单机游戏 TOP5 -->
     <div class="card">
       <div class="card-header">
         <div class="card-title">
-          <span class="card-title-dot" style="background:linear-gradient(180deg,#e3b341,#f0c64e)"></span>
-          昨日各游戏付费排行
+          <span class="card-title-dot" style="background:linear-gradient(180deg,#4A90E2,#1E5799)"></span>
+          单机游戏 TOP 5
         </div>
-        <div class="card-badge">Top 20 · 昨日</div>
+        <div class="card-badge">昨日销售额排行 · 点击筛选明细</div>
       </div>
-      <div class="chart-body"><div class="chart-h300" id="barChart"></div></div>
+      <div class="chart-body"><div class="chart-h260" id="soloTop5Chart"></div></div>
+      <div class="rank-hint">点击条形可在下方明细表中自动筛选该游戏</div>
     </div>
+    <!-- 厂商游戏 TOP5 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span class="card-title-dot" style="background:linear-gradient(180deg,#FF6B35,#E84B0A)"></span>
+          厂商游戏 TOP 5
+        </div>
+        <div class="card-badge">昨日销售额排行 · 点击筛选明细</div>
+      </div>
+      <div class="chart-body"><div class="chart-h260" id="publisherTop5Chart"></div></div>
+      <div class="rank-hint">点击条形可在下方明细表中自动筛选该游戏</div>
+    </div>
+  </div>
+
+  <!-- Area + Heatmap -->
+  <div class="chart-grid-2">
     <div class="card">
       <div class="card-header">
         <div class="card-title">
@@ -509,23 +527,7 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
         </div>
         <div class="card-badge">7-Day Trend</div>
       </div>
-      <div class="chart-body"><div class="chart-h300" id="areaChart"></div></div>
-    </div>
-  </div>
-
-  <!-- Top Games Ranking + Heatmap -->
-  <div class="chart-grid-2">
-    <!-- 游戏排行榜 -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="card-title-dot" style="background:linear-gradient(180deg,#e3b341,#f0c64e)"></span>
-          销售额 TOP 5 游戏
-        </div>
-        <div class="card-badge">昨日排行 · 点击筛选明细</div>
-      </div>
-      <div class="chart-body"><div class="chart-h260" id="topGamesChart"></div></div>
-      <div class="rank-hint">点击条形可在下方明细表中自动筛选该游戏</div>
+      <div class="chart-body"><div class="chart-h260" id="areaChart"></div></div>
     </div>
     <!-- 周环比热力图 -->
     <div class="card">
@@ -605,7 +607,7 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
       <div class="source-icon" style="background:rgba(227,179,65,.12)">⚙️</div>
       <div class="source-info">
         <h4>自动化更新</h4>
-        <p>运行 <code style="font-size:10px;background:var(--bg3);padding:1px 5px;border-radius:3px">python3 update_data.py</code><br>每天 08:00 通过 crontab 自动执行</p>
+        <p>运行 <code style="font-size:10px;background:var(--bg3);padding:1px 5px;border-radius:3px">python3 update_data.py</code><br>每天 00:05 通过 crontab 自动执行（抓取昨日数据）</p>
         <span class="tag tag-daily" id="srcLastUpdate">最后更新：--</span>
       </div>
     </div>
@@ -630,7 +632,7 @@ let sortCol      = 'date';
 let sortDir      = 'desc';
 let currentPage  = 1;
 let lineRange    = 30;
-let chartLine, chartPie, chartBar, chartArea, chartTopGames, chartHeatmap;
+let chartLine, chartPie, chartArea, chartSoloTop5, chartPublisherTop5, chartHeatmap;
 
 const pageSize = 10;
 const COLORS   = ['#388bfd','#3fb950','#e3b341','#f85149','#a371f7',
@@ -698,17 +700,21 @@ function doRefresh() {
 //  Render All
 // ════════════════════════════════════════════════════════════════════
 function renderAll(d) {
-  const ts = d.last_updated || '--';
-  document.getElementById('lastUpdatedSm').textContent = ts;
-  document.getElementById('footerTime').textContent = '数据截至 ' + ts;
-  document.getElementById('srcLastUpdate').textContent = '最后更新：' + ts;
+  const dataDate   = d.data_date || '';
+  const updateTime = d.update_time || d.last_updated || '--';
+  const headerText = dataDate
+    ? `数据日期：${dataDate}（昨日）| 更新于 ${updateTime.slice(0, 16)}`
+    : updateTime;
+  document.getElementById('lastUpdatedSm').textContent = headerText;
+  document.getElementById('footerTime').textContent = '数据截至 ' + (dataDate || updateTime);
+  document.getElementById('srcLastUpdate').textContent = '最后更新：' + updateTime;
 
   renderKPI(d.kpi, d.monthly_total, d.active_games);
   renderLineChart(d.daily_sales, lineRange);
   renderPieChart(d.traffic_source);
-  renderBarChart(d.game_compare);
+  renderSoloTop5(d.solo_game_top5 || []);
+  renderPublisherTop5(d.publisher_game_top5 || []);
   renderAreaChart(d.daily_sales);
-  renderTopGames(d.top_games || (d.game_compare || []).slice(0, 5).map((g, i) => ({rank: i+1, game: g.game, sales: g.value, growth: 0})));
   renderHeatmap(d.weekly_heatmap || d.daily_sales);
   initTable(d.detail_table);
 }
@@ -720,7 +726,7 @@ function startCountdown() {
   function tick() {
     const now  = new Date();
     let next   = new Date(now);
-    next.setHours(8, 0, 0, 0);
+    next.setHours(0, 5, 0, 0);
     if (now >= next) next.setDate(next.getDate() + 1);
     const diff = next - now;
     const h    = Math.floor(diff / 3600000);
@@ -769,13 +775,13 @@ function renderKPI(kpi, monthlyTotal, activeGames) {
   const delta = document.getElementById('kpiGrowthDelta');
   if (gr > 0) {
     delta.className = 'kpi-delta up';
-    delta.innerHTML = '▲ 较昨日增长 ' + gr.toFixed(2) + '%';
+    delta.innerHTML = '▲ 较前日增长 ' + gr.toFixed(2) + '%';
   } else if (gr < 0) {
     delta.className = 'kpi-delta down';
-    delta.innerHTML = '▼ 较昨日下降 ' + Math.abs(gr).toFixed(2) + '%';
+    delta.innerHTML = '▼ 较前日下降 ' + Math.abs(gr).toFixed(2) + '%';
   } else {
     delta.className = 'kpi-delta flat';
-    delta.innerHTML = '— 与昨日持平';
+    delta.innerHTML = '— 与前日持平';
   }
 
   const gs = document.getElementById('kpiGrowthStatus');
@@ -889,7 +895,7 @@ function renderPieChart(sources) {
       z: 100
     },{
       type: 'text', left: '33%', top: '56%',
-      style: { text: '今日总计', font: '11px sans-serif', fill: '#6e7681', textAlign: 'center' },
+      style: { text: '昨日总计', font: '11px sans-serif', fill: '#6e7681', textAlign: 'center' },
       z: 100
     }],
     series: [{
@@ -906,50 +912,111 @@ function renderPieChart(sources) {
 }
 
 // ════════════════════════════════════════════════════════════════════
-//  Bar Chart
+//  Ranked Horizontal Bar — shared logic for Solo / Publisher TOP5
 // ════════════════════════════════════════════════════════════════════
-function renderBarChart(games) {
-  const el = document.getElementById('barChart');
+function _renderRankedBar(elId, games, getChart, setChart, barColors, accentColor) {
+  const el = document.getElementById(elId);
   if (!games || !games.length) { showEmpty(el); return; }
 
-  // Truncate long names
-  const names   = games.map(g => g.game.length > 10 ? g.game.slice(0,10)+'…' : g.game);
-  const fullNames = games.map(g => g.game);
-  const values  = games.map(g => g.value);
+  const top5     = games.slice(0, 5);
+  const reversed = [...top5].reverse();
+  const names    = reversed.map(g => g.game.length > 13 ? g.game.slice(0, 13) + '…' : g.game);
+  const fullNames = reversed.map(g => g.game);
+  const values   = reversed.map(g => g.sales);
+  const growths  = reversed.map(g => g.growth || 0);
+  const ranks    = reversed.map(g => g.rank);
 
-  if (!chartBar) {
-    chartBar = echarts.init(el, null, { renderer: 'canvas' });
-    window.addEventListener('resize', () => chartBar.resize());
+  let chart = getChart();
+  if (!chart) {
+    chart = echarts.init(el, null, { renderer: 'canvas' });
+    setChart(chart);
+    window.addEventListener('resize', () => chart.resize());
   }
 
-  chartBar.setOption({
+  chart.setOption({
     backgroundColor: 'transparent',
-    grid: { top: 32, right: 16, bottom: 66, left: 64 },
+    grid: { top: 8, right: 110, bottom: 10, left: 8, containLabel: true },
     tooltip: {
-      ...TOOLTIP, trigger: 'axis',
-      formatter: p => `${fullNames[p[0].dataIndex]}<br>付费金额：<b style="color:#e3b341">${fmtMoneyPlain(p[0].value)}</b>`
+      ...TOOLTIP, trigger: 'axis', axisPointer: { type: 'none' },
+      formatter(params) {
+        const i = params[0].dataIndex;
+        const gr = growths[i];
+        return `<b>NO.${ranks[i]}</b>&nbsp;${fullNames[i]}<br>` +
+          `昨日销售额：<b style="color:${accentColor}">${fmtMoneyPlain(values[i])}</b>` +
+          (gr !== 0 ? `<br>环比：<span style="color:${gr > 0 ? '#3fb950' : '#f85149'}">${gr > 0 ? '▲' : '▼'} ${Math.abs(gr).toFixed(1)}%</span>` : '');
+      }
     },
     xAxis: {
-      type: 'category', data: names, ...axisStyle,
-      axisLabel: { color: '#6e7681', rotate: 30, interval: 0, fontSize: 10 }
+      type: 'value', ...axisStyle,
+      axisLabel: { color: '#6e7681', fontSize: 10, formatter: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
     },
     yAxis: {
-      type: 'value', ...axisStyle,
-      axisLabel: { color: '#6e7681', formatter: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
+      type: 'category', data: names,
+      axisLine: { lineStyle: { color: '#21262d' } },
+      splitLine: { show: false },
+      axisLabel: {
+        color: '#c9d1d9', fontSize: 11,
+        formatter(val, idx) {
+          const rk = ranks[idx];
+          return rk === 1 ? `{r1|#1} ${val}` :
+                 rk === 2 ? `{r2|#2} ${val}` :
+                 rk === 3 ? `{r3|#3} ${val}` :
+                            `{rn|#${rk}} ${val}`;
+        },
+        rich: {
+          r1: { color: accentColor,    fontWeight: 700 },
+          r2: { color: barColors[3],   fontWeight: 700 },
+          r3: { color: barColors[2],   fontWeight: 700 },
+          rn: { color: '#6e7681',      fontWeight: 600 }
+        }
+      }
     },
     series: [{
       type: 'bar',
       data: values.map((v, i) => ({
         value: v,
-        itemStyle: { color: COLORS[i % COLORS.length], borderRadius: [4,4,0,0] }
+        itemStyle: {
+          color: { type:'linear', x:0, y:0, x2:1, y2:0,
+            colorStops:[{offset:0, color:barColors[i]+'60'},{offset:1, color:barColors[i]}] },
+          borderRadius: [0, 6, 6, 0]
+        }
       })),
-      barMaxWidth: 36,
-      label: {
-        show: true, position: 'top', fontSize: 10, color: '#8b949e',
-        formatter: p => p.value >= 1000 ? (p.value/1000).toFixed(1)+'k' : p.value
-      }
+      barMaxWidth: 38,
+      label: { show: true, position: 'right', fontSize: 11, color: '#e6edf3', formatter: p => fmtMoneyPlain(p.value) }
     }]
+  }, true);
+
+  chart.off('click');
+  chart.on('click', function(params) {
+    const fullName = fullNames[params.dataIndex];
+    const sel = document.getElementById('filterGame');
+    if (sel) {
+      sel.value = fullName;
+      currentPage = 1;
+      applyFilter();
+      document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
+}
+
+function renderSoloTop5(games) {
+  _renderRankedBar(
+    'soloTop5Chart', games,
+    () => chartSoloTop5,
+    inst => { chartSoloTop5 = inst; },
+    ['#1e3a6e','#1e5799','#2a70c8','#3d8fef','#4A90E2'],
+    '#4A90E2'
+  );
+}
+
+function renderPublisherTop5(games) {
+  _renderRankedBar(
+    'publisherTop5Chart', games,
+    () => chartPublisherTop5,
+    inst => { chartPublisherTop5 = inst; },
+    ['#7a2510','#a33010','#c84520','#e05020','#FF6B35'],
+    '#FF6B35'
+  );
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -990,96 +1057,6 @@ function renderAreaChart(daily) {
           colorStops:[{offset:0,color:'rgba(63,185,80,.35)'},{offset:1,color:'rgba(63,185,80,0)'}] }
       }
     }]
-  });
-}
-
-// ════════════════════════════════════════════════════════════════════
-//  Top Games Ranking (Horizontal Bar)
-// ════════════════════════════════════════════════════════════════════
-function renderTopGames(games) {
-  const el = document.getElementById('topGamesChart');
-  if (!games || !games.length) { showEmpty(el); return; }
-
-  const top5     = games.slice(0, 5);
-  const reversed = [...top5].reverse(); // ECharts horizontal bar shows bottom-up
-  const names    = reversed.map(g => g.game.length > 13 ? g.game.slice(0, 13) + '…' : g.game);
-  const fullNames = reversed.map(g => g.game);
-  const values   = reversed.map(g => g.sales);
-  const growths  = reversed.map(g => g.growth || 0);
-  const ranks    = reversed.map(g => g.rank);
-
-  if (!chartTopGames) {
-    chartTopGames = echarts.init(el, null, { renderer: 'canvas' });
-    window.addEventListener('resize', () => chartTopGames.resize());
-  }
-
-  const barColors = ['#484f58','#484f58','#cd7f32','#adb5bd','#e3b341'];
-  // reversed: index 0 = rank5(bottom), index 4 = rank1(top)
-  // So color[0]=plain, color[4]=gold
-
-  chartTopGames.setOption({
-    backgroundColor: 'transparent',
-    grid: { top: 8, right: 110, bottom: 10, left: 8, containLabel: true },
-    tooltip: {
-      ...TOOLTIP, trigger: 'axis', axisPointer: { type: 'none' },
-      formatter(params) {
-        const i = params[0].dataIndex;
-        const gr = growths[i];
-        return `<b>NO.${ranks[i]}</b>&nbsp;${fullNames[i]}<br>` +
-          `昨日销售额：<b style="color:#e3b341">${fmtMoneyPlain(values[i])}</b>` +
-          (gr !== 0 ? `<br>环比：<span style="color:${gr > 0 ? '#3fb950' : '#f85149'}">${gr > 0 ? '▲' : '▼'} ${Math.abs(gr).toFixed(1)}%</span>` : '');
-      }
-    },
-    xAxis: {
-      type: 'value', ...axisStyle,
-      axisLabel: { color: '#6e7681', fontSize: 10, formatter: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v }
-    },
-    yAxis: {
-      type: 'category', data: names,
-      axisLine:  { lineStyle: { color: '#21262d' } },
-      splitLine: { show: false },
-      axisLabel: {
-        color: '#c9d1d9', fontSize: 11,
-        formatter(val, idx) {
-          const rk = ranks[idx];
-          return rk === 1 ? `{gold|#1} ${val}` :
-                 rk === 2 ? `{silver|#2} ${val}` :
-                 rk === 3 ? `{bronze|#3} ${val}` :
-                            `{plain|#${rk}} ${val}`;
-        },
-        rich: {
-          gold:   { color: '#e3b341', fontWeight: 700 },
-          silver: { color: '#adb5bd', fontWeight: 700 },
-          bronze: { color: '#cd7f32', fontWeight: 700 },
-          plain:  { color: '#6e7681', fontWeight: 600 }
-        }
-      }
-    },
-    series: [{
-      type: 'bar',
-      data: values.map((v, i) => ({
-        value: v,
-        itemStyle: { color: barColors[i], borderRadius: [0, 6, 6, 0] }
-      })),
-      barMaxWidth: 38,
-      label: {
-        show: true, position: 'right', fontSize: 11, color: '#e6edf3',
-        formatter: p => fmtMoneyPlain(p.value)
-      }
-    }]
-  }, true);
-
-  // Click to filter table
-  chartTopGames.off('click');
-  chartTopGames.on('click', function(params) {
-    const fullName = fullNames[params.dataIndex];
-    const sel = document.getElementById('filterGame');
-    if (sel) {
-      sel.value = fullName;
-      currentPage = 1;
-      applyFilter();
-      document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   });
 }
 
