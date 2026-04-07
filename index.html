@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamepark 运营数据看板</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #161b22 0%, #1a2332 100%);
+    border-bottom: 1px solid #21262d;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #f78166, #e05c3a);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: #fff;
+    box-shadow: 0 0 18px rgba(240,90,50,0.4);
+  }
+  .title-block h1 { font-size: 20px; font-weight: 700; color: #e6edf3; letter-spacing: 1px; }
+  .title-block p { font-size: 12px; color: #6e7681; margin-top: 2px; }
+  .last-updated {
+    font-size: 12px; color: #8b949e;
+    background: #21262d; border: 1px solid #30363d;
+    padding: 6px 14px; border-radius: 20px;
+  }
+  .last-updated span { color: #58a6ff; font-weight: 600; }
+
+  /* ── Main layout ── */
+  .main { padding: 24px 32px; }
+
+  /* ── KPI Cards ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px)  { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .kpi-card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .kpi-card:hover {
+    border-color: #388bfd;
+    box-shadow: 0 0 20px rgba(56,139,253,0.15);
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .kpi-card.blue::before   { background: linear-gradient(90deg, #388bfd, #79c0ff); }
+  .kpi-card.green::before  { background: linear-gradient(90deg, #3fb950, #56d364); }
+  .kpi-card.orange::before { background: linear-gradient(90deg, #e3b341, #f0c64e); }
+  .kpi-card.red::before    { background: linear-gradient(90deg, #f85149, #ff7b72); }
+  .kpi-card.purple::before { background: linear-gradient(90deg, #a371f7, #bc8cff); }
+
+  .kpi-label { font-size: 12px; color: #6e7681; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: #e6edf3; line-height: 1; }
+  .kpi-value .unit { font-size: 14px; color: #8b949e; margin-left: 2px; }
+  .kpi-delta {
+    margin-top: 10px; font-size: 12px; display: flex; align-items: center; gap: 4px;
+  }
+  .kpi-delta.up   { color: #3fb950; }
+  .kpi-delta.down { color: #f85149; }
+  .kpi-icon {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 36px; opacity: .08;
+  }
+
+  /* ── Chart Grid ── */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1024px) { .chart-grid { grid-template-columns: 1fr; } }
+
+  .chart-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1024px) { .chart-grid-3 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #21262d;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: #e6edf3; display: flex; align-items: center; gap: 8px; }
+  .card-title::before {
+    content: '';
+    width: 3px; height: 14px; border-radius: 2px;
+    background: linear-gradient(180deg, #388bfd, #79c0ff);
+    display: inline-block;
+  }
+  .card-badge {
+    font-size: 11px; color: #8b949e;
+    background: #21262d; padding: 3px 10px; border-radius: 12px;
+  }
+  .chart-body { padding: 8px; }
+  .chart-container { width: 100%; height: 300px; }
+  .chart-container-lg { width: 100%; height: 320px; }
+
+  /* ── Table ── */
+  .table-card { background: #161b22; border: 1px solid #21262d; border-radius: 12px; overflow: hidden; }
+  .table-toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid #21262d;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .table-title { font-size: 14px; font-weight: 600; color: #e6edf3; display: flex; align-items: center; gap: 8px; }
+  .table-title::before {
+    content: '';
+    width: 3px; height: 14px; border-radius: 2px;
+    background: linear-gradient(180deg, #e3b341, #f0c64e);
+    display: inline-block;
+  }
+  .table-controls { display: flex; gap: 10px; align-items: center; }
+  .search-input {
+    background: #0d1117; border: 1px solid #30363d; color: #c9d1d9;
+    padding: 6px 12px; border-radius: 6px; font-size: 13px; outline: none;
+    width: 200px; transition: border-color .2s;
+  }
+  .search-input:focus { border-color: #388bfd; }
+  .search-input::placeholder { color: #484f58; }
+  select.filter-select {
+    background: #0d1117; border: 1px solid #30363d; color: #c9d1d9;
+    padding: 6px 10px; border-radius: 6px; font-size: 13px; outline: none;
+    cursor: pointer;
+  }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #0d1117; color: #8b949e; font-weight: 600;
+    padding: 10px 16px; text-align: left;
+    border-bottom: 1px solid #21262d;
+    cursor: pointer; user-select: none; white-space: nowrap;
+  }
+  thead th:hover { color: #e6edf3; }
+  thead th.sort-asc::after  { content: ' ↑'; color: #388bfd; }
+  thead th.sort-desc::after { content: ' ↓'; color: #388bfd; }
+  tbody tr { border-bottom: 1px solid #161b22; transition: background .15s; }
+  tbody tr:hover { background: #1c2128; }
+  tbody td { padding: 10px 16px; color: #c9d1d9; }
+  tbody td.num { font-variant-numeric: tabular-nums; color: #e6edf3; }
+  tbody td.rate { color: #3fb950; font-weight: 600; }
+  .no-data { text-align: center; padding: 40px; color: #484f58; }
+  .pagination {
+    padding: 12px 20px; border-top: 1px solid #21262d;
+    display: flex; align-items: center; justify-content: space-between; font-size: 13px;
+  }
+  .pagination-info { color: #6e7681; }
+  .page-btns { display: flex; gap: 6px; }
+  .page-btn {
+    background: #21262d; border: 1px solid #30363d; color: #c9d1d9;
+    padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;
+    transition: background .15s;
+  }
+  .page-btn:hover { background: #30363d; }
+  .page-btn.active { background: #388bfd; border-color: #388bfd; color: #fff; }
+  .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center; padding: 20px; color: #484f58; font-size: 12px;
+    border-top: 1px solid #21262d; margin-top: 8px;
+  }
+
+  /* ── Loading overlay ── */
+  #loading {
+    position: fixed; inset: 0;
+    background: #0d1117;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999; gap: 16px;
+  }
+  .spinner {
+    width: 40px; height: 40px; border: 3px solid #21262d;
+    border-top-color: #388bfd; border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading p { color: #6e7681; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading">
+  <div class="spinner"></div>
+  <p>正在加载数据...</p>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">GP</div>
+    <div class="title-block">
+      <h1>Gamepark 运营数据看板</h1>
+      <p>Game Park · Operations BI Dashboard</p>
+    </div>
+  </div>
+  <div class="last-updated">最后更新：<span id="lastUpdatedTime">--</span></div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- KPI -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi-card blue">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">今日销售额</div>
+      <div class="kpi-value" id="kpiTodaySales">--<span class="unit">元</span></div>
+      <div class="kpi-delta" id="kpiGrowthDelta">--</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">📅</div>
+      <div class="kpi-label">昨日销售额</div>
+      <div class="kpi-value" id="kpiYesterdaySales">--<span class="unit">元</span></div>
+      <div class="kpi-delta up">环比基准</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-label">环比增长率</div>
+      <div class="kpi-value" id="kpiGrowthRate">--<span class="unit">%</span></div>
+      <div class="kpi-delta" id="kpiGrowthStatus">--</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-label">今日总流量</div>
+      <div class="kpi-value" id="kpiTraffic">--<span class="unit">UV</span></div>
+      <div class="kpi-delta up">全渠道合计</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">转化率</div>
+      <div class="kpi-value" id="kpiConversion">--<span class="unit">%</span></div>
+      <div class="kpi-delta up">访客→下单</div>
+    </div>
+  </div>
+
+  <!-- Line + Pie -->
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">近30天每日销售额趋势</div>
+        <div class="card-badge">Daily Sales Trend</div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-container-lg" id="lineChart"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">用户行为分布</div>
+        <div class="card-badge">User Behavior · 来自后台真实数据</div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-container-lg" id="pieChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar -->
+  <div class="chart-grid-3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">各游戏/渠道销售对比</div>
+        <div class="card-badge">Game Sales Compare</div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-container" id="barChart"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">销售额环比走势（近7日）</div>
+        <div class="card-badge">WoW Comparison</div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-container" id="areaChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Table -->
+  <div class="table-card">
+    <div class="table-toolbar">
+      <div class="table-title">每日数据明细</div>
+      <div class="table-controls">
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索游戏名称...">
+        <select class="filter-select" id="filterGame">
+          <option value="">全部游戏</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table id="detailTable">
+        <thead>
+          <tr>
+            <th data-col="date">日期</th>
+            <th data-col="game">游戏/品类</th>
+            <th data-col="traffic">流量(UV)</th>
+            <th data-col="sales">销售额(元)</th>
+            <th data-col="conversion">转化率(%)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <div class="pagination-info" id="pageInfo">共 0 条</div>
+      <div class="page-btns" id="pageBtns"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">Gamepark Operations BI Dashboard &nbsp;·&nbsp; Powered by ECharts &nbsp;·&nbsp; Data from data/data.json</div>
+
+<script>
+// ── State ──
+let allData = null;
+let tableData = [];
+let filteredData = [];
+let sortCol = 'date';
+let sortDir = 'desc';
+let currentPage = 1;
+const pageSize = 10;
+
+// ── Fetch & Init ──
+fetch('data/data.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(data => {
+    allData = data;
+    document.getElementById('loading').style.display = 'none';
+    renderAll(data);
+  })
+  .catch(err => {
+    document.getElementById('loading').innerHTML =
+      '<div style="color:#f85149;font-size:14px">加载失败：' + err.message +
+      '<br><small style="color:#6e7681;margin-top:8px;display:block">请通过 HTTP 服务器打开此页面（如 python -m http.server 8080）</small></div>';
+  });
+
+function renderAll(d) {
+  document.getElementById('lastUpdatedTime').textContent = d.last_updated || '--';
+  renderKPI(d.kpi);
+  renderLineChart(d.daily_sales);
+  renderPieChart(d.traffic_source);
+  renderBarChart(d.game_compare);
+  renderAreaChart(d.daily_sales);
+  initTable(d.detail_table);
+}
+
+// ── KPI ──
+function fmt(n) {
+  if (n >= 10000) return (n / 10000).toFixed(2) + '<span class="unit">万</span>';
+  return n.toLocaleString();
+}
+
+function renderKPI(kpi) {
+  document.getElementById('kpiTodaySales').innerHTML = fmt(kpi.today_sales) + '<span class="unit">元</span>';
+  document.getElementById('kpiYesterdaySales').innerHTML = fmt(kpi.yesterday_sales) + '<span class="unit">元</span>';
+  document.getElementById('kpiGrowthRate').innerHTML = kpi.growth_rate.toFixed(2) + '<span class="unit">%</span>';
+  document.getElementById('kpiTraffic').innerHTML = kpi.total_traffic.toLocaleString() + '<span class="unit">UV</span>';
+  document.getElementById('kpiConversion').innerHTML = kpi.conversion_rate.toFixed(2) + '<span class="unit">%</span>';
+
+  const delta = document.getElementById('kpiGrowthDelta');
+  if (kpi.growth_rate >= 0) {
+    delta.className = 'kpi-delta up';
+    delta.textContent = '↑ 较昨日增长 ' + kpi.growth_rate.toFixed(2) + '%';
+  } else {
+    delta.className = 'kpi-delta down';
+    delta.textContent = '↓ 较昨日下降 ' + Math.abs(kpi.growth_rate).toFixed(2) + '%';
+  }
+
+  const gs = document.getElementById('kpiGrowthStatus');
+  gs.className = kpi.growth_rate >= 0 ? 'kpi-delta up' : 'kpi-delta down';
+  gs.textContent = kpi.growth_rate >= 0 ? '↑ 增长趋势' : '↓ 下降趋势';
+}
+
+// ── ECharts theme helpers ──
+const COLORS = ['#388bfd','#3fb950','#e3b341','#f85149','#a371f7','#58a6ff','#56d364','#ffa657'];
+const axisStyle = { axisLine: { lineStyle: { color: '#30363d' } }, axisLabel: { color: '#6e7681' }, splitLine: { lineStyle: { color: '#21262d' } } };
+const tooltip = { backgroundColor: '#1c2128', borderColor: '#30363d', textStyle: { color: '#c9d1d9' } };
+
+// ── Line Chart ──
+function renderLineChart(daily) {
+  const chart = echarts.init(document.getElementById('lineChart'), null, { renderer: 'canvas' });
+  const dates = daily.map(d => d.date.slice(5));
+  const amounts = daily.map(d => d.amount);
+  chart.setOption({
+    backgroundColor: 'transparent',
+    grid: { top: 20, right: 20, bottom: 40, left: 60 },
+    tooltip: { ...tooltip, trigger: 'axis', formatter: p => p[0].axisValue + '<br/>销售额：<b>¥' + p[0].value.toLocaleString() + '</b>' },
+    xAxis: { type: 'category', data: dates, ...axisStyle, axisLabel: { color: '#6e7681', rotate: 30, interval: 4 } },
+    yAxis: { type: 'value', ...axisStyle, axisLabel: { color: '#6e7681', formatter: v => v >= 10000 ? (v/10000)+'万' : v } },
+    series: [{
+      type: 'line', data: amounts, smooth: true,
+      lineStyle: { color: '#388bfd', width: 2 },
+      itemStyle: { color: '#388bfd' },
+      areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+        colorStops: [{ offset: 0, color: 'rgba(56,139,253,0.3)' }, { offset: 1, color: 'rgba(56,139,253,0)' }] } },
+      symbol: 'circle', symbolSize: 4
+    }]
+  });
+  window.addEventListener('resize', () => chart.resize());
+}
+
+// ── Pie Chart ──
+function renderPieChart(sources) {
+  const chart = echarts.init(document.getElementById('pieChart'), null, { renderer: 'canvas' });
+  chart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: { ...tooltip, trigger: 'item', formatter: '{b}: {c} 人 ({d}%)' },
+    legend: { orient: 'vertical', right: 10, top: 'middle', textStyle: { color: '#8b949e', fontSize: 12 } },
+    series: [{
+      type: 'pie', radius: ['40%', '70%'], center: ['40%', '50%'],
+      data: sources.map((s, i) => ({ name: s.source, value: s.value, itemStyle: { color: COLORS[i % COLORS.length] } })),
+      label: { color: '#6e7681', fontSize: 11 },
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(56,139,253,0.3)' } }
+    }]
+  });
+  window.addEventListener('resize', () => chart.resize());
+}
+
+// ── Bar Chart ──
+function renderBarChart(games) {
+  const chart = echarts.init(document.getElementById('barChart'), null, { renderer: 'canvas' });
+  chart.setOption({
+    backgroundColor: 'transparent',
+    grid: { top: 20, right: 20, bottom: 60, left: 70 },
+    tooltip: { ...tooltip, trigger: 'axis', formatter: p => p[0].axisValue + '<br/>销售额：<b>¥' + p[0].value.toLocaleString() + '</b>' },
+    xAxis: { type: 'category', data: games.map(g => g.game), ...axisStyle, axisLabel: { color: '#6e7681', rotate: 20, interval: 0, fontSize: 11 } },
+    yAxis: { type: 'value', ...axisStyle, axisLabel: { color: '#6e7681', formatter: v => v >= 10000 ? (v/10000)+'万' : v } },
+    series: [{
+      type: 'bar', data: games.map((g, i) => ({ value: g.value, itemStyle: { color: COLORS[i % COLORS.length], borderRadius: [4,4,0,0] } })),
+      barMaxWidth: 50
+    }]
+  });
+  window.addEventListener('resize', () => chart.resize());
+}
+
+// ── Area Chart (last 7 days) ──
+function renderAreaChart(daily) {
+  const last7 = daily.slice(-7);
+  const chart = echarts.init(document.getElementById('areaChart'), null, { renderer: 'canvas' });
+  chart.setOption({
+    backgroundColor: 'transparent',
+    grid: { top: 20, right: 20, bottom: 40, left: 60 },
+    tooltip: { ...tooltip, trigger: 'axis', formatter: p => p[0].axisValue + '<br/>销售额：<b>¥' + p[0].value.toLocaleString() + '</b>' },
+    xAxis: { type: 'category', data: last7.map(d => d.date.slice(5)), ...axisStyle },
+    yAxis: { type: 'value', ...axisStyle, axisLabel: { color: '#6e7681', formatter: v => v >= 10000 ? (v/10000)+'万' : v } },
+    series: [{
+      type: 'line', data: last7.map(d => d.amount), smooth: true,
+      lineStyle: { color: '#3fb950', width: 2 },
+      itemStyle: { color: '#3fb950' },
+      areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+        colorStops: [{ offset: 0, color: 'rgba(63,185,80,0.3)' }, { offset: 1, color: 'rgba(63,185,80,0)' }] } },
+      symbol: 'circle', symbolSize: 5
+    }]
+  });
+  window.addEventListener('resize', () => chart.resize());
+}
+
+// ── Table ──
+function initTable(data) {
+  tableData = data;
+
+  // Fill game filter
+  const games = [...new Set(data.map(r => r.game))].sort();
+  const sel = document.getElementById('filterGame');
+  games.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o); });
+
+  // Sort headers
+  document.querySelectorAll('#detailTable thead th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      else { sortCol = col; sortDir = 'asc'; }
+      document.querySelectorAll('#detailTable thead th').forEach(h => h.className = '');
+      th.className = 'sort-' + sortDir;
+      currentPage = 1;
+      applyFilter();
+    });
+  });
+
+  // Search & filter
+  document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; applyFilter(); });
+  document.getElementById('filterGame').addEventListener('change', () => { currentPage = 1; applyFilter(); });
+
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const g = document.getElementById('filterGame').value;
+  filteredData = tableData.filter(r =>
+    (!q || r.game.toLowerCase().includes(q) || r.date.includes(q)) &&
+    (!g || r.game === g)
+  );
+
+  // Sort
+  filteredData.sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (typeof va === 'string') va = va.toLowerCase(), vb = vb.toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  renderTable();
+}
+
+function renderTable() {
+  const total = filteredData.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage - 1) * pageSize;
+  const rows = filteredData.slice(start, start + pageSize);
+
+  const tbody = document.getElementById('tableBody');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="no-data">暂无数据</td></tr>';
+  } else {
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td>${r.date}</td>
+        <td>${r.game}</td>
+        <td class="num">${r.traffic.toLocaleString()}</td>
+        <td class="num">¥${r.sales.toLocaleString()}</td>
+        <td class="rate">${r.conversion.toFixed(2)}%</td>
+      </tr>`).join('');
+  }
+
+  document.getElementById('pageInfo').textContent = `共 ${total} 条，第 ${currentPage}/${totalPages} 页`;
+
+  // Pagination buttons
+  const btns = document.getElementById('pageBtns');
+  btns.innerHTML = '';
+  const addBtn = (label, page, active, disabled) => {
+    const b = document.createElement('button');
+    b.className = 'page-btn' + (active ? ' active' : '');
+    b.textContent = label;
+    b.disabled = disabled;
+    b.onclick = () => { currentPage = page; renderTable(); };
+    btns.appendChild(b);
+  };
+  addBtn('«', 1, false, currentPage === 1);
+  addBtn('‹', currentPage - 1, false, currentPage === 1);
+  const startP = Math.max(1, currentPage - 2);
+  const endP = Math.min(totalPages, startP + 4);
+  for (let p = startP; p <= endP; p++) addBtn(p, p, p === currentPage, false);
+  addBtn('›', currentPage + 1, false, currentPage === totalPages);
+  addBtn('»', totalPages, false, currentPage === totalPages);
+}
+</script>
+</body>
+</html>
