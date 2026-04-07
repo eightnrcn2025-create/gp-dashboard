@@ -298,12 +298,22 @@ def fetch_admin_game_stats(last):
             ]
 
         # 按 PUBLISHER_GAMES 白名单分类，而非依赖后台 gameType 参数
-        solo_pool      = [r for r in all_rows if not is_publisher_game(r["game"])]
-        publisher_pool = [r for r in all_rows if     is_publisher_game(r["game"])]
+        log("--- 游戏分类明细 ---")
+        solo_pool      = []
+        publisher_pool = []
+        for r in all_rows:
+            if is_publisher_game(r["game"]):
+                log(f"  [厂商] {r['game']}  ¥{r['payment']}")
+                publisher_pool.append(r)
+            else:
+                log(f"  [单机] {r['game']}  ¥{r['payment']}")
+                solo_pool.append(r)
 
         solo_top5      = rows_to_top5(solo_pool)
         publisher_top5 = rows_to_top5(publisher_pool)
         log_ok(f"分类结果 → 单机 {len(solo_pool)} 款 / 厂商 {len(publisher_pool)} 款")
+        log(f"  单机 TOP5  : {[r['game'] for r in solo_top5]}")
+        log(f"  厂商 TOP5  : {[r['game'] for r in publisher_top5]}")
 
         detail_rows = [{
             "date":       yesterday,

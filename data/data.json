@@ -163,38 +163,7 @@
       "growth": 12.3
     }
   ],
-  "publisher_game_top5": [
-    {
-      "rank": 1,
-      "game": "（双游戏折扣包）情欲古式按摩店（Windows/安卓）",
-      "sales": 400.4,
-      "growth": 8.2
-    },
-    {
-      "rank": 2,
-      "game": "永恒世界完整版（Windows/安卓）",
-      "sales": 396.0,
-      "growth": -2.4
-    },
-    {
-      "rank": 3,
-      "game": "特工17豪华版（Windows/安卓）",
-      "sales": 320.5,
-      "growth": 15.6
-    },
-    {
-      "rank": 4,
-      "game": "街霸：成人游乐场扩展包（Windows/安卓）",
-      "sales": 280.25,
-      "growth": -5.1
-    },
-    {
-      "rank": 5,
-      "game": "帝国后宫计划豪华版（Windows/安卓）",
-      "sales": 245.8,
-      "growth": 3.7
-    }
-  ],
+  "publisher_game_top5": [],
   "weekly_heatmap": [
     {
       "date": "2026-02-09",
