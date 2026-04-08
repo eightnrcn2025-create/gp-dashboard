@@ -26,23 +26,23 @@ jobs:
         with:
           python-version: '3.11'
           cache: pip
+          cache-dependency-path: requirements.txt
 
       # ── 3. 安装 Python 依赖 ────────────────────────────────────────
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install gspread google-auth playwright pandas \
-                      openpyxl python-dotenv requests
+          pip install -r requirements.txt
 
       # ── 4. 安装 Playwright Chromium ────────────────────────────────
       - name: Install Playwright browsers
-        run: |
-          playwright install chromium
-          playwright install-deps chromium
+        run: python -m playwright install chromium --with-deps
 
       # ── 5. 写入 Google 服务账号凭据 ────────────────────────────────
       - name: Create credentials.json
-        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: echo "$GOOGLE_CREDENTIALS" > credentials.json
 
       # ── 6. 写入后台账号密码 ────────────────────────────────────────
       - name: Create .env

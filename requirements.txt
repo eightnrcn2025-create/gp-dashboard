@@ -1,0 +1,9 @@
+gspread
+google-auth
+playwright
+pandas
+openpyxl
+python-dotenv
+requests
+flask
+flask-cors
