@@ -434,6 +434,46 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 .week-daily td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .week-empty { text-align: center; color: var(--text3); padding: 60px; font-size: 14px; }
 
+/* ── 周数据可视化 ────────────────────────────────────────────────────────────*/
+.weekly-top-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.weekly-selector {
+  background:var(--bg3); border:1px solid var(--border2);
+  color:var(--text); border-radius:6px; padding:7px 12px;
+  font-size:14px; outline:none; cursor:pointer;
+}
+.weekly-selector:focus { border-color:var(--blue); }
+.wkpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+@media(max-width:900px){ .wkpi-grid{ grid-template-columns:repeat(2,1fr); } }
+.wkpi {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:10px; padding:16px; position:relative; overflow:hidden;
+}
+.wkpi::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.wkpi.sales::before  { background:var(--orange); }
+.wkpi.uv::before     { background:var(--blue); }
+.wkpi.daily::before  { background:var(--green); }
+.wkpi.users::before  { background:var(--purple); }
+.wkpi-label { font-size:12px; color:var(--text3); margin-bottom:8px; }
+.wkpi-value { font-size:26px; font-weight:700; color:var(--text); margin-bottom:6px; line-height:1; }
+.wkpi-row   { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:4px; }
+.wkpi-wow, .wkpi-mom { font-size:12px; display:flex; align-items:center; gap:3px; }
+.wkpi-wow.up, .wkpi-mom.up   { color:var(--green); }
+.wkpi-wow.down, .wkpi-mom.down { color:var(--red); }
+.wkpi-wow.flat, .wkpi-mom.flat { color:var(--text3); }
+.wkpi-prev { font-size:12px; color:var(--text3); margin-top:4px; }
+/* 周明细表 */
+.wdetail-table { width:100%; border-collapse:collapse; font-size:13px; }
+.wdetail-table th {
+  padding:9px 14px; text-align:left; color:var(--text3);
+  font-weight:500; background:var(--bg3); border-bottom:1px solid var(--border);
+}
+.wdetail-table th.num { text-align:right; }
+.wdetail-table td { padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text); }
+.wdetail-table td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.wdetail-table tr.zero td { color:var(--text4); }
+.wdetail-table tr.best td { background:rgba(255,107,53,.08); }
+.wdetail-table tr.total td { font-weight:600; background:var(--bg3); }
+
 /* ── 历史查询 ─────────────────────────────────────────────────────────────── */
 .hist-bar {
   display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
@@ -781,20 +821,114 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 <!-- Panel: 周数据报告 -->
 <div class="tab-panel" id="panel-weekly">
   <div class="main">
-    <div class="card" style="margin-bottom:0">
+
+    <!-- 区域1: 周期选择器 -->
+    <div class="card" style="margin-bottom:16px">
       <div class="card-header">
-        <div class="card-title">
-          <span class="card-title-dot" style="background:linear-gradient(180deg,#79c0ff,#388bfd)"></span>
-          周数据报告
+        <div class="weekly-top-bar" style="flex:1">
+          <div class="card-title">
+            <span class="card-title-dot" style="background:linear-gradient(180deg,#79c0ff,#388bfd)"></span>
+            周数据报告
+          </div>
+          <select id="weeklySelector" class="weekly-selector" onchange="onWeekChange()">
+            <option value="">正在加载...</option>
+          </select>
         </div>
-        <div class="card-badge" id="weeklyUpdatedAt">从 weekly_data.json 加载</div>
-      </div>
-      <div style="padding:16px">
-        <div id="weeklyList" class="week-list">
-          <div class="week-empty">正在加载周数据...</div>
-        </div>
+        <div class="card-badge" id="weeklyUpdatedAt">--</div>
       </div>
     </div>
+
+    <!-- 区域2: 4个 KPI 对比卡片 -->
+    <div class="wkpi-grid" id="wkpiGrid">
+      <div class="wkpi sales">
+        <div class="wkpi-label">总销售额</div>
+        <div class="wkpi-value" id="wkSales">--</div>
+        <div class="wkpi-row">
+          <span class="wkpi-wow flat" id="wkSalesWow">-- 周环比</span>
+          <span class="wkpi-mom flat" id="wkSalesMom">-- 上上周</span>
+        </div>
+        <div class="wkpi-prev" id="wkSalesPrev">上周期 --</div>
+      </div>
+      <div class="wkpi uv">
+        <div class="wkpi-label">总 UV 访客数</div>
+        <div class="wkpi-value" id="wkUv">--</div>
+        <div class="wkpi-row">
+          <span class="wkpi-wow flat" id="wkUvWow">-- 周环比</span>
+          <span class="wkpi-mom flat" id="wkUvMom">-- 上上周</span>
+        </div>
+        <div class="wkpi-prev" id="wkUvPrev">上周期 --</div>
+      </div>
+      <div class="wkpi daily">
+        <div class="wkpi-label">日均销售额</div>
+        <div class="wkpi-value" id="wkAvg">--</div>
+        <div class="wkpi-row">
+          <span class="wkpi-wow flat" id="wkAvgWow">-- 周环比</span>
+          <span class="wkpi-mom flat" id="wkAvgMom">-- 上上周</span>
+        </div>
+        <div class="wkpi-prev" id="wkAvgPrev">上周期 --</div>
+      </div>
+      <div class="wkpi users">
+        <div class="wkpi-label">新增用户</div>
+        <div class="wkpi-value" id="wkUsers">--</div>
+        <div class="wkpi-row">
+          <span class="wkpi-wow flat" id="wkUsersWow">-- 周环比</span>
+          <span class="wkpi-mom flat" id="wkUsersMom">-- 上上周</span>
+        </div>
+        <div class="wkpi-prev" id="wkUsersPrev">上周期 --</div>
+      </div>
+    </div>
+
+    <!-- 区域3+4: 每日趋势图 + 多周期对比图 -->
+    <div class="chart-grid-2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot" style="background:linear-gradient(180deg,#FF6B35,#e05020)"></span>
+            本周每日趋势
+          </div>
+          <div class="card-badge" id="wTrendPeriod">--</div>
+        </div>
+        <div class="chart-body"><div class="chart-h380" id="weeklyTrendChart"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot" style="background:linear-gradient(180deg,#3fb950,#56d364)"></span>
+            多周期销售额对比
+          </div>
+          <div class="card-badge">全部历史周期</div>
+        </div>
+        <div class="chart-body"><div class="chart-h380" id="weeklyCompareChart"></div></div>
+      </div>
+    </div>
+
+    <!-- 区域5: 本周每日明细表格 -->
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="table-title">
+          <span class="card-title-dot" style="background:linear-gradient(180deg,#e3b341,#f0c64e);width:3px;height:15px;border-radius:2px;display:inline-block"></span>
+          本周每日明细
+        </div>
+        <div class="table-controls">
+          <span id="wDetailPeriod" style="font-size:12px;color:var(--text3)"></span>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="wdetail-table">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th class="num">销售额</th>
+              <th class="num">UV</th>
+              <th class="num">新增用户</th>
+              <th class="num">日均ARPU</th>
+            </tr>
+          </thead>
+          <tbody id="wDetailBody"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div><!-- /panel-weekly -->
 
@@ -802,45 +936,54 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 <div class="tab-panel" id="panel-history">
   <div class="main">
 
-    <div class="hist-api-warn" id="histApiWarn">
-      需要先启动本地 API 服务：<code>python3 api_server.py</code>（端口 5001）
-    </div>
-
-    <!-- 查询栏 -->
+    <!-- 区域1: 筛选器 -->
     <div class="hist-bar">
-      <span class="hist-label">开始日期</span>
+      <span class="hist-label">开始</span>
       <input type="date" id="histStart" class="hist-input">
-      <span class="hist-label">结束日期</span>
+      <span class="hist-label">结束</span>
       <input type="date" id="histEnd" class="hist-input">
+      <button class="hist-btn sec" onclick="setHistPreset(7)">近7天</button>
+      <button class="hist-btn sec" onclick="setHistPreset(30)">近30天</button>
+      <button class="hist-btn sec" onclick="setHistPreset(90)">近90天</button>
+      <button class="hist-btn sec" onclick="setHistPreset(0)">全部</button>
+      <select id="histDataType" class="hist-input" onchange="histQuery()" style="cursor:pointer">
+        <option value="daily">运营数据</option>
+        <option value="games">游戏销售</option>
+      </select>
       <button class="hist-btn" onclick="histQuery()">查询</button>
-      <button class="hist-btn sec" onclick="histExport()">导出 CSV</button>
+      <button class="hist-btn sec" onclick="histExportCSV()">导出 CSV</button>
     </div>
 
-    <!-- 汇总卡片 -->
-    <div class="hist-kpi-grid" id="histKpiGrid" style="display:none">
+    <!-- 区域2: 5个汇总卡片 -->
+    <div class="hist-kpi-grid" id="histKpiGrid" style="display:none; grid-template-columns:repeat(5,1fr)">
       <div class="hist-kpi">
         <div class="hist-kpi-label">区间销售总额</div>
         <div class="hist-kpi-value" id="hkSales">--</div>
         <div class="hist-kpi-sub" id="hkDays">--</div>
       </div>
       <div class="hist-kpi">
-        <div class="hist-kpi-label">平均日 UV</div>
+        <div class="hist-kpi-label">总 UV</div>
         <div class="hist-kpi-value" id="hkUv">--</div>
-        <div class="hist-kpi-sub">日均访客</div>
+        <div class="hist-kpi-sub">区间累计访客</div>
       </div>
       <div class="hist-kpi">
-        <div class="hist-kpi-label">总订单数</div>
-        <div class="hist-kpi-value" id="hkOrders">--</div>
-        <div class="hist-kpi-sub">付费订单</div>
+        <div class="hist-kpi-label">日均销售额</div>
+        <div class="hist-kpi-value" id="hkAvgSales">--</div>
+        <div class="hist-kpi-sub">每日平均</div>
       </div>
       <div class="hist-kpi">
         <div class="hist-kpi-label">平均 ARPU</div>
         <div class="hist-kpi-value" id="hkArpu">--</div>
         <div class="hist-kpi-sub">付费用户均值</div>
       </div>
+      <div class="hist-kpi">
+        <div class="hist-kpi-label">最高销售日</div>
+        <div class="hist-kpi-value" style="font-size:16px" id="hkBestDay">--</div>
+        <div class="hist-kpi-sub" id="hkBestAmt">--</div>
+      </div>
     </div>
 
-    <!-- 趋势图 -->
+    <!-- 区域3: 趋势折线图 -->
     <div class="card" id="histChartCard" style="display:none; margin-bottom:16px">
       <div class="card-header">
         <div class="card-title">
@@ -849,46 +992,59 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
         </div>
         <div style="display:flex;gap:8px;align-items:center">
           <label style="font-size:12px;color:var(--text2)">
-            <input type="checkbox" id="hcbSales"  checked onchange="renderHistChart()"> 销售额
+            <input type="checkbox" id="hcbSales" checked onchange="renderHistChart()"> 销售额
           </label>
           <label style="font-size:12px;color:var(--text2)">
-            <input type="checkbox" id="hcbUv"     checked onchange="renderHistChart()"> UV
+            <input type="checkbox" id="hcbUv"    checked onchange="renderHistChart()"> UV
           </label>
           <label style="font-size:12px;color:var(--text2)">
-            <input type="checkbox" id="hcbArpu"         onchange="renderHistChart()"> ARPU
+            <input type="checkbox" id="hcbArpu"        onchange="renderHistChart()"> ARPU
           </label>
         </div>
       </div>
       <div class="chart-body"><div class="chart-h380" id="histChart"></div></div>
     </div>
 
-    <!-- 明细表 -->
+    <!-- 区域4: 明细表格（运营/游戏切换） -->
     <div class="table-card" id="histTableCard" style="display:none">
       <div class="table-toolbar">
         <div class="table-title">
           <span class="card-title-dot" style="background:linear-gradient(180deg,#e3b341,#f0c64e);width:3px;height:15px;border-radius:2px;display:inline-block"></span>
-          历史明细
+          <span id="histTableTitle">历史明细</span>
         </div>
         <div class="table-controls">
           <span id="histRowCount" style="font-size:12px;color:var(--text3)">0 条</span>
         </div>
       </div>
-      <div class="hist-table-wrap">
+      <!-- 运营数据表头 -->
+      <div class="hist-table-wrap" id="histDailyWrap">
         <table class="hist-table">
-          <thead>
-            <tr>
-              <th onclick="histSortBy('date')">日期</th>
-              <th class="num" onclick="histSortBy('sales')">销售额</th>
-              <th class="num" onclick="histSortBy('uv')">UV</th>
-              <th class="num" onclick="histSortBy('pv')">PV</th>
-              <th class="num" onclick="histSortBy('new_users')">新注册</th>
-              <th class="num" onclick="histSortBy('paying_users')">付费用户</th>
-              <th class="num" onclick="histSortBy('orders')">订单数</th>
-              <th class="num" onclick="histSortBy('arpu')">ARPU</th>
-              <th class="num" onclick="histSortBy('growth_rate')">环比%</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th onclick="histSortBy('date')">日期</th>
+            <th class="num" onclick="histSortBy('sales')">销售额</th>
+            <th class="num" onclick="histSortBy('uv')">UV</th>
+            <th class="num" onclick="histSortBy('pv')">PV</th>
+            <th class="num" onclick="histSortBy('new_users')">新注册</th>
+            <th class="num" onclick="histSortBy('paying_users')">付费用户</th>
+            <th class="num" onclick="histSortBy('orders')">订单数</th>
+            <th class="num" onclick="histSortBy('arpu')">ARPU</th>
+            <th class="num" onclick="histSortBy('growth_rate')">环比%</th>
+          </tr></thead>
           <tbody id="histTableBody"></tbody>
+        </table>
+      </div>
+      <!-- 游戏销售表头 -->
+      <div class="hist-table-wrap" id="histGamesWrap" style="display:none">
+        <table class="hist-table">
+          <thead><tr>
+            <th onclick="histSortBy('data_date')">日期</th>
+            <th onclick="histSortBy('game_name')">游戏名</th>
+            <th onclick="histSortBy('game_type')">类型</th>
+            <th class="num" onclick="histSortBy('sales_amount')">销售额</th>
+            <th class="num" onclick="histSortBy('uv')">UV</th>
+            <th class="num" onclick="histSortBy('orders')">订单数</th>
+          </tr></thead>
+          <tbody id="histGamesBody"></tbody>
         </table>
       </div>
       <div class="pagination">
@@ -897,7 +1053,7 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
       </div>
     </div>
 
-    <div class="hist-tip" id="histTip">请选择日期范围后点击查询</div>
+    <div class="hist-tip" id="histTip">数据从 data/history_cache.json 加载，运行 update_data.py 后刷新</div>
 
   </div>
 </div><!-- /panel-history -->
@@ -1633,190 +1789,416 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
   btn.classList.add('active');
-
-  if (name === 'weekly' && !weeklyLoaded) loadWeeklyData();
-  if (name === 'history') checkHistApi();
+  if (name === 'weekly'  && !weeklyData)  loadWeeklyData();
+  if (name === 'history' && !histCache)   loadHistCache();
 }
 
 // ════════════════════════════════════════════════════════════════════
 //  周数据报告
 // ════════════════════════════════════════════════════════════════════
-let weeklyLoaded = false;
+let weeklyData       = null;
+let wTrendInst       = null;
+let wCompareInst     = null;
 
 function loadWeeklyData() {
   fetch('data/weekly_data.json?_t=' + Date.now())
-    .then(r => r.ok ? r.json() : Promise.reject('not found'))
+    .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => {
-      weeklyLoaded = true;
+      weeklyData = data;
       const weeks = data.weeks || [];
       const upd = document.getElementById('weeklyUpdatedAt');
       if (upd) upd.textContent = '更新于 ' + (data.updated_at || '--');
 
-      const list = document.getElementById('weeklyList');
+      // 填充下拉框（最新在前）
+      const sel = document.getElementById('weeklySelector');
       if (!weeks.length) {
-        list.innerHTML = '<div class="week-empty">暂无周数据，请运行 update_data.py</div>';
+        sel.innerHTML = '<option>暂无数据</option>';
         return;
       }
-      list.innerHTML = weeks.map((w, idx) => {
-        const sm   = w.summary || {};
-        const days = (w.daily || []);
-        const rows = days.map(d => `
-          <tr>
-            <td>${d.date}</td>
-            <td class="num">¥${(d.sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-            <td class="num">${(d.uv||0).toLocaleString()}</td>
-            <td class="num">${(d.new_users||0).toLocaleString()}</td>
-          </tr>`).join('');
-        return `
-        <div class="week-item">
-          <div class="week-header" onclick="toggleWeek(${idx})">
-            <span class="week-period">${w.period || w.sheet_name}</span>
-            <div class="week-stats">
-              <span class="week-stat">总销售 <strong>¥${(sm.total_sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></span>
-              <span class="week-stat">日均 <strong>¥${(sm.avg_daily_sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}</strong></span>
-              <span class="week-stat">总UV <strong>${(sm.total_uv||0).toLocaleString()}</strong></span>
-              <span class="week-stat">新注册 <strong>${(sm.new_users||0).toLocaleString()}</strong></span>
-              <span class="week-stat" style="color:var(--text3)">${days.length} 天数据</span>
-            </div>
-            <span class="week-arrow" id="warr-${idx}">▼</span>
-          </div>
-          <div class="week-daily" id="wday-${idx}">
-            <table>
-              <thead><tr>
-                <th>日期</th><th class="num">销售额</th>
-                <th class="num">UV</th><th class="num">新注册</th>
-              </tr></thead>
-              <tbody>${rows}</tbody>
-            </table>
-          </div>
-        </div>`;
-      }).join('');
+      sel.innerHTML = weeks.map((w, i) =>
+        `<option value="${i}">${w.period || w.sheet_name}</option>`
+      ).join('');
+      sel.value = '0';
+
+      // 渲染全部周期对比图（只做一次）
+      renderWeeklyCompare(weeks, 0);
+      // 渲染当前选中周期
+      renderWeeklyPeriod(weeks, 0);
     })
     .catch(() => {
-      document.getElementById('weeklyList').innerHTML =
-        '<div class="week-empty">暂无周数据文件，请运行 python3 update_data.py</div>';
+      document.getElementById('weeklySelector').innerHTML = '<option>加载失败，请运行 update_data.py</option>';
     });
 }
 
-function toggleWeek(idx) {
-  const body = document.getElementById('wday-' + idx);
-  const arr  = document.getElementById('warr-' + idx);
-  const open = body.classList.toggle('open');
-  if (arr) arr.classList.toggle('open', open);
+function onWeekChange() {
+  if (!weeklyData) return;
+  const idx = parseInt(document.getElementById('weeklySelector').value, 10);
+  renderWeeklyPeriod(weeklyData.weeks, idx);
+}
+
+function renderWeeklyPeriod(weeks, idx) {
+  const cur  = weeks[idx];
+  const prev = weeks[idx + 1] || null;   // 上一周期（环比）
+  const pp   = weeks[idx + 2] || null;   // 上上周期（月同比近似）
+  if (!cur) return;
+
+  const sm   = cur.summary  || {};
+  const psm  = prev ? (prev.summary || {}) : null;
+  const ppsm = pp   ? (pp.summary   || {}) : null;
+
+  // 更新对比图高亮
+  renderWeeklyCompare(weeks, idx);
+
+  // KPI 卡片
+  const fmtMoney = n => '¥' + (n||0).toLocaleString('zh-CN', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const fmtNum   = n => (n||0).toLocaleString();
+
+  function setKpi(prefix, curVal, prevVal, ppVal, fmt) {
+    document.getElementById(prefix + 'Value').textContent = fmt(curVal);
+    setChange(prefix + 'Wow', curVal, prevVal, '周环比');
+    setChange(prefix + 'Mom', curVal, ppVal,   '上上周');
+    const prevEl = document.getElementById(prefix + 'Prev');
+    if (prevEl) prevEl.textContent = prevVal != null ? `上周期 ${fmt(prevVal)}` : '上周期 暂无';
+  }
+
+  // 销售额
+  document.getElementById('wkSales').textContent    = fmtMoney(sm.total_sales);
+  setChange('wkSalesWow', sm.total_sales, psm?.total_sales, '周环比');
+  setChange('wkSalesMom', sm.total_sales, ppsm?.total_sales,'上上周');
+  document.getElementById('wkSalesPrev').textContent = psm ? `上周期 ${fmtMoney(psm.total_sales)}` : '上周期 暂无';
+
+  // UV
+  document.getElementById('wkUv').textContent       = fmtNum(sm.total_uv);
+  setChange('wkUvWow', sm.total_uv, psm?.total_uv, '周环比');
+  setChange('wkUvMom', sm.total_uv, ppsm?.total_uv,'上上周');
+  document.getElementById('wkUvPrev').textContent    = psm ? `上周期 ${fmtNum(psm.total_uv)}` : '上周期 暂无';
+
+  // 日均
+  document.getElementById('wkAvg').textContent      = fmtMoney(sm.avg_daily_sales);
+  setChange('wkAvgWow', sm.avg_daily_sales, psm?.avg_daily_sales, '周环比');
+  setChange('wkAvgMom', sm.avg_daily_sales, ppsm?.avg_daily_sales,'上上周');
+  document.getElementById('wkAvgPrev').textContent   = psm ? `上周期 ${fmtMoney(psm.avg_daily_sales)}` : '上周期 暂无';
+
+  // 新增用户
+  document.getElementById('wkUsers').textContent    = fmtNum(sm.new_users);
+  setChange('wkUsersWow', sm.new_users, psm?.new_users, '周环比');
+  setChange('wkUsersMom', sm.new_users, ppsm?.new_users,'上上周');
+  document.getElementById('wkUsersPrev').textContent = psm ? `上周期 ${fmtNum(psm.new_users)}` : '上周期 暂无';
+
+  // 趋势图标题
+  document.getElementById('wTrendPeriod').textContent = cur.period || cur.sheet_name;
+  document.getElementById('wDetailPeriod').textContent = cur.period || cur.sheet_name;
+
+  // 每日趋势图
+  renderWeeklyTrend(cur);
+
+  // 明细表
+  renderWeeklyTable(cur);
+}
+
+function setChange(elId, cur, prev, label) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (prev == null || prev === 0) {
+    el.className = 'wkpi-wow flat'; el.textContent = `-- ${label}`; return;
+  }
+  const pct  = ((cur - prev) / Math.abs(prev) * 100).toFixed(1);
+  const up   = cur >= prev;
+  el.className = `wkpi-wow ${up ? 'up' : 'down'}`;
+  el.textContent = `${up ? '▲' : '▼'} ${Math.abs(pct)}%  ${label}`;
+}
+
+function renderWeeklyTrend(week) {
+  const el = document.getElementById('weeklyTrendChart');
+  if (!wTrendInst) wTrendInst = echarts.init(el, null, { renderer: 'canvas' });
+
+  const daily = (week.daily || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+  const today = new Date().toISOString().slice(0, 10);
+  const dates  = daily.map(d => d.date.slice(5));   // MM-DD
+  const sales  = daily.map(d => d.sales || 0);
+  const uvs    = daily.map(d => d.uv || 0);
+
+  wTrendInst.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {
+      ...TOOLTIP, trigger: 'axis',
+      formatter: params => {
+        const day = daily[params[0]?.dataIndex];
+        if (!day) return '';
+        return `<b>${day.date}</b><br>
+          销售额：¥${(day.sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2})}<br>
+          UV：${(day.uv||0).toLocaleString()}<br>
+          新增：${(day.new_users||0).toLocaleString()}`;
+      }
+    },
+    legend: { bottom: 0, textStyle: { color: '#8b949e' } },
+    grid: { top: 20, right: 60, bottom: 50, left: 20, containLabel: true },
+    xAxis: { type: 'category', data: dates, ...axisStyle },
+    yAxis: [
+      { type: 'value', name: '销售额', position: 'left',  ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} },
+      { type: 'value', name: 'UV',    position: 'right', ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} },
+    ],
+    series: [
+      {
+        name: '销售额', type: 'bar', yAxisIndex: 0, data: sales, barMaxWidth: 40,
+        itemStyle: {
+          color: params => {
+            const d = daily[params.dataIndex];
+            return (!d || d.date > today) ? 'rgba(255,107,53,0.2)' : '#FF6B35';
+          },
+          borderColor: params => {
+            const d = daily[params.dataIndex];
+            return (!d || d.date > today) ? '#FF6B35' : 'transparent';
+          },
+          borderWidth: params => {
+            const d = daily[params.dataIndex];
+            return (!d || d.date > today) ? 1 : 0;
+          },
+          borderType: 'dashed',
+        }
+      },
+      {
+        name: 'UV', type: 'line', yAxisIndex: 1, data: uvs,
+        lineStyle: { color: '#388bfd', width: 2 },
+        itemStyle: { color: '#388bfd' }, symbol: 'circle', symbolSize: 5, smooth: true,
+      }
+    ],
+  }, true);
+}
+
+function renderWeeklyCompare(weeks, selectedIdx) {
+  const el = document.getElementById('weeklyCompareChart');
+  if (!wCompareInst) wCompareInst = echarts.init(el, null, { renderer: 'canvas' });
+
+  // 从旧到新排列
+  const ordered = [...weeks].reverse();
+  const selPeriod = weeks[selectedIdx]?.period;
+
+  wCompareInst.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {
+      ...TOOLTIP, trigger: 'axis',
+      formatter: p => `<b>${p[0].name}</b><br>总销售：¥${(p[0].value||0).toLocaleString('zh-CN',{minimumFractionDigits:2})}`
+    },
+    grid: { top: 30, right: 20, bottom: 60, left: 20, containLabel: true },
+    xAxis: {
+      type: 'category', data: ordered.map(w => w.sheet_name || w.period),
+      ...axisStyle, axisLabel: { color: '#6e7681', fontSize: 11, rotate: 30 }
+    },
+    yAxis: { type: 'value', ...axisStyle, name: '总销售额(¥)', nameTextStyle:{color:'#6e7681',fontSize:11} },
+    series: [{
+      type: 'bar', barMaxWidth: 50,
+      data: ordered.map(w => ({
+        value: w.summary?.total_sales || 0,
+        itemStyle: {
+          color: w.period === selPeriod ? '#FF6B35' : '#2d4a6e',
+          borderRadius: [4, 4, 0, 0],
+        }
+      })),
+      label: {
+        show: true, position: 'top', color: '#8b949e', fontSize: 11,
+        formatter: p => p.value >= 10000 ? (p.value/10000).toFixed(1)+'万' : '¥'+p.value.toFixed(0),
+      }
+    }],
+  }, true);
+}
+
+function renderWeeklyTable(week) {
+  const daily = (week.daily || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+  const today = new Date().toISOString().slice(0, 10);
+  const totSales = daily.reduce((s, d) => s + (d.sales||0), 0);
+  const totUv    = daily.reduce((s, d) => s + (d.uv||0), 0);
+  const totUsers = daily.reduce((s, d) => s + (d.new_users||0), 0);
+  const maxSales = Math.max(...daily.map(d => d.sales||0));
+
+  const fmt2 = n => '¥' + (n||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  const rows = daily.map(d => {
+    const isFuture = d.date > today;
+    const isZero   = !d.sales && !d.uv;
+    const isBest   = d.sales === maxSales && d.sales > 0;
+    const arpu     = d.uv > 0 ? (d.sales / d.uv).toFixed(2) : '--';
+    const cls      = isBest ? 'best' : isZero ? 'zero' : '';
+    return `<tr class="${cls}">
+      <td>${d.date}</td>
+      <td class="num">${isZero ? '<span style="color:var(--text4)">—</span>' : fmt2(d.sales)}</td>
+      <td class="num">${isZero ? '<span style="color:var(--text4)">—</span>' : (d.uv||0).toLocaleString()}</td>
+      <td class="num">${(d.new_users||0).toLocaleString()}</td>
+      <td class="num">${isZero ? '—' : '¥'+arpu}</td>
+    </tr>`;
+  }).join('');
+
+  const totalArpu = totUv > 0 ? (totSales/totUv).toFixed(2) : '--';
+  const totalRow  = `<tr class="total">
+    <td>合计</td>
+    <td class="num">${fmt2(totSales)}</td>
+    <td class="num">${totUv.toLocaleString()}</td>
+    <td class="num">${totUsers.toLocaleString()}</td>
+    <td class="num">${totUv > 0 ? '¥'+totalArpu : '--'}</td>
+  </tr>`;
+
+  document.getElementById('wDetailBody').innerHTML = rows + totalRow;
 }
 
 // ════════════════════════════════════════════════════════════════════
-//  历史查询
+//  历史查询（读取 history_cache.json，纯前端过滤）
 // ════════════════════════════════════════════════════════════════════
-const API_BASE  = 'http://localhost:5001';
-let histData    = [];
-let histSortCol = 'date';
-let histSortDir = 'desc';
-let histPage    = 1;
-const histPageSize = 20;
-let histChart_instance = null;
+let histCache     = null;    // 完整 history_cache.json
+let histFiltered  = [];      // 过滤后的当前数据集
+let histSortCol   = 'date';
+let histSortDir   = 'desc';
+let histPage      = 1;
+const histPageSize = 15;
+let histChartInst = null;
 
-// 默认日期：最近30天
+// 默认日期：近30天
 (function initHistDates() {
-  const end   = new Date();
-  const start = new Date(end);
+  const end = new Date(), start = new Date(end);
   start.setDate(start.getDate() - 29);
   const fmt = d => d.toISOString().slice(0, 10);
   document.getElementById('histStart').value = fmt(start);
   document.getElementById('histEnd').value   = fmt(end);
 })();
 
-function checkHistApi() {
-  fetch(API_BASE + '/api/status', { signal: AbortSignal.timeout(2000) })
+function loadHistCache() {
+  fetch('data/history_cache.json?_t=' + Date.now())
     .then(r => r.ok ? r.json() : Promise.reject())
-    .then(() => {
-      document.getElementById('histApiWarn').style.display = 'none';
+    .then(data => {
+      histCache = data;
+      document.getElementById('histTip').textContent =
+        `已加载 ${data.daily_stats?.length||0} 天数据（导出于 ${data.export_time||'--'}）`;
     })
     .catch(() => {
-      document.getElementById('histApiWarn').style.display = '';
+      document.getElementById('histTip').textContent =
+        '暂无历史缓存，请运行 python3 update_data.py 生成 data/history_cache.json';
     });
 }
 
+function setHistPreset(days) {
+  const end = new Date(), start = new Date(end);
+  if (days > 0) start.setDate(start.getDate() - days + 1);
+  else if (days === 0 && histCache?.daily_stats?.length) {
+    // 全部：取最早日期
+    const dates = histCache.daily_stats.map(r => r.date).sort();
+    document.getElementById('histStart').value = dates[0];
+    document.getElementById('histEnd').value   = new Date().toISOString().slice(0,10);
+    histQuery(); return;
+  }
+  const fmt = d => d.toISOString().slice(0, 10);
+  document.getElementById('histStart').value = fmt(start);
+  document.getElementById('histEnd').value   = fmt(end);
+  histQuery();
+}
+
 function histQuery() {
-  const start = document.getElementById('histStart').value;
-  const end   = document.getElementById('histEnd').value;
+  if (!histCache) {
+    loadHistCache();
+    document.getElementById('histTip').textContent = '正在加载缓存文件...';
+    document.getElementById('histTip').style.display = '';
+    // 稍后再次触发
+    setTimeout(() => { if (histCache) histQuery(); }, 800);
+    return;
+  }
+  const start    = document.getElementById('histStart').value;
+  const end      = document.getElementById('histEnd').value;
+  const dataType = document.getElementById('histDataType').value;
+
   if (!start || !end) { alert('请选择日期范围'); return; }
 
-  document.getElementById('histTip').textContent = '正在查询...';
-  document.getElementById('histTip').style.display = '';
-  document.getElementById('histKpiGrid').style.display = 'none';
-  document.getElementById('histChartCard').style.display = 'none';
-  document.getElementById('histTableCard').style.display = 'none';
-
-  Promise.all([
-    fetch(`${API_BASE}/api/summary?start=${start}&end=${end}`).then(r => r.json()),
-    fetch(`${API_BASE}/api/daily?start=${start}&end=${end}`).then(r => r.json()),
-  ]).then(([summary, daily]) => {
-    histData = daily || [];
-
-    // 汇总卡片
-    document.getElementById('hkSales').textContent =
-      '¥' + (summary.total_sales || 0).toLocaleString('zh-CN', {minimumFractionDigits:2,maximumFractionDigits:2});
-    document.getElementById('hkDays').textContent =
-      `共 ${summary.days || 0} 天 · ${summary.start || start} ~ ${summary.end || end}`;
-    document.getElementById('hkUv').textContent    = (summary.avg_uv || 0).toLocaleString();
-    document.getElementById('hkOrders').textContent = (summary.total_orders || 0).toLocaleString();
-    document.getElementById('hkArpu').textContent  =
-      '¥' + (summary.avg_arpu || 0).toFixed(2);
-
-    document.getElementById('histKpiGrid').style.display = '';
+  if (dataType === 'daily') {
+    histFiltered = (histCache.daily_stats || [])
+      .filter(r => r.date >= start && r.date <= end);
+    document.getElementById('histDailyWrap').style.display = '';
+    document.getElementById('histGamesWrap').style.display = 'none';
+    document.getElementById('histTableTitle').textContent = '每日运营数据';
     document.getElementById('histChartCard').style.display = '';
-    document.getElementById('histTableCard').style.display = '';
-    document.getElementById('histTip').style.display = 'none';
-
+    renderHistKpi(histFiltered);
     renderHistChart();
-    histSortCol = 'date'; histSortDir = 'desc'; histPage = 1;
-    renderHistTable();
-  }).catch(() => {
-    document.getElementById('histTip').textContent =
-      'API 连接失败，请先运行 python3 api_server.py（端口 5001）';
-    checkHistApi();
-  });
+  } else {
+    histFiltered = (histCache.game_sales || [])
+      .filter(r => r.data_date >= start && r.data_date <= end);
+    document.getElementById('histDailyWrap').style.display = 'none';
+    document.getElementById('histGamesWrap').style.display = '';
+    document.getElementById('histTableTitle').textContent = '游戏销售明细';
+    document.getElementById('histChartCard').style.display = 'none';
+    // 游戏模式没有单独 KPI，用销售汇总
+    const fakeDailyForKpi = Object.values(
+      histFiltered.reduce((m, r) => {
+        const k = r.data_date;
+        if (!m[k]) m[k] = { date: k, sales: 0, uv: 0, paying_users: 0 };
+        m[k].sales += r.sales_amount || 0;
+        return m;
+      }, {})
+    );
+    renderHistKpi(fakeDailyForKpi);
+  }
+
+  document.getElementById('histKpiGrid').style.display = '';
+  document.getElementById('histTableCard').style.display = '';
+  document.getElementById('histTip').style.display = 'none';
+
+  histSortCol = dataType === 'daily' ? 'date' : 'data_date';
+  histSortDir = 'desc'; histPage = 1;
+  renderHistPagedTable();
+}
+
+function renderHistKpi(data) {
+  if (!data.length) return;
+  const total      = data.reduce((s, r) => s + (r.sales||r.payment_amount||0), 0);
+  const totalUv    = data.reduce((s, r) => s + (r.uv||0), 0);
+  const totalPaying= data.reduce((s, r) => s + (r.paying_users||0), 0);
+  const days       = data.length;
+  const avgSales   = days > 0 ? total / days : 0;
+  const avgArpu    = totalPaying > 0 ? total / totalPaying : 0;
+  const bestRow    = data.reduce((best, r) => (r.sales||r.payment_amount||0) > (best.sales||best.payment_amount||0) ? r : best, data[0]);
+  const fmt2 = n => '¥' + (n||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const start = document.getElementById('histStart').value;
+  const end   = document.getElementById('histEnd').value;
+
+  document.getElementById('hkSales').textContent    = fmt2(total);
+  document.getElementById('hkDays').textContent     = `共 ${days} 天 · ${start} ~ ${end}`;
+  document.getElementById('hkUv').textContent       = totalUv.toLocaleString();
+  document.getElementById('hkAvgSales').textContent = fmt2(avgSales);
+  document.getElementById('hkArpu').textContent     = fmt2(avgArpu);
+  document.getElementById('hkBestDay').textContent  = bestRow?.date || bestRow?.data_date || '--';
+  document.getElementById('hkBestAmt').textContent  = fmt2(bestRow?.sales||bestRow?.payment_amount||0);
 }
 
 function renderHistChart() {
   const el = document.getElementById('histChart');
-  if (!histChart_instance) {
-    histChart_instance = echarts.init(el, null, { renderer: 'canvas' });
-  }
-  const sorted = [...histData].sort((a, b) => a.date < b.date ? -1 : 1);
-  const dates   = sorted.map(r => r.date);
+  if (!histChartInst) histChartInst = echarts.init(el, null, { renderer: 'canvas' });
+
+  const sorted = [...histFiltered].sort((a, b) => a.date < b.date ? -1 : 1);
+  const dates  = sorted.map(r => r.date);
   const showSales = document.getElementById('hcbSales').checked;
   const showUv    = document.getElementById('hcbUv').checked;
   const showArpu  = document.getElementById('hcbArpu').checked;
 
-  const series = [];
-  const yAxes  = [];
-  let yIdx = 0;
-
+  const series = [], yAxes = [];
+  let yi = 0;
   if (showSales) {
     yAxes.push({ type:'value', name:'销售额(¥)', position:'left', ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} });
-    series.push({ name:'销售额', type:'bar', yAxisIndex:yIdx++, data: sorted.map(r=>r.sales||0),
-      itemStyle:{color:'#388bfd', opacity:.8}, barMaxWidth:30 });
+    series.push({ name:'销售额', type:'bar', yAxisIndex:yi++, data: sorted.map(r=>r.sales||0),
+      itemStyle:{color:'#388bfd', opacity:.8, borderRadius:[3,3,0,0]}, barMaxWidth:30 });
   }
   if (showUv) {
     yAxes.push({ type:'value', name:'UV', position: showSales?'right':'left', ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} });
-    series.push({ name:'UV', type:'line', yAxisIndex:yIdx++, data: sorted.map(r=>r.uv||0),
+    series.push({ name:'UV', type:'line', yAxisIndex:yi++, data: sorted.map(r=>r.uv||0),
       lineStyle:{color:'#3fb950',width:2}, itemStyle:{color:'#3fb950'}, symbol:'none', smooth:true });
   }
   if (showArpu) {
     yAxes.push({ type:'value', name:'ARPU', position:'right', ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} });
-    series.push({ name:'ARPU', type:'line', yAxisIndex:yIdx++, data: sorted.map(r=>r.arpu||0),
+    series.push({ name:'ARPU', type:'line', yAxisIndex:yi++, data: sorted.map(r=>r.arpu||0),
       lineStyle:{color:'#e3b341',width:2}, itemStyle:{color:'#e3b341'}, symbol:'none', smooth:true });
   }
-  if (!yAxes.length) { histChart_instance.clear(); return; }
+  if (!yAxes.length) { histChartInst.clear(); return; }
 
-  histChart_instance.setOption({
+  histChartInst.setOption({
     backgroundColor: 'transparent',
-    tooltip: { ...TOOLTIP, trigger:'axis' },
-    legend: { bottom:0, textStyle:{color:'#8b949e'} },
-    grid: { top:30, right:showUv&&showSales?60:20, bottom:50, left:showSales?70:20, containLabel:true },
-    xAxis: { type:'category', data:dates, ...axisStyle, axisLabel:{color:'#6e7681',fontSize:11,rotate:dates.length>30?30:0} },
+    tooltip: { ...TOOLTIP, trigger: 'axis' },
+    legend: { bottom: 0, textStyle: { color: '#8b949e' } },
+    grid: { top: 20, right: showUv && showSales ? 60 : 20, bottom: 50, left: 20, containLabel: true },
+    xAxis: { type: 'category', data: dates, ...axisStyle, axisLabel: { color: '#6e7681', fontSize: 11, rotate: dates.length > 30 ? 30 : 0 } },
     yAxis: yAxes,
     series,
   }, true);
@@ -1825,66 +2207,102 @@ function renderHistChart() {
 function histSortBy(col) {
   if (histSortCol === col) histSortDir = histSortDir === 'asc' ? 'desc' : 'asc';
   else { histSortCol = col; histSortDir = 'desc'; }
-  histPage = 1;
-  renderHistTable();
+  histPage = 1; renderHistPagedTable();
 }
 
-function renderHistTable() {
-  const sorted = [...histData].sort((a, b) => {
-    let va = a[histSortCol], vb = b[histSortCol];
-    if (va == null) va = 0; if (vb == null) vb = 0;
+function renderHistPagedTable() {
+  const dataType = document.getElementById('histDataType').value;
+  const sorted = [...histFiltered].sort((a, b) => {
+    let va = a[histSortCol] ?? 0, vb = b[histSortCol] ?? 0;
     if (va < vb) return histSortDir === 'asc' ? -1 : 1;
     if (va > vb) return histSortDir === 'asc' ?  1 : -1;
     return 0;
   });
   const total = sorted.length;
-  const totalPages = Math.max(1, Math.ceil(total / histPageSize));
-  histPage = Math.min(histPage, totalPages);
-  const start = (histPage - 1) * histPageSize;
-  const rows  = sorted.slice(start, start + histPageSize);
+  const pages = Math.max(1, Math.ceil(total / histPageSize));
+  histPage = Math.min(histPage, pages);
+  const sl = (histPage - 1) * histPageSize;
+  const rows = sorted.slice(sl, sl + histPageSize);
 
   document.getElementById('histRowCount').textContent = `共 ${total} 条`;
-  document.getElementById('histTableBody').innerHTML = rows.length ? rows.map(r => {
-    const gr = r.growth_rate || 0;
-    const grClass = gr > 0 ? 'rate-up' : gr < 0 ? 'rate-down' : 'rate-zero';
-    return `<tr>
-      <td>${r.date}</td>
-      <td class="num">¥${(r.sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-      <td class="num">${(r.uv||0).toLocaleString()}</td>
-      <td class="num">${(r.pv||0).toLocaleString()}</td>
-      <td class="num">${(r.new_users||0).toLocaleString()}</td>
-      <td class="num">${(r.paying_users||0).toLocaleString()}</td>
-      <td class="num">${(r.orders||0).toLocaleString()}</td>
-      <td class="num">¥${(r.arpu||0).toFixed(2)}</td>
-      <td class="num ${grClass}">${gr !== 0 ? (gr>0?'+':'')+gr.toFixed(2)+'%' : '--'}</td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="9" class="no-data">暂无数据</td></tr>';
 
-  // Pagination
-  document.getElementById('histPageInfo').textContent = `共 ${total} 条 · 第 ${histPage} / ${totalPages} 页`;
+  if (dataType === 'daily') {
+    const fmt2 = n => '¥' + (n||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('histTableBody').innerHTML = rows.length ? rows.map(r => {
+      const gr = r.growth_rate || 0;
+      const grCls = gr > 0 ? 'rate-up' : gr < 0 ? 'rate-down' : 'rate-zero';
+      return `<tr>
+        <td>${r.date}</td>
+        <td class="num">${fmt2(r.sales||0)}</td>
+        <td class="num">${(r.uv||0).toLocaleString()}</td>
+        <td class="num">${(r.pv||0).toLocaleString()}</td>
+        <td class="num">${(r.new_users||0).toLocaleString()}</td>
+        <td class="num">${(r.paying_users||0).toLocaleString()}</td>
+        <td class="num">${(r.orders||0).toLocaleString()}</td>
+        <td class="num">¥${(r.arpu||0).toFixed(2)}</td>
+        <td class="num ${grCls}">${gr ? (gr>0?'+':'')+gr.toFixed(2)+'%' : '--'}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="9" class="no-data">暂无数据</td></tr>';
+  } else {
+    const typeLabel = { solo: '单机', publisher: '厂商', unknown: '未知' };
+    document.getElementById('histGamesBody').innerHTML = rows.length ? rows.map(r => `<tr>
+      <td>${r.data_date}</td>
+      <td>${r.game_name}</td>
+      <td><span class="tag" style="background:${r.game_type==='solo'?'rgba(56,139,253,.15)':'rgba(255,107,53,.15)'}; color:${r.game_type==='solo'?'var(--blue)':'var(--orange)'}; padding:2px 6px; border-radius:4px; font-size:11px">${typeLabel[r.game_type]||r.game_type}</span></td>
+      <td class="num">¥${(r.sales_amount||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+      <td class="num">${(r.uv||0).toLocaleString()}</td>
+      <td class="num">${(r.orders||0).toLocaleString()}</td>
+    </tr>`).join('') : '<tr><td colspan="6" class="no-data">暂无数据</td></tr>';
+  }
+
+  // 分页
+  document.getElementById('histPageInfo').textContent = `共 ${total} 条 · 第 ${histPage} / ${pages} 页`;
   const btns = document.getElementById('histPageBtns');
   btns.innerHTML = '';
-  const add = (label, page, active, disabled) => {
+  const add = (label, pg, active, disabled) => {
     const b = document.createElement('button');
     b.className = 'page-btn' + (active ? ' active' : '');
     b.textContent = label; b.disabled = disabled;
-    b.onclick = () => { histPage = page; renderHistTable(); };
+    b.onclick = () => { histPage = pg; renderHistPagedTable(); };
     btns.appendChild(b);
   };
-  add('«', 1,               false, histPage===1);
-  add('‹', histPage-1,      false, histPage===1);
-  const sp = Math.max(1, histPage-2);
-  const ep = Math.min(totalPages, sp+4);
+  add('«', 1,          false, histPage===1);
+  add('‹', histPage-1, false, histPage===1);
+  const sp = Math.max(1, histPage-2), ep = Math.min(pages, sp+4);
   for (let p = sp; p <= ep; p++) add(p, p, p===histPage, false);
-  add('›', histPage+1,      false, histPage===totalPages);
-  add('»', totalPages,      false, histPage===totalPages);
+  add('›', histPage+1, false, histPage===pages);
+  add('»', pages,      false, histPage===pages);
 }
 
-function histExport() {
-  const start = document.getElementById('histStart').value;
-  const end   = document.getElementById('histEnd').value;
-  if (!start || !end) { alert('请先选择日期范围'); return; }
-  window.open(`${API_BASE}/api/export?start=${start}&end=${end}`);
+function histExportCSV() {
+  if (!histFiltered.length) { alert('请先查询数据'); return; }
+  const start  = document.getElementById('histStart').value;
+  const end    = document.getElementById('histEnd').value;
+  const type   = document.getElementById('histDataType').value;
+
+  let headers, rows;
+  if (type === 'daily') {
+    headers = ['日期','销售额','PV','UV','新增用户','付费用户','订单数','ARPU','环比增长率%'];
+    rows = histFiltered.map(r => [
+      r.date, r.sales||0, r.pv||0, r.uv||0,
+      r.new_users||0, r.paying_users||0, r.orders||0,
+      r.arpu||0, r.growth_rate||0
+    ]);
+  } else {
+    headers = ['日期','游戏名','类型','销售额','UV','订单数'];
+    rows = histFiltered.map(r => [
+      r.data_date, r.game_name, r.game_type,
+      r.sales_amount||0, r.uv||0, r.orders||0
+    ]);
+  }
+
+  const csv  = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = `gamepark_${type}_${start}_${end}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 </script>
 </body>

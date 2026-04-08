@@ -295,6 +295,41 @@ def save_to_db(output, yesterday, weekly_weeks=None):
         log_err(f"DB 存档失败: {e}\n{traceback.format_exc()}")
 
 
+def export_history_cache():
+    """将数据库所有记录导出为 data/history_cache.json（供前端 file:// 直读）"""
+    try:
+        if not DB_FILE.exists():
+            log_warn("DB 文件不存在，跳过 history_cache 导出")
+            return
+        conn = sqlite3.connect(DB_FILE)
+        conn.row_factory = sqlite3.Row
+
+        daily_stats = [dict(r) for r in conn.execute(
+            "SELECT * FROM daily_stats ORDER BY date ASC").fetchall()]
+
+        game_sales = [dict(r) for r in conn.execute(
+            """SELECT date AS data_date, game AS game_name, game_type,
+                      sales AS sales_amount, uv, orders
+               FROM daily_game_sales
+               ORDER BY date DESC, sales DESC""").fetchall()]
+
+        conn.close()
+
+        result = {
+            "export_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "daily_stats": daily_stats,
+            "game_sales":  game_sales,
+        }
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with open(DATA_DIR / "history_cache.json", "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+
+        log_ok(f"history_cache.json 导出完成：{len(daily_stats)} 天 · {len(game_sales)} 条游戏记录")
+
+    except Exception as e:
+        log_err(f"导出 history_cache.json 失败: {e}\n{traceback.format_exc()}")
+
+
 # ── 工具 ──────────────────────────────────────────────────────────────────────
 def to_num(val, default=0.0):
     try:
@@ -1154,8 +1189,9 @@ def main():
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    # ── 存入数据库 ────────────────────────────────────────────────────────────
+    # ── 存入数据库 & 导出前端缓存 ─────────────────────────────────────────────
     save_to_db(output, yesterday, weekly_weeks)
+    export_history_cache()
 
     elapsed = (datetime.now() - t0).total_seconds()
     total   = sum(len(output[k]) for k in ["daily_sales","detail_table"])
