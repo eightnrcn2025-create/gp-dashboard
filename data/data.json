@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-04-08 16:03:19",
+  "last_updated": "2026-04-08 16:14:14",
   "data_date": "2026-04-07",
-  "update_time": "2026-04-08 16:03:19",
+  "update_time": "2026-04-08 16:14:14",
   "kpi": {
     "today_sales": 3051.46,
     "yesterday_sales": 4515.49,
@@ -363,7 +363,7 @@
       "amount": 3051.46
     }
   ],
-  "monthly_total": 30126.1,
+  "monthly_total": 30165.85,
   "active_games": 27,
   "traffic_stats": {
     "pv": 22548,

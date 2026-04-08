@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-04-08 16:02:25",
+  "run_time": "2026-04-08 16:13:24",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 3051.46,
-      "today_amount": 1413.44,
+      "today_amount": 1453.19,
       "today_orders": 146
     },
     "daily_sales": {
@@ -105,6 +105,52 @@
       "recharged_amount": 2340.0,
       "arpu": 31.88,
       "avg_order_value": 51.65
+    },
+    "playwright": {
+      "status": "success",
+      "solo_top5": [
+        {
+          "game": "女神的最佳交易（Windows/安卓）",
+          "sales": 984.0
+        },
+        {
+          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
+          "sales": 493.75
+        },
+        {
+          "game": "爱欲之都 - 超大版本更新 ！！！ (Windows/安卓)",
+          "sales": 462.3
+        }
+      ],
+      "publisher_top5": [
+        {
+          "game": "欲界圣姬",
+          "sales": 3080.0
+        },
+        {
+          "game": "青楼大掌柜",
+          "sales": 1305.4
+        },
+        {
+          "game": "魅惑前线",
+          "sales": 889.0
+        }
+      ],
+      "views_top5": [
+        {
+          "game": "青楼大掌柜",
+          "views": 6537
+        },
+        {
+          "game": "欲界圣姬",
+          "views": 5622
+        },
+        {
+          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
+          "views": 1808
+        }
+      ],
+      "detail_rows_count": 27
     }
   }
 }
