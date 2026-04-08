@@ -1,9 +1,110 @@
 {
-  "run_time": "2026-04-08 15:32:41",
+  "run_time": "2026-04-08 15:51:42",
   "steps": {
-    "error": {
-      "msg": "422 Client Error: Unprocessable Entity for url: https://admin.gamepark.co/api/auth/admin/login",
-      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 411, in admin_login\n    r.raise_for_status()\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/models.py\", line 1028, in raise_for_status\n    raise HTTPError(http_error_msg, response=self)\nrequests.exceptions.HTTPError: 422 Client Error: Unprocessable Entity for url: https://admin.gamepark.co/api/auth/admin/login\n"
+    "login": "ok",
+    "orders_recent": {
+      "yestoday_amount": 3051.46,
+      "today_amount": 1403.44,
+      "today_orders": 146
+    },
+    "daily_sales": {
+      "count": 30,
+      "last3": [
+        {
+          "date": "2026-04-06",
+          "amount": 4515.49
+        },
+        {
+          "date": "2026-04-07",
+          "amount": 3051.46
+        },
+        {
+          "date": "2026-04-08",
+          "amount": 1403.44
+        }
+      ]
+    },
+    "userstats_raw": [
+      {
+        "title": "pv",
+        "yesterday": 22548,
+        "today": 20419
+      },
+      {
+        "title": "uv",
+        "yesterday": 3426,
+        "today": 3435
+      },
+      {
+        "title": "ip",
+        "yesterday": 0,
+        "today": 3243
+      },
+      {
+        "title": "bounce_rate",
+        "yesterday": 0.32,
+        "today": 0.3
+      },
+      {
+        "title": "visit_avg_time",
+        "yesterday": 6531,
+        "today": 3754
+      },
+      {
+        "title": "register_total",
+        "yesterday": "126293",
+        "today": "126652"
+      },
+      {
+        "title": "register_new",
+        "yesterday": 440,
+        "today": 359
+      },
+      {
+        "title": "active_user",
+        "yesterday": 81,
+        "today": 68
+      },
+      {
+        "title": "recharged_count",
+        "yesterday": 47,
+        "today": 41
+      },
+      {
+        "title": "recharged_amount",
+        "yesterday": 2340,
+        "today": 1710
+      },
+      {
+        "title": "channel_order_user_count",
+        "yesterday": "3",
+        "today": "0"
+      },
+      {
+        "title": "channel_order_amount",
+        "yesterday": 242.26,
+        "today": 0
+      },
+      {
+        "title": "arpu",
+        "yesterday": 31.88,
+        "today": 25.15
+      },
+      {
+        "title": "average_order_value",
+        "yesterday": 51.65,
+        "today": 41.71
+      }
+    ],
+    "userstats_parsed": {
+      "uv": 3426,
+      "pv": 22548,
+      "new_reg": 440,
+      "active_users": 81,
+      "paid_users": 47,
+      "recharged_amount": 2340.0,
+      "arpu": 31.88,
+      "avg_order_value": 51.65
     }
   }
 }
