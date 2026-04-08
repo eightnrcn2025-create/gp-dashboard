@@ -1138,39 +1138,43 @@ def main():
 
     # ── 流量统计（API + Playwright 流量页融合）────────────────────────────────
     flow_stats        = game_data.get("flow_stats", {})
+    # ── 以下字段 API 已提供准确值，不从 flow_stats 覆盖 ────────────────────────
+    # API userstats/summary 的 "yesterday" 字段是权威来源；
+    # Playwright 抓的流量统计页不稳定（昨日按钮未必点成功、值可能为0），
+    # 且 dict.get(key, default) 在 key=0 时不会使用 default，会导致 0 覆盖正确值。
     uv                = api_data.get("total_traffic", 0)
     pv_val            = api_data.get("pv", 0)
     new_reg           = api_data.get("new_reg", 0)
     active_users      = api_data.get("active_users", 0)
     paid_users        = api_data.get("paid_users", 0)
     today_orders      = api_data.get("today_orders", 0)
-    recharged_amount  = api_data.get("recharged_amount", 0)   # 充值金额（来自 userstats）
-    arpu_api          = api_data.get("arpu_api", 0)           # API 直接给出的 ARPU
-    avg_order_val_api = api_data.get("avg_order_val_api", 0)  # API 直接给出的客单价
+    recharged_amount  = api_data.get("recharged_amount", 0)
+    arpu_api          = api_data.get("arpu_api", 0)
+    avg_order_val_api = api_data.get("avg_order_val_api", 0)
 
     traffic_stats = {
-        "pv":              int(flow_stats.get("pv",             pv_val)),
-        "uv":              int(flow_stats.get("uv",             uv)),
-        "ip":              int(flow_stats.get("ip",             0)),
-        "bounce_rate":     flow_stats.get("bounce_rate",        ""),
-        "avg_duration":    flow_stats.get("avg_duration",       ""),
-        "total_users":     int(flow_stats.get("total_users",    0)),
-        "new_users":       int(flow_stats.get("new_users",      new_reg)),
-        "active_users":    int(flow_stats.get("active_users",   active_users)),
-        "paying_users":    int(flow_stats.get("paying_users",   paid_users)),
-        # payment_amount = 充值金额（recharged_amount），来自 userstats API
-        "payment_amount":  round(float(flow_stats.get("payment_amount", recharged_amount)), 2),
-        "order_count":     int(flow_stats.get("order_count",    today_orders)),
-        # order_amount = 订单支付总额，来自 orders/stats/recent yestoday
-        "order_amount":    round(float(flow_stats.get("order_amount",   today_sales)), 2),
-        # arpu 优先用 API 直接返回值，避免用错误的 today_sales/active_users 计算
-        "arpu":            round(float(flow_stats.get("arpu",   arpu_api)), 2),
-        "avg_order_value": round(float(flow_stats.get("avg_order_value", avg_order_val_api)), 2),
+        # 核心用户/流量指标：完全来自 API，不被 Playwright 覆盖
+        "pv":              pv_val,
+        "uv":              uv,
+        "new_users":       new_reg,
+        "active_users":    active_users,
+        "paying_users":    paid_users,
+        "payment_amount":  round(recharged_amount, 2),       # 充值金额
+        "order_count":     today_orders,
+        "order_amount":    round(float(today_sales), 2),     # 订单支付总额
+        "arpu":            round(arpu_api, 2),               # API 直接返回
+        "avg_order_value": round(avg_order_val_api, 2),      # API 直接返回
+        # 以下字段 API 无法提供，仅 Playwright 可抓（不存在时留空）
+        "ip":           int(flow_stats.get("ip", 0)),
+        "bounce_rate":  flow_stats.get("bounce_rate", ""),
+        "avg_duration": flow_stats.get("avg_duration", ""),
+        "total_users":  int(flow_stats.get("total_users", 0)),
     }
     log_ok(f"流量统计汇总 → UV={traffic_stats['uv']}  PV={traffic_stats['pv']}"
-           f"  新注册={traffic_stats['new_users']}  付费={traffic_stats['paying_users']}"
-           f"  充值¥{traffic_stats['payment_amount']}  订单¥{traffic_stats['order_amount']}"
-           f"  ARPU=¥{traffic_stats['arpu']}  客单价=¥{traffic_stats['avg_order_value']}")
+           f"  新注册={traffic_stats['new_users']}  活跃={traffic_stats['active_users']}"
+           f"  充值用户={traffic_stats['paying_users']}  充值¥{traffic_stats['payment_amount']}"
+           f"  订单¥{traffic_stats['order_amount']}  ARPU=¥{traffic_stats['arpu']}"
+           f"  客单价=¥{traffic_stats['avg_order_value']}")
 
     # ── 组装输出 ──────────────────────────────────────────────────────────────
     update_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
