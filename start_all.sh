@@ -1,16 +1,11 @@
 #!/bin/bash
 # =============================================================
 # Gamepark 看板 — 一键启动（macOS / Linux）
-# 启动 refresh_server（port 5002）+ api_server（port 5001）
+# 使用 nohup 持久启动 refresh_server + api_server，再打开看板
 # =============================================================
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LOGS_DIR="$PROJECT_DIR/logs"
-REFRESH_LOG="$LOGS_DIR/refresh_server.log"
-API_LOG="$LOGS_DIR/api_server.log"
-REFRESH_PID="$LOGS_DIR/refresh_server.pid"
-API_PID_FILE="$LOGS_DIR/api_server.pid"
-
 mkdir -p "$LOGS_DIR"
 cd "$PROJECT_DIR"
 
@@ -26,45 +21,33 @@ if ! command -v python3 &>/dev/null; then
     exit 1
 fi
 
-# ── 停止旧进程 ─────────────────────────────────────────────────
-for PF in "$REFRESH_PID" "$API_PID_FILE"; do
-    if [ -f "$PF" ]; then
-        OLD=$(cat "$PF")
-        kill "$OLD" 2>/dev/null && echo "[INFO] 已停止旧进程 PID=$OLD"
-        rm -f "$PF"
-        sleep 0.5
-    fi
-done
-
 # ── 启动 refresh_server（port 5002）──────────────────────────
-if lsof -i :5002 -t &>/dev/null 2>&1; then
-    echo "[WARN] 端口 5002 已被占用，跳过启动刷新服务"
+if lsof -Pi :5002 -sTCP:LISTEN -t &>/dev/null 2>&1; then
+    echo "[INFO] 刷新服务已在运行（端口 5002）"
 else
     echo "[INFO] 启动刷新服务 (port 5002)..."
-    python3 refresh_server.py >> "$REFRESH_LOG" 2>&1 &
-    RPID=$!
-    echo $RPID > "$REFRESH_PID"
+    nohup python3 refresh_server.py > "$LOGS_DIR/refresh_server.log" 2>&1 &
+    echo $! > "$LOGS_DIR/refresh_server.pid"
     sleep 2
-    if kill -0 "$RPID" 2>/dev/null; then
-        echo "[OK]  刷新服务已启动 → http://localhost:5002  (PID=$RPID)"
+    if lsof -Pi :5002 -sTCP:LISTEN -t &>/dev/null 2>&1; then
+        echo "[OK]  刷新服务已启动 → http://localhost:5002  (PID=$(cat "$LOGS_DIR/refresh_server.pid"))"
     else
-        echo "[WARN] 刷新服务启动失败，请检查: $REFRESH_LOG"
+        echo "[WARN] 刷新服务启动失败，请检查: $LOGS_DIR/refresh_server.log"
     fi
 fi
 
-# ── 启动 api_server（port 5001，历史查询备用）────────────────
-if lsof -i :5001 -t &>/dev/null 2>&1; then
-    echo "[WARN] 端口 5001 已被占用，跳过启动 API 服务"
+# ── 启动 api_server（port 5001）──────────────────────────────
+if lsof -Pi :5001 -sTCP:LISTEN -t &>/dev/null 2>&1; then
+    echo "[INFO] API 服务已在运行（端口 5001）"
 else
     echo "[INFO] 启动 API 服务 (port 5001)..."
-    python3 api_server.py >> "$API_LOG" 2>&1 &
-    APID=$!
-    echo $APID > "$API_PID_FILE"
+    nohup python3 api_server.py > "$LOGS_DIR/api_server.log" 2>&1 &
+    echo $! > "$LOGS_DIR/api_server.pid"
     sleep 1
-    if kill -0 "$APID" 2>/dev/null; then
-        echo "[OK]  API 服务已启动 → http://localhost:5001  (PID=$APID)"
+    if lsof -Pi :5001 -sTCP:LISTEN -t &>/dev/null 2>&1; then
+        echo "[OK]  API 服务已启动 → http://localhost:5001  (PID=$(cat "$LOGS_DIR/api_server.pid"))"
     else
-        echo "[WARN] API 服务启动失败，请检查: $API_LOG"
+        echo "[WARN] API 服务启动失败，请检查: $LOGS_DIR/api_server.log"
     fi
 fi
 
@@ -86,6 +69,6 @@ echo ""
 echo "================================================"
 echo "  刷新服务: http://localhost:5002/ping"
 echo "  API 服务:  http://localhost:5001/api/status"
-echo "  停止全部:  kill \$(cat $REFRESH_PID) \$(cat $API_PID_FILE)"
+echo "  服务日志:  $LOGS_DIR/"
 echo "================================================"
 echo ""

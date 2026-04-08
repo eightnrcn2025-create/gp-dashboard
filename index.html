@@ -560,6 +560,12 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
   </div>
 </div>
 
+<!-- 离线提示（服务未启动时显示，不影响主界面）-->
+<div id="offline-tip" style="display:none; text-align:center; padding:5px 16px;
+  font-size:11px; color:#484f58; background:var(--bg2); border-bottom:1px solid var(--border);">
+  运行 <code style="color:#6e7681; font-size:11px">start_all.sh</code> 后可使用一键刷新功能
+</div>
+
 <!-- Tab Navigation -->
 <div class="tab-nav">
   <button class="tab-btn active" id="tab-overview" onclick="switchTab('overview',this)">运营总览</button>
@@ -1160,51 +1166,93 @@ function showToast(message, type = 'info', duration = 3000) {
 // ── 刷新 ────────────────────────────────────────────────────────────
 const REFRESH_URL = 'http://localhost:5002';
 let   _pollTimer  = null;
+let   _svcAlive   = false;   // 服务在线状态缓存
+
+// ── 页面加载后静默检测服务状态 ─────────────────────────────────
+(function checkServiceSilently() {
+  fetch(REFRESH_URL + '/ping', { signal: AbortSignal.timeout(2000) })
+    .then(r => { if (r.ok) { _svcAlive = true; } })
+    .catch(() => {
+      // 服务离线：显示低调提示，不弹 Toast
+      const tip = document.getElementById('offline-tip');
+      if (tip) tip.style.display = '';
+    });
+})();
 
 async function doRefresh() {
   const btn  = document.getElementById('btnRefresh');
   const icon = document.getElementById('refreshIcon');
 
-  // ① 检查刷新服务是否在线
-  let alive = false;
+  // ── 重新 ping，确认最新状态（可能用户刚刚启动了服务）──────────
   try {
     const r = await fetch(REFRESH_URL + '/ping', { signal: AbortSignal.timeout(2000) });
-    alive = r.ok;
-  } catch (_) {}
+    _svcAlive = r.ok;
+  } catch (_) { _svcAlive = false; }
 
-  if (!alive) {
-    showToast('请先运行 start_all.sh（或 start_all.bat）启动刷新服务', 'warning', 6000);
-    return;
-  }
+  if (_svcAlive) {
+    // ── 服务在线：API 流程 ─────────────────────────────────────
+    // 检查是否已在运行
+    try {
+      const r  = await fetch(REFRESH_URL + '/status');
+      const st = await r.json();
+      if (st.is_running) {
+        showToast('数据更新已在进行中，请稍候...', 'info', 4000);
+        _startPoll(btn, icon);
+        return;
+      }
+    } catch (_) {}
 
-  // ② 检查是否已在运行
-  try {
-    const r   = await fetch(REFRESH_URL + '/status');
-    const st  = await r.json();
-    if (st.is_running) {
-      showToast('数据更新已在进行中，请稍候...', 'info', 4000);
-      _startPoll(btn, icon);
+    // 触发更新
+    btn.disabled = true;
+    btn.classList.add('loading');
+    icon.textContent = '↻';
+    try {
+      await fetch(REFRESH_URL + '/refresh', { method: 'POST' });
+    } catch (e) {
+      showToast('触发更新失败：' + e.message, 'error');
+      btn.disabled = false; btn.classList.remove('loading');
       return;
     }
-  } catch (_) {}
+    showToast('数据更新已启动，约需 30-90 秒...', 'info', 90000);
+    _startPoll(btn, icon);
 
-  // ③ 触发更新
-  btn.disabled = true;
-  icon.textContent = '↻';
-  btn.classList.add('loading');
+  } else {
+    // ── 服务离线：打开跳板页 + 固定倒计时 ─────────────────────
+    window.open('run_refresh.html', '_blank', 'width=460,height=280,menubar=no,toolbar=no');
 
-  try {
-    await fetch(REFRESH_URL + '/refresh', { method: 'POST' });
-  } catch (e) {
-    showToast('触发更新失败：' + e.message, 'error');
-    btn.disabled = false; btn.classList.remove('loading');
-    return;
+    btn.disabled = true;
+    btn.classList.add('loading');
+    _startCountdown(btn, icon, 60, () => {
+      // 60s 后重新加载所有数据文件
+      loadData().then(data => {
+        allData = data;
+        renderAll(data);
+        startCountdown(data.last_updated);
+      }).catch(() => {});
+      weeklyData = null;
+      histCache  = null;
+      showToast('数据已刷新', 'success', 3000);
+    });
   }
-
-  showToast('数据更新已启动，约需 30-90 秒...', 'info', 90000);
-  _startPoll(btn, icon);
 }
 
+// 固定倒计时（服务离线时用）
+function _startCountdown(btn, icon, total, onDone) {
+  if (_pollTimer) clearInterval(_pollTimer);
+  let elapsed = 0;
+  _pollTimer = setInterval(() => {
+    elapsed += 5;
+    icon.textContent = elapsed + 's';
+    if (elapsed >= total) {
+      clearInterval(_pollTimer); _pollTimer = null;
+      btn.disabled = false; btn.classList.remove('loading');
+      icon.textContent = '↻';
+      onDone();
+    }
+  }, 5000);
+}
+
+// API 轮询（服务在线时用）
 function _startPoll(btn, icon) {
   if (_pollTimer) clearInterval(_pollTimer);
   let elapsed = 0;
@@ -1220,24 +1268,19 @@ function _startPoll(btn, icon) {
         clearInterval(_pollTimer); _pollTimer = null;
         btn.disabled = false; btn.classList.remove('loading');
         icon.textContent = '↻';
-
-        // 移除"更新中"toast，显示完成
         const t = document.getElementById('toast-msg');
         if (t) t.remove();
 
         const ok = (st.last?.returncode === 0);
-        showToast(ok ? '数据更新完成！' : '更新出现错误，请查看 logs/update_log.txt', ok ? 'success' : 'error', 4000);
-
+        showToast(
+          ok ? '数据更新完成！' : '更新出现错误，请查看 logs/update_log.txt',
+          ok ? 'success' : 'error', 4000
+        );
         if (ok) {
-          // 重新加载全部数据
           loadData().then(data => {
-            allData = data;
-            renderAll(data);
-            startCountdown(data.last_updated);
+            allData = data; renderAll(data); startCountdown(data.last_updated);
           }).catch(() => {});
-          // 重置周数据和历史缓存，下次切换 tab 时重新拉取
-          weeklyData = null;
-          histCache  = null;
+          weeklyData = null; histCache = null;
         }
         return;
       }
