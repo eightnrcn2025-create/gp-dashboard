@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-04-08 01:38:42",
+  "last_updated": "2026-04-08 14:17:09",
   "data_date": "2026-04-07",
-  "update_time": "2026-04-08 01:38:42",
+  "update_time": "2026-04-08 14:17:09",
   "kpi": {
     "today_sales": 4515.49,
     "yesterday_sales": 4515.49,
@@ -372,22 +372,22 @@
     }
   ],
   "monthly_total": 28265.04,
-  "active_games": 27,
+  "active_games": 10,
   "traffic_stats": {
-    "pv": 22548,
+    "pv": 0,
     "uv": 3426,
     "ip": 0,
     "bounce_rate": "",
     "avg_duration": "",
     "total_users": 0,
-    "new_users": 440,
-    "active_users": 71,
-    "paying_users": 47,
+    "new_users": 0,
+    "active_users": 0,
+    "paying_users": 0,
     "payment_amount": 4515.49,
-    "order_count": 161,
+    "order_count": 0,
     "order_amount": 4515.49,
-    "arpu": 63.6,
-    "avg_order_value": 28.05
+    "arpu": 0.0,
+    "avg_order_value": 0.0
   },
   "traffic_source": [
     {
