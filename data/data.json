@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-04-08 14:17:09",
+  "last_updated": "2026-04-08 14:29:00",
   "data_date": "2026-04-07",
-  "update_time": "2026-04-08 14:17:09",
+  "update_time": "2026-04-08 14:29:00",
   "kpi": {
     "today_sales": 4515.49,
     "yesterday_sales": 4515.49,
@@ -383,7 +383,7 @@
     "new_users": 0,
     "active_users": 0,
     "paying_users": 0,
-    "payment_amount": 4515.49,
+    "payment_amount": 0.0,
     "order_count": 0,
     "order_amount": 4515.49,
     "arpu": 0.0,
