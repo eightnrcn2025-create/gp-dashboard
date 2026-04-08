@@ -435,17 +435,32 @@ def fetch_admin_api(last):
         "daily_sales":     last.get("daily_sales", []),
         "traffic_source":  last.get("traffic_source", []),
     }
+    dbg = {"run_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "steps": {}}
+
+    def _save_dbg():
+        try:
+            DATA_DIR.mkdir(parents=True, exist_ok=True)
+            with open(DATA_DIR / "debug_last_run.json", "w", encoding="utf-8") as _f:
+                json.dump(dbg, _f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
     try:
         headers = admin_login()
         log_ok("后台 API 登录成功")
+        dbg["steps"]["login"] = "ok"
 
         # ── 1. 昨日/前日/本月订单统计（脚本在 0:05 运行，以"昨日"为主数据）────
         stats = api_get(headers, "/admin/orders/stats/recent")
-        # 脚本于凌晨运行，API 的 yestoday = 昨日完整数据 = data_date
         result["today_sales"]     = to_num(stats.get("yestoday", {}).get("total_amount", 0))
-        result["yesterday_sales"] = to_num(stats.get("today",    {}).get("total_amount", 0))  # 暂存，稍后用 daily_sales[-2] 覆盖
+        result["yesterday_sales"] = to_num(stats.get("today",    {}).get("total_amount", 0))
         result["today_orders"]    = int(stats.get("yestoday",    {}).get("total_count", 0))
         result["month_sales"]     = to_num(stats.get("month",    {}).get("total_amount", 0))
+        dbg["steps"]["orders_recent"] = {
+            "yestoday_amount": result["today_sales"],
+            "today_amount":    result["yesterday_sales"],
+            "today_orders":    result["today_orders"],
+        }
         log_ok(f"订单统计 → 昨日¥{result['today_sales']}  (data_date={yesterday})")
 
         # ── 2. 近30天每日订单（作为 daily_sales 主数据源）───────────────────
@@ -456,6 +471,8 @@ def fetch_admin_api(last):
                 {"date": row["order_date"], "amount": to_num(row["total_amount"])}
                 for row in sorted(daily_list, key=lambda x: x["order_date"])
             ]
+            dbg["steps"]["daily_sales"] = {"count": len(result["daily_sales"]),
+                                            "last3": result["daily_sales"][-3:]}
             log_ok(f"日销售额 → {len(result['daily_sales'])} 条（近30天）")
 
         # ── 3. 流量汇总（昨日 UV/PV/新注册/活跃/付费用户）
@@ -463,14 +480,15 @@ def fetch_admin_api(last):
         # 脚本于 00:05 运行，必须用 "yesterday" 字段取昨日完整数据
         summary_list = api_get(headers, "/admin/platform/userstats/summary",
                                 {"started_at": yesterday, "ended_at": yesterday})
+        dbg["steps"]["userstats_raw"] = summary_list   # 保存完整原始返回
         summary = {item["title"]: item.get("yesterday", 0) for item in (summary_list or [])}
         uv               = int(summary.get("uv", 0))
         pv               = int(summary.get("pv", 0))
         new_reg          = int(summary.get("register_new", 0))
         active_users     = int(summary.get("active_user", 0))
-        paid_users       = int(summary.get("recharged_count", 0))   # 充值用户数
-        recharged_amount = float(summary.get("recharged_amount", 0)) # 充值金额
-        arpu_api         = float(summary.get("arpu", 0))             # API 直接给出
+        paid_users       = int(summary.get("recharged_count", 0))
+        recharged_amount = float(summary.get("recharged_amount", 0))
+        arpu_api         = float(summary.get("arpu", 0))
         avg_order_val    = float(summary.get("average_order_value", 0))
         result["total_traffic"]     = uv
         result["pv"]                = pv
@@ -480,6 +498,11 @@ def fetch_admin_api(last):
         result["recharged_amount"]  = recharged_amount
         result["arpu_api"]          = arpu_api
         result["avg_order_val_api"] = avg_order_val
+        dbg["steps"]["userstats_parsed"] = {
+            "uv": uv, "pv": pv, "new_reg": new_reg, "active_users": active_users,
+            "paid_users": paid_users, "recharged_amount": recharged_amount,
+            "arpu": arpu_api, "avg_order_value": avg_order_val,
+        }
         log_ok(f"流量汇总 → UV={uv}  PV={pv}  新注册={new_reg}  活跃={active_users}"
                f"  充值用户={paid_users}  充值金额=¥{recharged_amount}  ARPU=¥{arpu_api}")
 
@@ -487,7 +510,6 @@ def fetch_admin_api(last):
         result["conversion_rate"] = round(result["today_orders"] / uv * 100, 2) if uv > 0 else 0
 
         # ── 5. 用户行为分布（替代伪造的流量来源）────────────────────────────
-        # 数据完全来自后台 API，真实可靠
         browse_only   = max(0, uv - new_reg)
         result["traffic_source"] = [
             {"source": "仅浏览（未注册）", "value": browse_only},
@@ -497,10 +519,13 @@ def fetch_admin_api(last):
         ]
         log_ok(f"用户行为分布 → 仅浏览:{browse_only}  注册:{new_reg}  活跃:{active_users}  付费:{paid_users}")
 
+        _save_dbg()
         return result
 
     except Exception as e:
+        dbg["steps"]["error"] = {"msg": str(e), "trace": traceback.format_exc()}
         log_err(f"后台 API 失败: {e}\n{traceback.format_exc()}")
+        _save_dbg()
         return result
 
 
