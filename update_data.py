@@ -467,13 +467,15 @@ def fetch_admin_api(last):
         daily_raw = api_get(headers, "/admin/orders/stats/recentDaily", {"period_type": "30d"})
         daily_list = daily_raw.get("daily_list", []) if isinstance(daily_raw, dict) else []
         if daily_list:
+            # 过滤掉今日数据：脚本于 00:05 运行，今日数据极少且不完整，会造成图表误导性下跌
             result["daily_sales"] = [
                 {"date": row["order_date"], "amount": to_num(row["total_amount"])}
                 for row in sorted(daily_list, key=lambda x: x["order_date"])
+                if row["order_date"] != today
             ]
             dbg["steps"]["daily_sales"] = {"count": len(result["daily_sales"]),
                                             "last3": result["daily_sales"][-3:]}
-            log_ok(f"日销售额 → {len(result['daily_sales'])} 条（近30天）")
+            log_ok(f"日销售额 → {len(result['daily_sales'])} 条（近30天，不含今日）")
 
         # ── 3. 流量汇总（昨日 UV/PV/新注册/活跃/付费用户）
         # API 不受日期参数影响，始终返回 yesterday（昨日完整）和 today（今日截至当前）
@@ -1037,28 +1039,34 @@ def fetch_weekly_data_all_sheets():
                         date_str = parse_chinese_date(row[0], year) or parse_date(row[0])
                         if not date_str:
                             continue
-                        sales     = to_num(row[1]) if len(row) > 1 else 0
-                        uv        = int(to_num(row[3])) if len(row) > 3 else 0
-                        new_users = int(to_num(row[4])) if len(row) > 4 else 0
+                        # Sheet 列顺序：日期 / 销售额 / 浏览量(PV) / 访客数(UV) / ARPU
+                        sales = to_num(row[1]) if len(row) > 1 else 0
+                        pv    = int(to_num(row[2])) if len(row) > 2 else 0
+                        uv    = int(to_num(row[3])) if len(row) > 3 else 0
+                        arpu  = round(to_num(row[4]), 4) if len(row) > 4 else 0
                         daily.append({
-                            "date":      date_str,
-                            "sales":     round(sales, 2),
-                            "uv":        uv,
-                            "new_users": new_users,
+                            "date":  date_str,
+                            "sales": round(sales, 2),
+                            "pv":    pv,
+                            "uv":    uv,
+                            "arpu":  arpu,
                         })
 
-                # 汇总
+                # 汇总（Sheet 列：日期/销售额/PV/UV/ARPU，无新增用户列）
                 summary: dict = {}
                 if daily:
                     total_sales = round(sum(d["sales"] for d in daily), 2)
+                    total_pv    = sum(d["pv"] for d in daily)
                     total_uv    = sum(d["uv"] for d in daily)
                     n           = len(daily)
                     summary = {
                         "total_sales":     total_sales,
                         "avg_daily_sales": round(total_sales / n, 2) if n else 0,
+                        "total_pv":        total_pv,
                         "total_uv":        total_uv,
                         "avg_uv":          round(total_uv / n, 2) if n else 0,
-                        "new_users":       sum(d["new_users"] for d in daily),
+                        "avg_arpu":        round(sum(d["arpu"] for d in daily) / n, 4) if n else 0,
+                        "new_users":       0,   # Sheet 中无此列
                     }
 
                 weeks.append({
