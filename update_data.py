@@ -1096,11 +1096,18 @@ def main():
     daily_sales = api_data.get("daily_sales") or last.get("daily_sales", [])
 
     # ── 计算环比（昨日 vs 前日，两个完整日的对比）───────────────────────────
-    # api_data["today_sales"] = API的 yestoday（昨日完整数据）
-    # 前日销售 = daily_sales 倒数第二条（昨日之前一天）
-    today_sales = api_data["today_sales"]
-    if len(daily_sales) >= 2:
-        yesterday_sales = daily_sales[-2]["amount"]
+    # api_data["today_sales"] = API的 yestoday（昨日完整数据，脚本在 00:05 运行）
+    # recentDaily 末尾结构: [-3]=前日完整  [-2]=昨日完整  [-1]=今天(不完整)
+    # 前日 = yesterday-2天，按日期精确匹配避免偏移
+    today_sales    = api_data["today_sales"]
+    day_before_str = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")
+    day_before_entry = next(
+        (r for r in daily_sales if r["date"] == day_before_str), None
+    )
+    if day_before_entry:
+        yesterday_sales = day_before_entry["amount"]
+    elif len(daily_sales) >= 3:
+        yesterday_sales = daily_sales[-3]["amount"]   # 兜底：倒数第三条
     else:
         yesterday_sales = api_data.get("yesterday_sales", 0)
     growth_rate = (

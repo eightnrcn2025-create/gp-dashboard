@@ -634,10 +634,6 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
 
   <!-- Traffic Stats Mini KPI -->
   <div class="mini-kpi-grid" id="trafficStatsGrid">
-    <div class="mini-kpi-card purple">
-      <div class="mini-kpi-label">UV 访客数</div>
-      <div class="mini-kpi-value" id="tsUV">--</div>
-    </div>
     <div class="mini-kpi-card blue">
       <div class="mini-kpi-label">PV 浏览量</div>
       <div class="mini-kpi-value" id="tsPV">--</div>
@@ -646,13 +642,17 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
       <div class="mini-kpi-label">新增注册</div>
       <div class="mini-kpi-value" id="tsNewUsers">--</div>
     </div>
+    <div class="mini-kpi-card purple">
+      <div class="mini-kpi-label">活跃用户</div>
+      <div class="mini-kpi-value" id="tsActiveUsers">--</div>
+    </div>
     <div class="mini-kpi-card orange">
       <div class="mini-kpi-label">充值用户</div>
       <div class="mini-kpi-value" id="tsPayingUsers">--</div>
     </div>
     <div class="mini-kpi-card yellow">
-      <div class="mini-kpi-label">订单支付额</div>
-      <div class="mini-kpi-value" id="tsOrderAmount">--</div>
+      <div class="mini-kpi-label">充值金额</div>
+      <div class="mini-kpi-value" id="tsPaymentAmount">--</div>
     </div>
     <div class="mini-kpi-card cyan">
       <div class="mini-kpi-label">ARPU</div>
@@ -1353,12 +1353,12 @@ function fmtMoneyPlain(n) {
 function renderTrafficStats(ts) {
   if (!ts) return;
   const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-  set('tsUV',          (ts.uv || 0).toLocaleString() + '<span class="unit"> UV</span>');
-  set('tsPV',          (ts.pv || 0).toLocaleString() + '<span class="unit"> PV</span>');
-  set('tsNewUsers',    (ts.new_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
-  set('tsPayingUsers', (ts.paying_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
-  set('tsOrderAmount', fmtMoney(ts.order_amount || ts.payment_amount || 0) + '<span class="unit"> 元</span>');
-  set('tsARPU',        '¥' + (ts.arpu || 0).toFixed(2));
+  set('tsPV',            (ts.pv || 0).toLocaleString() + '<span class="unit"> PV</span>');
+  set('tsNewUsers',      (ts.new_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
+  set('tsActiveUsers',   (ts.active_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
+  set('tsPayingUsers',   (ts.paying_users || 0).toLocaleString() + '<span class="unit"> 人</span>');
+  set('tsPaymentAmount', fmtMoney(ts.payment_amount || 0) + '<span class="unit"> 元</span>');
+  set('tsARPU',          '¥' + (ts.arpu || 0).toFixed(2));
 }
 
 function renderKPI(kpi, monthlyTotal, activeGames) {
