@@ -885,17 +885,56 @@ def fetch_admin_game_stats(last):
 
             browser.close()
 
-        return {
+        result_data = {
             "solo_game_top5":            solo_top5,
             "publisher_game_top5":       publisher_top5,
             "game_views_top5":           game_views_top5,
             "game_views_publisher_top5": game_views_publisher_top5,
             "detail_rows":               detail_rows,
             "flow_stats":                flow_stats,
+            "_playwright_ok":            True,
         }
+        # 写 Playwright 调试摘要
+        try:
+            dbg_pw = {
+                "status": "success",
+                "solo_top5":      [{"game": r["game"], "sales": r["sales"]} for r in solo_top5[:3]],
+                "publisher_top5": [{"game": r["game"], "sales": r["sales"]} for r in publisher_top5[:3]],
+                "views_top5":     [{"game": r["game"], "views": r["views"]} for r in game_views_top5[:3]],
+                "detail_rows_count": len(detail_rows),
+            }
+            dbg_path = Path(__file__).parent / "data" / "debug_last_run.json"
+            if dbg_path.exists():
+                with open(dbg_path, encoding="utf-8") as _f:
+                    existing = json.load(_f)
+            else:
+                existing = {}
+            existing.setdefault("steps", {})["playwright"] = dbg_pw
+            with open(dbg_path, "w", encoding="utf-8") as _f:
+                json.dump(existing, _f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+        return result_data
 
     except Exception as e:
         log_err(f"Playwright 失败: {e}\n{traceback.format_exc()}")
+        # 记录 Playwright 失败原因
+        try:
+            dbg_path = Path(__file__).parent / "data" / "debug_last_run.json"
+            if dbg_path.exists():
+                with open(dbg_path, encoding="utf-8") as _f:
+                    existing = json.load(_f)
+            else:
+                existing = {}
+            existing.setdefault("steps", {})["playwright"] = {
+                "status": "failed",
+                "error": str(e),
+                "trace": traceback.format_exc(),
+            }
+            with open(dbg_path, "w", encoding="utf-8") as _f:
+                json.dump(existing, _f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
         return fallback
 
 
