@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-04-08 16:18:48",
+  "run_time": "2026-04-08 17:17:25",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 3051.46,
-      "today_amount": 1453.19,
+      "today_amount": 1598.08,
       "today_orders": 146
     },
     "daily_sales": {
@@ -28,17 +28,17 @@
       {
         "title": "pv",
         "yesterday": 22548,
-        "today": 22276
+        "today": 22430
       },
       {
         "title": "uv",
         "yesterday": 3426,
-        "today": 3657
+        "today": 3673
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 3470
+        "today": 3485
       },
       {
         "title": "bounce_rate",
@@ -48,22 +48,22 @@
       {
         "title": "visit_avg_time",
         "yesterday": 6531,
-        "today": 4144
+        "today": 4463
       },
       {
         "title": "register_total",
         "yesterday": "126293",
-        "today": "126688"
+        "today": "126689"
       },
       {
         "title": "register_new",
         "yesterday": 440,
-        "today": 395
+        "today": 396
       },
       {
         "title": "active_user",
         "yesterday": 81,
-        "today": 72
+        "today": 74
       },
       {
         "title": "recharged_count",
@@ -88,7 +88,7 @@
       {
         "title": "arpu",
         "yesterday": 31.88,
-        "today": 25.83
+        "today": 25.14
       },
       {
         "title": "average_order_value",
@@ -111,7 +111,7 @@
       "solo_top5": [
         {
           "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 984.0
+          "sales": 1008.0
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
@@ -125,7 +125,7 @@
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 3080.0
+          "sales": 3094.0
         },
         {
           "game": "青楼大掌柜",
@@ -139,15 +139,15 @@
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 6537
+          "views": 6599
         },
         {
           "game": "欲界圣姬",
-          "views": 5622
+          "views": 5678
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1808
+          "views": 1832
         }
       ],
       "detail_rows_count": 27
