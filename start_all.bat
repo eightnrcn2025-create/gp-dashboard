@@ -4,67 +4,48 @@ setlocal
 
 set PROJECT_DIR=%USERPROFILE%\Desktop\gp活动看板
 set LOGS_DIR=%PROJECT_DIR%\logs
-set REFRESH_LOG=%LOGS_DIR%\refresh_server.log
-set API_LOG=%LOGS_DIR%\api_server.log
-
 if not exist "%LOGS_DIR%" mkdir "%LOGS_DIR%"
 
 echo ================================================
-echo   Gamepark 看板 - 一键启动
+echo   Gamepark 看板
 echo   项目路径: %PROJECT_DIR%
 echo ================================================
 echo.
+echo 注：刷新功能已改为 GitHub Actions，无需本地服务。
+echo     配置说明请查看 SETUP_REFRESH.md
+echo.
 
-REM ── 检查 Python ──────────────────────────────────────────────
 where python >nul 2>&1
 if errorlevel 1 (
-    echo [ERROR] 未找到 python，请安装 Python 并添加到 PATH
-    pause
-    exit /b 1
+    echo [ERROR] 未找到 python，请安装 Python
+    pause & exit /b 1
 )
 
 cd /d "%PROJECT_DIR%"
 
-REM ── 启动 refresh_server（port 5002）──────────────────────────
-netstat -ano | findstr ":5002 " >nul 2>&1
-if errorlevel 1 (
-    echo [INFO] 启动刷新服务 (port 5002)...
-    start /b python refresh_server.py > "%REFRESH_LOG%" 2>&1
-    timeout /t 2 /nobreak >nul
-    echo [OK]  刷新服务已启动 ^→ http://localhost:5002
-) else (
-    echo [WARN] 端口 5002 已被占用，跳过启动刷新服务
-)
-
-REM ── 启动 api_server（port 5001）──────────────────────────────
+REM ── 启动 api_server（port 5001，可选）────────────────────────
 netstat -ano | findstr ":5001 " >nul 2>&1
 if errorlevel 1 (
     echo [INFO] 启动 API 服务 (port 5001)...
-    start /b python api_server.py > "%API_LOG%" 2>&1
+    start /b python api_server.py > "%LOGS_DIR%\api_server.log" 2>&1
     timeout /t 2 /nobreak >nul
     echo [OK]  API 服务已启动 ^→ http://localhost:5001
 ) else (
-    echo [WARN] 端口 5001 已被占用，跳过启动 API 服务
+    echo [INFO] API 服务已在运行
 )
 
 echo.
 
-REM ── 打开看板页面 ─────────────────────────────────────────────
 if exist "%PROJECT_DIR%\index.html" (
-    echo [INFO] 打开看板页面...
     start "" "%PROJECT_DIR%\index.html"
-    echo [OK]  index.html 已在浏览器中打开
-) else (
-    echo [WARN] 未找到 index.html
+    echo [OK]  已打开 index.html
 )
 
 echo.
 echo ================================================
-echo   刷新服务: http://localhost:5002/ping
-echo   API 服务:  http://localhost:5001/api/status
+echo   看板地址（GitHub Pages）：
+echo   https://eightnrcn2025-create.github.io/gp-dashboard/
 echo ================================================
-echo.
-echo 点击看板右上角"立即刷新"可触发实时数据更新
 echo.
 pause
 endlocal

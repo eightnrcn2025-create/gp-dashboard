@@ -560,12 +560,6 @@ tbody td.rate-zero { color: var(--text2); text-align: right; }
   </div>
 </div>
 
-<!-- 离线提示（服务未启动时显示，不影响主界面）-->
-<div id="offline-tip" style="display:none; text-align:center; padding:5px 16px;
-  font-size:11px; color:#484f58; background:var(--bg2); border-bottom:1px solid var(--border);">
-  运行 <code style="color:#6e7681; font-size:11px">start_all.sh</code> 后可使用一键刷新功能
-</div>
-
 <!-- Tab Navigation -->
 <div class="tab-nav">
   <button class="tab-btn active" id="tab-overview" onclick="switchTab('overview',this)">运营总览</button>
@@ -1164,135 +1158,137 @@ function showToast(message, type = 'info', duration = 3000) {
 }
 
 // ── 刷新 ────────────────────────────────────────────────────────────
-const REFRESH_URL = 'http://localhost:5002';
-let   _pollTimer  = null;
-let   _svcAlive   = false;   // 服务在线状态缓存
-
-// ── 页面加载后静默检测服务状态 ─────────────────────────────────
-(function checkServiceSilently() {
-  fetch(REFRESH_URL + '/ping', { signal: AbortSignal.timeout(2000) })
-    .then(r => { if (r.ok) { _svcAlive = true; } })
-    .catch(() => {
-      // 服务离线：显示低调提示，不弹 Toast
-      const tip = document.getElementById('offline-tip');
-      if (tip) tip.style.display = '';
-    });
-})();
+// ════════════════════════════════════════════════════════════════════
+//  GitHub Actions 刷新
+// ════════════════════════════════════════════════════════════════════
+const GH_OWNER = 'eightnrcn2025-create';
+const GH_REPO  = 'gp-dashboard';
+const GH_WF    = 'update_data.yml';
+const GH_API   = 'https://api.github.com';
+let   _pollTimer = null;
 
 async function doRefresh() {
   const btn  = document.getElementById('btnRefresh');
   const icon = document.getElementById('refreshIcon');
 
-  // ── 重新 ping，确认最新状态（可能用户刚刚启动了服务）──────────
+  // ① 获取/提示输入 GitHub PAT
+  let token = localStorage.getItem('gh_pat');
+  if (!token) {
+    token = prompt(
+      '首次使用「立即刷新」功能需要配置 GitHub Token\n\n' +
+      '请前往：github.com/settings/tokens\n' +
+      '点击「Generate new token (classic)」\n' +
+      '勾选权限：repo → workflow\n\n' +
+      '粘贴 Token 后点击确定（只需输入一次）：'
+    );
+    if (!token) return;
+    localStorage.setItem('gh_pat', token.trim());
+    token = token.trim();
+  }
+
+  // ② 触发 workflow_dispatch
+  btn.disabled = true;
+  btn.classList.add('loading');
+  icon.textContent = '↻';
+
+  let res;
   try {
-    const r = await fetch(REFRESH_URL + '/ping', { signal: AbortSignal.timeout(2000) });
-    _svcAlive = r.ok;
-  } catch (_) { _svcAlive = false; }
-
-  if (_svcAlive) {
-    // ── 服务在线：API 流程 ─────────────────────────────────────
-    // 检查是否已在运行
-    try {
-      const r  = await fetch(REFRESH_URL + '/status');
-      const st = await r.json();
-      if (st.is_running) {
-        showToast('数据更新已在进行中，请稍候...', 'info', 4000);
-        _startPoll(btn, icon);
-        return;
+    res = await fetch(
+      `${GH_API}/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WF}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main' }),
       }
-    } catch (_) {}
+    );
+  } catch (e) {
+    showToast('网络错误：' + e.message, 'error', 5000);
+    _resetBtn(btn, icon); return;
+  }
 
-    // 触发更新
-    btn.disabled = true;
-    btn.classList.add('loading');
-    icon.textContent = '↻';
-    try {
-      await fetch(REFRESH_URL + '/refresh', { method: 'POST' });
-    } catch (e) {
-      showToast('触发更新失败：' + e.message, 'error');
-      btn.disabled = false; btn.classList.remove('loading');
-      return;
-    }
-    showToast('数据更新已启动，约需 30-90 秒...', 'info', 90000);
-    _startPoll(btn, icon);
-
+  if (res.status === 204) {
+    showToast('GitHub Actions 任务已触发！约需 2-3 分钟...', 'success', 180000);
+    _pollGHRun(btn, icon, token);
+  } else if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('gh_pat');
+    showToast('Token 无效或无 workflow 权限，请重新输入', 'error', 6000);
+    _resetBtn(btn, icon);
   } else {
-    // ── 服务离线：打开跳板页 + 固定倒计时 ─────────────────────
-    window.open('run_refresh.html', '_blank', 'width=460,height=280,menubar=no,toolbar=no');
-
-    btn.disabled = true;
-    btn.classList.add('loading');
-    _startCountdown(btn, icon, 60, () => {
-      // 60s 后重新加载所有数据文件
-      loadData().then(data => {
-        allData = data;
-        renderAll(data);
-        startCountdown(data.last_updated);
-      }).catch(() => {});
-      weeklyData = null;
-      histCache  = null;
-      showToast('数据已刷新', 'success', 3000);
-    });
+    const body = await res.text().catch(() => '');
+    showToast(`触发失败 (${res.status})：${body.slice(0, 120)}`, 'error', 6000);
+    _resetBtn(btn, icon);
   }
 }
 
-// 固定倒计时（服务离线时用）
-function _startCountdown(btn, icon, total, onDone) {
-  if (_pollTimer) clearInterval(_pollTimer);
-  let elapsed = 0;
-  _pollTimer = setInterval(() => {
-    elapsed += 5;
-    icon.textContent = elapsed + 's';
-    if (elapsed >= total) {
-      clearInterval(_pollTimer); _pollTimer = null;
-      btn.disabled = false; btn.classList.remove('loading');
-      icon.textContent = '↻';
-      onDone();
-    }
-  }, 5000);
+function _resetBtn(btn, icon) {
+  btn.disabled = false; btn.classList.remove('loading'); icon.textContent = '↻';
 }
 
-// API 轮询（服务在线时用）
-function _startPoll(btn, icon) {
+async function _pollGHRun(btn, icon, token) {
   if (_pollTimer) clearInterval(_pollTimer);
-  let elapsed = 0;
+
+  // 等 10s 让 Actions 开始排队，再开始轮询
+  await new Promise(r => setTimeout(r, 10000));
+  icon.textContent = '10s';
+
+  let elapsed = 10;
   _pollTimer = setInterval(async () => {
-    elapsed += 3;
+    elapsed += 15;
     icon.textContent = elapsed + 's';
 
     try {
-      const r  = await fetch(REFRESH_URL + '/status');
-      const st = await r.json();
+      const r = await fetch(
+        `${GH_API}/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WF}/runs?per_page=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+          }
+        }
+      );
+      if (!r.ok) return;
+      const d   = await r.json();
+      const run = d.workflow_runs?.[0];
+      if (!run) return;
 
-      if (!st.is_running) {
+      if (run.status === 'completed') {
         clearInterval(_pollTimer); _pollTimer = null;
-        btn.disabled = false; btn.classList.remove('loading');
-        icon.textContent = '↻';
         const t = document.getElementById('toast-msg');
         if (t) t.remove();
 
-        const ok = (st.last?.returncode === 0);
-        showToast(
-          ok ? '数据更新完成！' : '更新出现错误，请查看 logs/update_log.txt',
-          ok ? 'success' : 'error', 4000
-        );
-        if (ok) {
-          loadData().then(data => {
-            allData = data; renderAll(data); startCountdown(data.last_updated);
-          }).catch(() => {});
-          weeklyData = null; histCache = null;
+        if (run.conclusion === 'success') {
+          showToast('数据更新完成！正在刷新...', 'success', 3000);
+          setTimeout(async () => {
+            try {
+              const data = await loadData();
+              allData = data; renderAll(data); startCountdown(data.last_updated);
+            } catch (_) {}
+            weeklyData = null; histCache = null;
+            _resetBtn(btn, icon);
+          }, 2000);
+        } else {
+          showToast(
+            `Actions 运行结束 (${run.conclusion})，请查看 GitHub Actions 日志`,
+            run.conclusion === 'failure' ? 'error' : 'warning', 7000
+          );
+          _resetBtn(btn, icon);
         }
-        return;
       }
     } catch (_) {}
 
-    if (elapsed >= 120) {
+    // 最多等 5 分钟
+    if (elapsed >= 300) {
       clearInterval(_pollTimer); _pollTimer = null;
-      btn.disabled = false; btn.classList.remove('loading');
-      icon.textContent = '↻';
-      showToast('更新超时，请查看 logs/update_log.txt', 'warning', 5000);
+      showToast('等待超时（5分钟），可前往 GitHub Actions 页面查看进度', 'warning', 6000);
+      _resetBtn(btn, icon);
     }
-  }, 3000);
+  }, 15000);
 }
 
 // ════════════════════════════════════════════════════════════════════

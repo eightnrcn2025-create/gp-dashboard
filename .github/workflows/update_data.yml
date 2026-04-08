@@ -1,0 +1,69 @@
+name: Update Dashboard Data
+
+on:
+  schedule:
+    - cron: '5 16 * * *'   # 北京时间每天 00:05（UTC 16:05 前一天）
+  workflow_dispatch:         # 允许手动触发（"立即刷新"按钮调用）
+
+permissions:
+  contents: write            # 允许将更新后的数据文件推送回仓库
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ── 1. 签出代码 ────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 2. 配置 Python ─────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      # ── 3. 安装 Python 依赖 ────────────────────────────────────────
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install gspread google-auth playwright pandas \
+                      openpyxl python-dotenv requests
+
+      # ── 4. 安装 Playwright Chromium ────────────────────────────────
+      - name: Install Playwright browsers
+        run: |
+          playwright install chromium
+          playwright install-deps chromium
+
+      # ── 5. 写入 Google 服务账号凭据 ────────────────────────────────
+      - name: Create credentials.json
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+
+      # ── 6. 写入后台账号密码 ────────────────────────────────────────
+      - name: Create .env
+        run: |
+          echo "GAMEPARK_ACCOUNT=${{ secrets.GAMEPARK_ACCOUNT }}" > .env
+          echo "GAMEPARK_PASSWORD=${{ secrets.GAMEPARK_PASSWORD }}" >> .env
+
+      # ── 7. 创建必需目录 ────────────────────────────────────────────
+      - name: Create directories
+        run: mkdir -p data database logs debug
+
+      # ── 8. 运行数据采集脚本 ────────────────────────────────────────
+      - name: Run update_data.py
+        run: python3 update_data.py
+
+      # ── 9. 提交并推送更新后的数据文件 ─────────────────────────────
+      - name: Commit and push data files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/data.json data/weekly_data.json data/history_cache.json || true
+          git diff --staged --quiet \
+            || git commit -m "chore: auto update data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

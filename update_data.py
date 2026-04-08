@@ -296,35 +296,65 @@ def save_to_db(output, yesterday, weekly_weeks=None):
 
 
 def export_history_cache():
-    """将数据库所有记录导出为 data/history_cache.json（供前端 file:// 直读）"""
+    """
+    将本次采集数据追加合并到 data/history_cache.json。
+    CI 环境下 DB 不跨 run 持久化，通过合并已提交的 JSON 保留历史记录。
+    """
     try:
-        if not DB_FILE.exists():
-            log_warn("DB 文件不存在，跳过 history_cache 导出")
-            return
-        conn = sqlite3.connect(DB_FILE)
-        conn.row_factory = sqlite3.Row
+        cache_path = DATA_DIR / "history_cache.json"
 
-        daily_stats = [dict(r) for r in conn.execute(
-            "SELECT * FROM daily_stats ORDER BY date ASC").fetchall()]
+        # ── 1. 从 DB 读取本次采集结果 ─────────────────────────────────
+        new_daily: list = []
+        new_games: list = []
+        if DB_FILE.exists():
+            conn = sqlite3.connect(DB_FILE)
+            conn.row_factory = sqlite3.Row
+            new_daily = [dict(r) for r in conn.execute(
+                "SELECT * FROM daily_stats ORDER BY date ASC").fetchall()]
+            new_games = [dict(r) for r in conn.execute(
+                """SELECT date AS data_date, game AS game_name, game_type,
+                          sales AS sales_amount, uv, orders
+                   FROM daily_game_sales
+                   ORDER BY date DESC, sales DESC""").fetchall()]
+            conn.close()
+        else:
+            log_warn("DB 文件不存在，history_cache 仅合并现有 JSON")
 
-        game_sales = [dict(r) for r in conn.execute(
-            """SELECT date AS data_date, game AS game_name, game_type,
-                      sales AS sales_amount, uv, orders
-               FROM daily_game_sales
-               ORDER BY date DESC, sales DESC""").fetchall()]
+        # ── 2. 加载已有历史（若存在）────────────────────────────────
+        existing = {"daily_stats": [], "game_sales": []}
+        if cache_path.exists():
+            try:
+                with open(cache_path, encoding="utf-8") as f:
+                    existing = json.load(f)
+            except Exception as e:
+                log_warn(f"读取已有 history_cache.json 失败: {e}")
 
-        conn.close()
+        # ── 3. 按 key 合并去重（新数据覆盖旧）────────────────────────
+        # daily_stats: key = date
+        daily_map = {r["date"]: r for r in existing.get("daily_stats", [])}
+        for r in new_daily:
+            daily_map[r["date"]] = r
+
+        # game_sales: key = (data_date, game_name)
+        games_map = {(r["data_date"], r["game_name"]): r
+                     for r in existing.get("game_sales", [])}
+        for r in new_games:
+            games_map[(r["data_date"], r["game_name"])] = r
+
+        merged_daily = sorted(daily_map.values(), key=lambda x: x["date"])
+        merged_games = sorted(games_map.values(),
+                              key=lambda x: (x["data_date"], -(x.get("sales_amount") or 0)))
 
         result = {
             "export_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "daily_stats": daily_stats,
-            "game_sales":  game_sales,
+            "daily_stats": merged_daily,
+            "game_sales":  merged_games,
         }
         DATA_DIR.mkdir(parents=True, exist_ok=True)
-        with open(DATA_DIR / "history_cache.json", "w", encoding="utf-8") as f:
+        with open(cache_path, "w", encoding="utf-8") as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
 
-        log_ok(f"history_cache.json 导出完成：{len(daily_stats)} 天 · {len(game_sales)} 条游戏记录")
+        log_ok(f"history_cache.json 导出完成：{len(merged_daily)} 天 · {len(merged_games)} 条游戏记录")
 
     except Exception as e:
         log_err(f"导出 history_cache.json 失败: {e}\n{traceback.format_exc()}")
