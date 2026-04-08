@@ -459,21 +459,29 @@ def fetch_admin_api(last):
             log_ok(f"日销售额 → {len(result['daily_sales'])} 条（近30天）")
 
         # ── 3. 流量汇总（昨日 UV/PV/新注册/活跃/付费用户）
-        # 脚本于 00:05 运行，查 yesterday 而非 today，否则今日数据近乎为零
+        # API 不受日期参数影响，始终返回 yesterday（昨日完整）和 today（今日截至当前）
+        # 脚本于 00:05 运行，必须用 "yesterday" 字段取昨日完整数据
         summary_list = api_get(headers, "/admin/platform/userstats/summary",
                                 {"started_at": yesterday, "ended_at": yesterday})
-        summary = {item["title"]: item.get("today", 0) for item in (summary_list or [])}
-        uv            = int(summary.get("uv", 0))
-        pv            = int(summary.get("pv", 0))
-        new_reg       = int(summary.get("register_new", 0))
-        active_users  = int(summary.get("active_user", 0))
-        paid_users    = int(summary.get("recharged_count", 0))  # 充值用户数
-        result["total_traffic"] = uv
-        result["pv"]            = pv
-        result["new_reg"]       = new_reg
-        result["active_users"]  = active_users
-        result["paid_users"]    = paid_users
-        log_ok(f"流量汇总 → UV={uv}  PV={pv}  新注册={new_reg}  活跃={active_users}  付费={paid_users}")
+        summary = {item["title"]: item.get("yesterday", 0) for item in (summary_list or [])}
+        uv               = int(summary.get("uv", 0))
+        pv               = int(summary.get("pv", 0))
+        new_reg          = int(summary.get("register_new", 0))
+        active_users     = int(summary.get("active_user", 0))
+        paid_users       = int(summary.get("recharged_count", 0))   # 充值用户数
+        recharged_amount = float(summary.get("recharged_amount", 0)) # 充值金额
+        arpu_api         = float(summary.get("arpu", 0))             # API 直接给出
+        avg_order_val    = float(summary.get("average_order_value", 0))
+        result["total_traffic"]     = uv
+        result["pv"]                = pv
+        result["new_reg"]           = new_reg
+        result["active_users"]      = active_users
+        result["paid_users"]        = paid_users
+        result["recharged_amount"]  = recharged_amount
+        result["arpu_api"]          = arpu_api
+        result["avg_order_val_api"] = avg_order_val
+        log_ok(f"流量汇总 → UV={uv}  PV={pv}  新注册={new_reg}  活跃={active_users}"
+               f"  充值用户={paid_users}  充值金额=¥{recharged_amount}  ARPU=¥{arpu_api}")
 
         # ── 4. 转化率（付费用户 / UV）────────────────────────────────────────
         result["conversion_rate"] = round(result["today_orders"] / uv * 100, 2) if uv > 0 else 0
@@ -1129,13 +1137,16 @@ def main():
     }) or (len(solo_game_top5) + len(publisher_game_top5))
 
     # ── 流量统计（API + Playwright 流量页融合）────────────────────────────────
-    flow_stats    = game_data.get("flow_stats", {})
-    uv            = api_data.get("total_traffic", 0)
-    pv_val        = api_data.get("pv", 0)
-    new_reg       = api_data.get("new_reg", 0)
-    active_users  = api_data.get("active_users", 0)
-    paid_users    = api_data.get("paid_users", 0)
-    today_orders  = api_data.get("today_orders", 0)
+    flow_stats        = game_data.get("flow_stats", {})
+    uv                = api_data.get("total_traffic", 0)
+    pv_val            = api_data.get("pv", 0)
+    new_reg           = api_data.get("new_reg", 0)
+    active_users      = api_data.get("active_users", 0)
+    paid_users        = api_data.get("paid_users", 0)
+    today_orders      = api_data.get("today_orders", 0)
+    recharged_amount  = api_data.get("recharged_amount", 0)   # 充值金额（来自 userstats）
+    arpu_api          = api_data.get("arpu_api", 0)           # API 直接给出的 ARPU
+    avg_order_val_api = api_data.get("avg_order_val_api", 0)  # API 直接给出的客单价
 
     traffic_stats = {
         "pv":              int(flow_stats.get("pv",             pv_val)),
@@ -1147,16 +1158,18 @@ def main():
         "new_users":       int(flow_stats.get("new_users",      new_reg)),
         "active_users":    int(flow_stats.get("active_users",   active_users)),
         "paying_users":    int(flow_stats.get("paying_users",   paid_users)),
-        "payment_amount":  round(float(flow_stats.get("payment_amount", today_sales)), 2),
+        # payment_amount = 充值金额（recharged_amount），来自 userstats API
+        "payment_amount":  round(float(flow_stats.get("payment_amount", recharged_amount)), 2),
         "order_count":     int(flow_stats.get("order_count",    today_orders)),
-        "order_amount":    round(float(flow_stats.get("order_amount",  today_sales)), 2),
-        "arpu":            round(float(flow_stats.get("arpu",
-                               today_sales / active_users if active_users else 0)), 2),
-        "avg_order_value": round(float(flow_stats.get("avg_order_value",
-                               today_sales / today_orders if today_orders else 0)), 2),
+        # order_amount = 订单支付总额，来自 orders/stats/recent yestoday
+        "order_amount":    round(float(flow_stats.get("order_amount",   today_sales)), 2),
+        # arpu 优先用 API 直接返回值，避免用错误的 today_sales/active_users 计算
+        "arpu":            round(float(flow_stats.get("arpu",   arpu_api)), 2),
+        "avg_order_value": round(float(flow_stats.get("avg_order_value", avg_order_val_api)), 2),
     }
     log_ok(f"流量统计汇总 → UV={traffic_stats['uv']}  PV={traffic_stats['pv']}"
            f"  新注册={traffic_stats['new_users']}  付费={traffic_stats['paying_users']}"
+           f"  充值¥{traffic_stats['payment_amount']}  订单¥{traffic_stats['order_amount']}"
            f"  ARPU=¥{traffic_stats['arpu']}  客单价=¥{traffic_stats['avg_order_value']}")
 
     # ── 组装输出 ──────────────────────────────────────────────────────────────
