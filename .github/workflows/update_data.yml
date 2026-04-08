@@ -37,6 +37,18 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: echo "$GOOGLE_CREDENTIALS" > credentials.json
 
+      - name: Check secrets
+        run: |
+          if [ -z "${{ secrets.GAMEPARK_ACCOUNT }}" ]; then
+            echo "ERROR: GAMEPARK_ACCOUNT secret is empty or not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.GAMEPARK_PASSWORD }}" ]; then
+            echo "ERROR: GAMEPARK_PASSWORD secret is empty or not set"
+            exit 1
+          fi
+          echo "Secrets OK: GAMEPARK_ACCOUNT length=${{ secrets.GAMEPARK_ACCOUNT && '非空' || '空' }}"
+
       - name: Create .env
         run: |
           echo "GAMEPARK_ACCOUNT=${{ secrets.GAMEPARK_ACCOUNT }}" > .env
