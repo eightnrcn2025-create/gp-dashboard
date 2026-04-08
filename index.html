@@ -1128,25 +1128,128 @@ loadData()
       </div>`;
   });
 
+// ════════════════════════════════════════════════════════════════════
+//  Toast 提示
+// ════════════════════════════════════════════════════════════════════
+function showToast(message, type = 'info', duration = 3000) {
+  const existing = document.getElementById('toast-msg');
+  if (existing) existing.remove();
+  const colors = { info:'#388bfd', success:'#3fb950', warning:'#e3b341', error:'#f85149' };
+  const toast = document.createElement('div');
+  toast.id = 'toast-msg';
+  toast.style.cssText = `
+    position:fixed; top:72px; right:20px; z-index:9999;
+    background:${colors[type]||colors.info}; color:#fff;
+    padding:11px 18px; border-radius:8px; font-size:13px;
+    max-width:360px; box-shadow:0 4px 16px rgba(0,0,0,.4);
+    line-height:1.5; pointer-events:none;
+    animation:slideIn .25s ease;
+  `;
+  if (!document.getElementById('toast-style')) {
+    const s = document.createElement('style');
+    s.id = 'toast-style';
+    s.textContent = '@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}';
+    document.head.appendChild(s);
+  }
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  if (duration > 0) setTimeout(() => { if (toast.parentNode) toast.remove(); }, duration);
+  return toast;
+}
+
 // ── 刷新 ────────────────────────────────────────────────────────────
-function doRefresh() {
+const REFRESH_URL = 'http://localhost:5002';
+let   _pollTimer  = null;
+
+async function doRefresh() {
   const btn  = document.getElementById('btnRefresh');
   const icon = document.getElementById('refreshIcon');
-  btn.classList.add('loading');
+
+  // ① 检查刷新服务是否在线
+  let alive = false;
+  try {
+    const r = await fetch(REFRESH_URL + '/ping', { signal: AbortSignal.timeout(2000) });
+    alive = r.ok;
+  } catch (_) {}
+
+  if (!alive) {
+    showToast('请先运行 start_all.sh（或 start_all.bat）启动刷新服务', 'warning', 6000);
+    return;
+  }
+
+  // ② 检查是否已在运行
+  try {
+    const r   = await fetch(REFRESH_URL + '/status');
+    const st  = await r.json();
+    if (st.is_running) {
+      showToast('数据更新已在进行中，请稍候...', 'info', 4000);
+      _startPoll(btn, icon);
+      return;
+    }
+  } catch (_) {}
+
+  // ③ 触发更新
   btn.disabled = true;
   icon.textContent = '↻';
+  btn.classList.add('loading');
 
-  loadData()
-    .then(data => {
-      allData = data;
-      renderAll(data);
-      startCountdown(data.last_updated);
-    })
-    .catch(err => alert('刷新失败：' + err.message))
-    .finally(() => {
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    });
+  try {
+    await fetch(REFRESH_URL + '/refresh', { method: 'POST' });
+  } catch (e) {
+    showToast('触发更新失败：' + e.message, 'error');
+    btn.disabled = false; btn.classList.remove('loading');
+    return;
+  }
+
+  showToast('数据更新已启动，约需 30-90 秒...', 'info', 90000);
+  _startPoll(btn, icon);
+}
+
+function _startPoll(btn, icon) {
+  if (_pollTimer) clearInterval(_pollTimer);
+  let elapsed = 0;
+  _pollTimer = setInterval(async () => {
+    elapsed += 3;
+    icon.textContent = elapsed + 's';
+
+    try {
+      const r  = await fetch(REFRESH_URL + '/status');
+      const st = await r.json();
+
+      if (!st.is_running) {
+        clearInterval(_pollTimer); _pollTimer = null;
+        btn.disabled = false; btn.classList.remove('loading');
+        icon.textContent = '↻';
+
+        // 移除"更新中"toast，显示完成
+        const t = document.getElementById('toast-msg');
+        if (t) t.remove();
+
+        const ok = (st.last?.returncode === 0);
+        showToast(ok ? '数据更新完成！' : '更新出现错误，请查看 logs/update_log.txt', ok ? 'success' : 'error', 4000);
+
+        if (ok) {
+          // 重新加载全部数据
+          loadData().then(data => {
+            allData = data;
+            renderAll(data);
+            startCountdown(data.last_updated);
+          }).catch(() => {});
+          // 重置周数据和历史缓存，下次切换 tab 时重新拉取
+          weeklyData = null;
+          histCache  = null;
+        }
+        return;
+      }
+    } catch (_) {}
+
+    if (elapsed >= 120) {
+      clearInterval(_pollTimer); _pollTimer = null;
+      btn.disabled = false; btn.classList.remove('loading');
+      icon.textContent = '↻';
+      showToast('更新超时，请查看 logs/update_log.txt', 'warning', 5000);
+    }
+  }, 3000);
 }
 
 // ════════════════════════════════════════════════════════════════════

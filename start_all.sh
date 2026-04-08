@@ -1,14 +1,18 @@
 #!/bin/bash
 # =============================================================
 # Gamepark 看板 — 一键启动（macOS / Linux）
-# 启动 API 服务 + 打开看板页面
+# 启动 refresh_server（port 5002）+ api_server（port 5001）
 # =============================================================
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
-API_LOG="$PROJECT_DIR/logs/api_server.log"
-PID_FILE="$PROJECT_DIR/logs/api_server.pid"
+LOGS_DIR="$PROJECT_DIR/logs"
+REFRESH_LOG="$LOGS_DIR/refresh_server.log"
+API_LOG="$LOGS_DIR/api_server.log"
+REFRESH_PID="$LOGS_DIR/refresh_server.pid"
+API_PID_FILE="$LOGS_DIR/api_server.pid"
 
-mkdir -p "$PROJECT_DIR/logs"
+mkdir -p "$LOGS_DIR"
+cd "$PROJECT_DIR"
 
 echo "================================================"
 echo "  Gamepark 看板 - 一键启动"
@@ -22,34 +26,45 @@ if ! command -v python3 &>/dev/null; then
     exit 1
 fi
 
-# ── 停止旧的 API 进程 ─────────────────────────────────────────
-if [ -f "$PID_FILE" ]; then
-    OLD_PID=$(cat "$PID_FILE")
-    if kill -0 "$OLD_PID" 2>/dev/null; then
-        echo "[INFO] 停止旧的 API 进程 (PID=$OLD_PID)..."
-        kill "$OLD_PID" 2>/dev/null
-        sleep 1
+# ── 停止旧进程 ─────────────────────────────────────────────────
+for PF in "$REFRESH_PID" "$API_PID_FILE"; do
+    if [ -f "$PF" ]; then
+        OLD=$(cat "$PF")
+        kill "$OLD" 2>/dev/null && echo "[INFO] 已停止旧进程 PID=$OLD"
+        rm -f "$PF"
+        sleep 0.5
     fi
-    rm -f "$PID_FILE"
+done
+
+# ── 启动 refresh_server（port 5002）──────────────────────────
+if lsof -i :5002 -t &>/dev/null 2>&1; then
+    echo "[WARN] 端口 5002 已被占用，跳过启动刷新服务"
+else
+    echo "[INFO] 启动刷新服务 (port 5002)..."
+    python3 refresh_server.py >> "$REFRESH_LOG" 2>&1 &
+    RPID=$!
+    echo $RPID > "$REFRESH_PID"
+    sleep 2
+    if kill -0 "$RPID" 2>/dev/null; then
+        echo "[OK]  刷新服务已启动 → http://localhost:5002  (PID=$RPID)"
+    else
+        echo "[WARN] 刷新服务启动失败，请检查: $REFRESH_LOG"
+    fi
 fi
 
-# ── 检查端口 5001 是否已被占用 ────────────────────────────────
+# ── 启动 api_server（port 5001，历史查询备用）────────────────
 if lsof -i :5001 -t &>/dev/null 2>&1; then
     echo "[WARN] 端口 5001 已被占用，跳过启动 API 服务"
 else
-    # 启动 API 服务（后台）
     echo "[INFO] 启动 API 服务 (port 5001)..."
-    cd "$PROJECT_DIR"
     python3 api_server.py >> "$API_LOG" 2>&1 &
-    API_PID=$!
-    echo $API_PID > "$PID_FILE"
-    sleep 2
-
-    # 检查是否启动成功
-    if kill -0 "$API_PID" 2>/dev/null; then
-        echo "[OK]  API 服务已启动 → http://localhost:5001  (PID=$API_PID)"
+    APID=$!
+    echo $APID > "$API_PID_FILE"
+    sleep 1
+    if kill -0 "$APID" 2>/dev/null; then
+        echo "[OK]  API 服务已启动 → http://localhost:5001  (PID=$APID)"
     else
-        echo "[WARN] API 服务启动失败，请检查日志: $API_LOG"
+        echo "[WARN] API 服务启动失败，请检查: $API_LOG"
     fi
 fi
 
@@ -60,21 +75,17 @@ INDEX="$PROJECT_DIR/index.html"
 if [ -f "$INDEX" ]; then
     echo "[INFO] 打开看板页面..."
     if command -v open &>/dev/null; then
-        open "$INDEX"          # macOS
+        open "$INDEX"
     elif command -v xdg-open &>/dev/null; then
-        xdg-open "$INDEX"     # Linux
+        xdg-open "$INDEX"
     fi
     echo "[OK]  index.html 已在浏览器中打开"
-else
-    echo "[WARN] 未找到 index.html: $INDEX"
 fi
 
 echo ""
 echo "================================================"
-echo "  API 服务: http://localhost:5001/api/status"
-echo "  停止服务: kill \$(cat $PID_FILE)"
+echo "  刷新服务: http://localhost:5002/ping"
+echo "  API 服务:  http://localhost:5001/api/status"
+echo "  停止全部:  kill \$(cat $REFRESH_PID) \$(cat $API_PID_FILE)"
 echo "================================================"
-echo ""
-echo "如需立即抓取数据，运行："
-echo "  python3 $PROJECT_DIR/update_data.py"
 echo ""
