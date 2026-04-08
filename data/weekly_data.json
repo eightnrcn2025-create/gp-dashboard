@@ -1,0 +1,182 @@
+{
+  "weeks": [
+    {
+      "period": "2026-04-03~2026-04-09",
+      "sheet_name": "2026.4.3-4.9",
+      "summary": {
+        "total_sales": 19957.29,
+        "avg_daily_sales": 2851.04,
+        "total_uv": 22930,
+        "avg_uv": 3275.71,
+        "new_users": 0
+      },
+      "daily": [
+        {
+          "date": "2026-04-03",
+          "sales": 4153.63,
+          "uv": 4744,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-04",
+          "sales": 4350.85,
+          "uv": 5978,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-05",
+          "sales": 5195.79,
+          "uv": 5620,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-06",
+          "sales": 4208.76,
+          "uv": 4483,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-07",
+          "sales": 2048.26,
+          "uv": 2105,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-08",
+          "sales": 0.0,
+          "uv": 0,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-09",
+          "sales": 0.0,
+          "uv": 0,
+          "new_users": 0
+        }
+      ],
+      "totals": {
+        "sales": 19957.29,
+        "uv": 22930
+      }
+    },
+    {
+      "period": "2026-03-27~2026-04-02",
+      "sheet_name": "2026.3.27-4.2",
+      "summary": {
+        "total_sales": 26453.35,
+        "avg_daily_sales": 3779.05,
+        "total_uv": 33616,
+        "avg_uv": 4802.29,
+        "new_users": 1
+      },
+      "daily": [
+        {
+          "date": "2026-03-27",
+          "sales": 4361.18,
+          "uv": 4839,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-28",
+          "sales": 4099.1,
+          "uv": 6163,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-29",
+          "sales": 4063.73,
+          "uv": 6047,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-30",
+          "sales": 2995.34,
+          "uv": 4584,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-31",
+          "sales": 3552.7,
+          "uv": 4572,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-01",
+          "sales": 3046.72,
+          "uv": 3737,
+          "new_users": 0
+        },
+        {
+          "date": "2026-04-02",
+          "sales": 4334.58,
+          "uv": 3674,
+          "new_users": 1
+        }
+      ],
+      "totals": {
+        "sales": 26453.35,
+        "uv": 33616
+      }
+    },
+    {
+      "period": "2026-03-20~2026-03-26",
+      "sheet_name": "2026.3.20-3.26",
+      "summary": {
+        "total_sales": 30769.81,
+        "avg_daily_sales": 4395.69,
+        "total_uv": 31852,
+        "avg_uv": 4550.29,
+        "new_users": 3
+      },
+      "daily": [
+        {
+          "date": "2026-03-20",
+          "sales": 3088.1,
+          "uv": 5079,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-21",
+          "sales": 5375.88,
+          "uv": 5629,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-22",
+          "sales": 4937.17,
+          "uv": 5259,
+          "new_users": 0
+        },
+        {
+          "date": "2026-03-23",
+          "sales": 3905.81,
+          "uv": 3838,
+          "new_users": 1
+        },
+        {
+          "date": "2026-03-24",
+          "sales": 4215.3,
+          "uv": 3941,
+          "new_users": 1
+        },
+        {
+          "date": "2026-03-25",
+          "sales": 5219.98,
+          "uv": 4046,
+          "new_users": 1
+        },
+        {
+          "date": "2026-03-26",
+          "sales": 4027.57,
+          "uv": 4060,
+          "new_users": 0
+        }
+      ],
+      "totals": {
+        "sales": 30769.81,
+        "uv": 31852
+      }
+    }
+  ],
+  "updated_at": "2026-04-08 01:38:42"
+}

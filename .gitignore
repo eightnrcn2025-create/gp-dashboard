@@ -6,3 +6,5 @@ debug_*.py
 test_sheets.py
 __pycache__/
 *.pyc
+.DS_Store
+database/gamepark.db

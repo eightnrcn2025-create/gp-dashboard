@@ -9,7 +9,7 @@
 #   python3 update_data.py
 # =============================================================================
 
-import os, re, json, time, traceback, requests
+import os, re, json, time, traceback, requests, sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -23,6 +23,9 @@ DATA_FILE  = DATA_DIR  / "data.json"
 LOG_FILE   = LOGS_DIR  / "update_log.txt"
 CREDS_FILE = BASE_DIR  / "credentials.json"
 ENV_FILE   = BASE_DIR  / ".env"
+DB_DIR     = BASE_DIR  / "database"
+DB_FILE    = DB_DIR    / "gamepark.db"
+WEEKLY_DATA_FILE = DATA_DIR / "weekly_data.json"
 
 # Google Sheets
 SHEET1_ID  = "1oB5lVRHJ3g80wFpWy4w5yq2XiQ6ytCji1R_bddKOGEk"
@@ -138,6 +141,159 @@ def load_last_data():
         "weekly_heatmap": [], "traffic_source": [], "detail_table": [],
         "monthly_total": 0, "active_games": 0
     }
+
+# =============================================================================
+# SQLite 数据库
+# =============================================================================
+def init_db():
+    """初始化数据库表（幂等）"""
+    DB_DIR.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DB_FILE)
+    conn.executescript("""
+    CREATE TABLE IF NOT EXISTS daily_stats (
+        date              TEXT PRIMARY KEY,
+        uv                INTEGER DEFAULT 0,
+        pv                INTEGER DEFAULT 0,
+        new_users         INTEGER DEFAULT 0,
+        active_users      INTEGER DEFAULT 0,
+        paying_users      INTEGER DEFAULT 0,
+        sales             REAL    DEFAULT 0,
+        orders            INTEGER DEFAULT 0,
+        arpu              REAL    DEFAULT 0,
+        growth_rate       REAL    DEFAULT 0,
+        conversion_rate   REAL    DEFAULT 0,
+        created_at        TEXT    DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS daily_game_sales (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        date        TEXT    NOT NULL,
+        game        TEXT    NOT NULL,
+        sales       REAL    DEFAULT 0,
+        uv          INTEGER DEFAULT 0,
+        orders      INTEGER DEFAULT 0,
+        game_type   TEXT    DEFAULT 'unknown',
+        UNIQUE(date, game)
+    );
+    CREATE TABLE IF NOT EXISTS weekly_summary (
+        period          TEXT PRIMARY KEY,
+        sheet_name      TEXT,
+        total_sales     REAL    DEFAULT 0,
+        avg_daily_sales REAL    DEFAULT 0,
+        total_uv        INTEGER DEFAULT 0,
+        avg_uv          REAL    DEFAULT 0,
+        new_users       INTEGER DEFAULT 0,
+        created_at      TEXT    DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS weekly_daily_detail (
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        period    TEXT    NOT NULL,
+        date      TEXT    NOT NULL,
+        sales     REAL    DEFAULT 0,
+        uv        INTEGER DEFAULT 0,
+        new_users INTEGER DEFAULT 0,
+        UNIQUE(period, date)
+    );
+    CREATE TABLE IF NOT EXISTS fetch_log (
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        run_time  TEXT NOT NULL,
+        data_date TEXT,
+        status    TEXT,
+        message   TEXT
+    );
+    """)
+    conn.commit()
+    conn.close()
+    log("DB 初始化完成")
+
+
+def save_to_db(output, yesterday, weekly_weeks=None):
+    """将本次采集结果存入 SQLite（INSERT OR IGNORE 防重复）"""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c    = conn.cursor()
+        ts   = output.get("traffic_stats", {})
+        kpi  = output.get("kpi", {})
+
+        # ── daily_stats ──────────────────────────────────────────────────────
+        c.execute("""
+        INSERT OR IGNORE INTO daily_stats
+          (date,uv,pv,new_users,active_users,paying_users,sales,orders,arpu,growth_rate,conversion_rate)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+        """, (yesterday,
+              ts.get("uv", 0), ts.get("pv", 0),
+              ts.get("new_users", 0), ts.get("active_users", 0),
+              ts.get("paying_users", 0),
+              kpi.get("today_sales", 0),
+              ts.get("order_count", 0),
+              ts.get("arpu", 0),
+              kpi.get("growth_rate", 0),
+              kpi.get("conversion_rate", 0)))
+
+        # ── daily_game_sales（TOP5 + detail_table）───────────────────────────
+        for row in output.get("solo_game_top5", []):
+            c.execute("INSERT OR IGNORE INTO daily_game_sales (date,game,sales,uv,orders,game_type) VALUES (?,?,?,?,?,?)",
+                      (yesterday, row["game"], row.get("sales", 0), 0, 0, "solo"))
+        for row in output.get("publisher_game_top5", []):
+            c.execute("INSERT OR IGNORE INTO daily_game_sales (date,game,sales,uv,orders,game_type) VALUES (?,?,?,?,?,?)",
+                      (yesterday, row["game"], row.get("sales", 0), 0, 0, "publisher"))
+        for row in output.get("detail_table", []):
+            name = str(row.get("game", ""))
+            if not name or name == "所有游戏（汇总）":
+                continue
+            gtype = "publisher" if is_publisher_game(name) else "solo"
+            traffic = row.get("traffic", 0) or 0
+            conv    = row.get("conversion", 0) or 0
+            c.execute("INSERT OR IGNORE INTO daily_game_sales (date,game,sales,uv,orders,game_type) VALUES (?,?,?,?,?,?)",
+                      (row.get("date", yesterday), name,
+                       row.get("sales", 0),
+                       traffic,
+                       int(conv * traffic / 100) if traffic else 0,
+                       gtype))
+
+        # ── weekly_summary + weekly_daily_detail ─────────────────────────────
+        if weekly_weeks:
+            for week in weekly_weeks:
+                period = week.get("period", "")
+                if not period:
+                    continue
+                sm = week.get("summary", {})
+                c.execute("""
+                INSERT OR IGNORE INTO weekly_summary
+                  (period,sheet_name,total_sales,avg_daily_sales,total_uv,avg_uv,new_users)
+                VALUES (?,?,?,?,?,?,?)
+                """, (period, week.get("sheet_name",""),
+                      sm.get("total_sales",0), sm.get("avg_daily_sales",0),
+                      sm.get("total_uv",0), sm.get("avg_uv",0),
+                      sm.get("new_users",0)))
+                for day in week.get("daily", []):
+                    c.execute("""
+                    INSERT OR IGNORE INTO weekly_daily_detail (period,date,sales,uv,new_users)
+                    VALUES (?,?,?,?,?)
+                    """, (period, day.get("date",""),
+                          day.get("sales",0), day.get("uv",0), day.get("new_users",0)))
+
+        # ── fetch_log ─────────────────────────────────────────────────────────
+        c.execute("INSERT INTO fetch_log (run_time,data_date,status,message) VALUES (?,?,?,?)",
+                  (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), yesterday, "ok", "正常完成"))
+
+        conn.commit()
+        conn.close()
+        log_ok("DB 存档完成")
+
+        # 打印各表记录数
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        print("\n" + "=" * 50)
+        print("数据库存档记录数：")
+        for tbl in ["daily_stats","daily_game_sales","weekly_summary","weekly_daily_detail","fetch_log"]:
+            c.execute(f"SELECT COUNT(*) FROM {tbl}")
+            print(f"  {tbl}: {c.fetchone()[0]} 条")
+        print("=" * 50)
+        conn.close()
+
+    except Exception as e:
+        log_err(f"DB 存档失败: {e}\n{traceback.format_exc()}")
+
 
 # ── 工具 ──────────────────────────────────────────────────────────────────────
 def to_num(val, default=0.0):
@@ -610,10 +766,10 @@ def fetch_admin_game_stats(last):
                     for i, r in enumerate(sorted_rows[:5])
                 ]
 
-            solo_top5      = rows_to_top5(solo_pool)
+            solo_top5      = rows_to_top5(solo_rows)
             publisher_top5 = rows_to_top5(publisher_pool)
 
-            log_ok(f"分类结果 → 单机 {len(solo_pool)} 款 / 厂商 {len(publisher_pool)} 款")
+            log_ok(f"分类结果 → 单机 {len(solo_rows)} 款 / 厂商 {len(publisher_pool)} 款")
             log(f"  单机 TOP5   : {[r['game'] for r in solo_top5]}")
             log(f"  厂商 TOP5   : {[r['game'] for r in publisher_top5]}")
             log(f"  访问 TOP5   : {[r['game'] for r in game_views_top5]}")
@@ -705,6 +861,144 @@ def fetch_sheet2_detail(last):
 
 
 # =============================================================================
+# 数据源四：Google Sheets — 全部 Sheet 周数据汇总
+# =============================================================================
+def parse_sheet_period(title: str) -> str:
+    """
+    将 Sheet 标题解析为标准周期字符串，例如：
+    "2026.4.3-4.9"  → "2026-04-03~2026-04-09"
+    "4.3-4.9"       → "<当前年>-04-03~<当前年>-04-09"
+    "2026-04-03~2026-04-09" → "2026-04-03~2026-04-09"（直通）
+    """
+    year_m = re.search(r'(\d{4})', title)
+    year   = int(year_m.group(1)) if year_m else datetime.now().year
+
+    # 去掉年份前缀，只保留月日部分
+    rest = re.sub(r'^\d{4}[.\-_]?', '', title).strip()
+
+    # "4.3-4.9" / "4.3~4.9" / "4/3-4/9"
+    m = re.match(r'(\d{1,2})[./](\d{1,2})\s*[-~]\s*(\d{1,2})[./](\d{1,2})', rest)
+    if m:
+        m1, d1, m2, d2 = int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))
+        return f"{year}-{m1:02d}-{d1:02d}~{year}-{m2:02d}-{d2:02d}"
+
+    # "2026-04-03~2026-04-09"
+    m2 = re.match(r'(\d{4}-\d{2}-\d{2})\s*[~-]\s*(\d{4}-\d{2}-\d{2})', title)
+    if m2:
+        return f"{m2.group(1)}~{m2.group(2)}"
+
+    return ""
+
+
+def fetch_weekly_data_all_sheets():
+    """读取 SHEET2 所有工作表，合并为 data/weekly_data.json"""
+    log("=== [Sheets] 多 Sheet 周数据读取 ===")
+    try:
+        import gspread
+        from google.oauth2.service_account import Credentials
+
+        scopes = ["https://spreadsheets.google.com/feeds",
+                  "https://www.googleapis.com/auth/drive"]
+        creds  = Credentials.from_service_account_file(str(CREDS_FILE), scopes=scopes)
+        client = gspread.authorize(creds)
+
+        sh         = client.open_by_key(SHEET2_ID)
+        worksheets = sh.worksheets()
+        log(f"发现 {len(worksheets)} 个工作表")
+
+        weeks = []
+        for ws in worksheets:
+            title  = ws.title.strip()
+            period = parse_sheet_period(title)
+            if not period:
+                log_warn(f"  无法解析周期，跳过: {title}")
+                continue
+            log(f"处理工作表: {title} → period={period}")
+
+            try:
+                rows = ws.get_all_values()
+                if not rows:
+                    continue
+
+                # 年份：优先从标题提取
+                year_m = re.search(r'(\d{4})', title)
+                year   = int(year_m.group(1)) if year_m else datetime.now().year
+
+                # 找"日期"表头行
+                detail_header_idx = next(
+                    (i for i, r in enumerate(rows) if r and r[0].strip() == "日期"), None)
+
+                # 每日明细
+                daily = []
+                if detail_header_idx is not None:
+                    for row in rows[detail_header_idx + 1:]:
+                        if not row or not row[0].strip():
+                            continue
+                        if row[0].strip() in ("合计/均值", "合计", "平均"):
+                            continue
+                        date_str = parse_chinese_date(row[0], year) or parse_date(row[0])
+                        if not date_str:
+                            continue
+                        sales     = to_num(row[1]) if len(row) > 1 else 0
+                        uv        = int(to_num(row[3])) if len(row) > 3 else 0
+                        new_users = int(to_num(row[4])) if len(row) > 4 else 0
+                        daily.append({
+                            "date":      date_str,
+                            "sales":     round(sales, 2),
+                            "uv":        uv,
+                            "new_users": new_users,
+                        })
+
+                # 汇总
+                summary: dict = {}
+                if daily:
+                    total_sales = round(sum(d["sales"] for d in daily), 2)
+                    total_uv    = sum(d["uv"] for d in daily)
+                    n           = len(daily)
+                    summary = {
+                        "total_sales":     total_sales,
+                        "avg_daily_sales": round(total_sales / n, 2) if n else 0,
+                        "total_uv":        total_uv,
+                        "avg_uv":          round(total_uv / n, 2) if n else 0,
+                        "new_users":       sum(d["new_users"] for d in daily),
+                    }
+
+                weeks.append({
+                    "period":     period,
+                    "sheet_name": title,
+                    "summary":    summary,
+                    "daily":      sorted(daily, key=lambda x: x["date"]),
+                    "totals": {
+                        "sales": summary.get("total_sales", 0),
+                        "uv":    summary.get("total_uv", 0),
+                    },
+                })
+                log_ok(f"  {title} → {len(daily)} 天  总¥{summary.get('total_sales',0):,.2f}")
+
+            except Exception as e:
+                log_err(f"  工作表 {title} 处理失败: {e}")
+                continue
+
+        # 按周期倒序（最新在前）
+        weeks.sort(key=lambda x: x["period"], reverse=True)
+
+        result = {
+            "weeks":      weeks,
+            "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with open(WEEKLY_DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+
+        log_ok(f"weekly_data.json 已保存：{len(weeks)} 周数据")
+        return weeks
+
+    except Exception as e:
+        log_err(f"多 Sheet 读取失败: {e}\n{traceback.format_exc()}")
+        return []
+
+
+# =============================================================================
 # 主流程
 # =============================================================================
 def main():
@@ -716,12 +1010,14 @@ def main():
     log("=" * 60)
 
     load_dotenv(ENV_FILE)
+    init_db()
     last = load_last_data()
 
-    # ── 三路采集 ──────────────────────────────────────────────────────────────
-    api_data   = fetch_admin_api(last)
-    game_data  = fetch_admin_game_stats(last)
-    sheet2_det = fetch_sheet2_detail(last)
+    # ── 四路采集 ──────────────────────────────────────────────────────────────
+    api_data      = fetch_admin_api(last)
+    game_data     = fetch_admin_game_stats(last)
+    sheet2_det    = fetch_sheet2_detail(last)
+    weekly_weeks  = fetch_weekly_data_all_sheets()
 
     # ── 整理日销售数据 ──────────────────────────────────────────────────────
     daily_sales = api_data.get("daily_sales") or last.get("daily_sales", [])
@@ -857,6 +1153,9 @@ def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
+
+    # ── 存入数据库 ────────────────────────────────────────────────────────────
+    save_to_db(output, yesterday, weekly_weeks)
 
     elapsed = (datetime.now() - t0).total_seconds()
     total   = sum(len(output[k]) for k in ["daily_sales","detail_table"])
