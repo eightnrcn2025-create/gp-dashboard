@@ -1,156 +1,16 @@
 {
-  "run_time": "2026-04-09 08:39:59",
+  "run_time": "2026-04-09 17:20:27",
   "steps": {
-    "login": "ok",
-    "orders_recent": {
-      "yestoday_amount": 3062.23,
-      "today_amount": 595.91,
-      "today_orders": 136
-    },
-    "daily_sales": {
-      "count": 29,
-      "last3": [
-        {
-          "date": "2026-04-06",
-          "amount": 4515.49
-        },
-        {
-          "date": "2026-04-07",
-          "amount": 3051.46
-        },
-        {
-          "date": "2026-04-08",
-          "amount": 3062.23
-        }
-      ]
-    },
-    "userstats_raw": [
-      {
-        "title": "pv",
-        "yesterday": 22430,
-        "today": 15305
-      },
-      {
-        "title": "uv",
-        "yesterday": 3673,
-        "today": 2314
-      },
-      {
-        "title": "ip",
-        "yesterday": 0,
-        "today": 2283
-      },
-      {
-        "title": "bounce_rate",
-        "yesterday": 0.33,
-        "today": 0.32
-      },
-      {
-        "title": "visit_avg_time",
-        "yesterday": 5212,
-        "today": 3314
-      },
-      {
-        "title": "register_total",
-        "yesterday": "126689",
-        "today": "126956"
-      },
-      {
-        "title": "register_new",
-        "yesterday": 396,
-        "today": 267
-      },
-      {
-        "title": "active_user",
-        "yesterday": 89,
-        "today": 20
-      },
-      {
-        "title": "recharged_count",
-        "yesterday": 46,
-        "today": 29
-      },
-      {
-        "title": "recharged_amount",
-        "yesterday": 1860,
-        "today": 1520
-      },
-      {
-        "title": "channel_order_user_count",
-        "yesterday": "0",
-        "today": "0"
-      },
-      {
-        "title": "channel_order_amount",
-        "yesterday": 0,
-        "today": 0
-      },
-      {
-        "title": "arpu",
-        "yesterday": 20.9,
-        "today": 76
-      },
-      {
-        "title": "average_order_value",
-        "yesterday": 40.43,
-        "today": 52.41
-      }
-    ],
-    "userstats_parsed": {
-      "uv": 3673,
-      "pv": 22430,
-      "new_reg": 396,
-      "active_users": 89,
-      "paid_users": 46,
-      "recharged_amount": 1860.0,
-      "arpu": 20.9,
-      "avg_order_value": 40.43
+    "error": {
+      "msg": "HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)",
+      "trace": "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 534, in _make_request\n    response = conn.getresponse()\n               ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connection.py\", line 571, in getresponse\n    httplib_response = super().getresponse()\n                       ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 1415, in getresponse\n    response.begin()\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 330, in begin\n    version, status, reason = self._read_status()\n                              ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 291, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/socket.py\", line 718, in readinto\n    return self._sock.recv_into(b)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/ssl.py\", line 1314, in recv_into\n    return self.read(nbytes, buffer)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/ssl.py\", line 1166, in read\n    return self._sslobj.read(len, buffer)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: The read operation timed out\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/adapters.py\", line 645, in send\n    resp = conn.urlopen(\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 841, in urlopen\n    retries = retries.increment(\n              ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/util/retry.py\", line 490, in increment\n    raise reraise(type(error), error, _stacktrace)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/util/util.py\", line 39, in reraise\n    raise value\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 787, in urlopen\n    response = self._make_request(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 536, in _make_request\n    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 367, in _raise_timeout\n    raise ReadTimeoutError(\nurllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 408, in admin_login\n    r = requests.post(f\"{API_BASE}/auth/admin/login\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/api.py\", line 115, in post\n    return request(\"post\", url, data=data, json=json, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/api.py\", line 59, in request\n    return session.request(method=method, url=url, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/sessions.py\", line 592, in request\n    resp = self.send(prep, **send_kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/sessions.py\", line 706, in send\n    r = adapter.send(request, **kwargs)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/adapters.py\", line 691, in send\n    raise ReadTimeout(e, request=request)\nrequests.exceptions.ReadTimeout: HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)\n"
     },
     "playwright": {
       "status": "success",
-      "solo_top5": [
-        {
-          "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 1080.0
-        },
-        {
-          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "sales": 513.5
-        },
-        {
-          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-          "sales": 504.9
-        }
-      ],
-      "publisher_top5": [
-        {
-          "game": "欲界圣姬",
-          "sales": 3584.0
-        },
-        {
-          "game": "青楼大掌柜",
-          "sales": 1355.2
-        },
-        {
-          "game": "解禁无双",
-          "sales": 1111.0
-        }
-      ],
-      "views_top5": [
-        {
-          "game": "青楼大掌柜",
-          "views": 6960
-        },
-        {
-          "game": "欲界圣姬",
-          "views": 6004
-        },
-        {
-          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1948
-        }
-      ],
-      "detail_rows_count": 27
+      "solo_top5": [],
+      "publisher_top5": [],
+      "views_top5": [],
+      "detail_rows_count": 0
     }
   }
 }
