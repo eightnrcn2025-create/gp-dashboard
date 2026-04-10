@@ -2060,6 +2060,9 @@ function renderWeeklyTrend(week) {
   const sales  = daily.map(d => d.sales || 0);
   const uvs    = daily.map(d => d.uv || 0);
 
+  const maxSales = Math.max(...sales.filter(v => v > 0), 1);
+  const maxUv    = Math.max(...uvs.filter(v => v > 0), 1);
+
   wTrendInst.setOption({
     backgroundColor: 'transparent',
     tooltip: {
@@ -2069,34 +2072,25 @@ function renderWeeklyTrend(week) {
         if (!day) return '';
         return `<b>${day.date}</b><br>
           销售额：¥${(day.sales||0).toLocaleString('zh-CN',{minimumFractionDigits:2})}<br>
-          UV：${(day.uv||0).toLocaleString()}<br>
-          新增：${(day.new_users||0).toLocaleString()}`;
+          UV：${(day.uv||0).toLocaleString()}`;
       }
     },
     legend: { bottom: 0, textStyle: { color: '#8b949e' } },
     grid: { top: 20, right: 60, bottom: 50, left: 20, containLabel: true },
     xAxis: { type: 'category', data: dates, ...axisStyle },
     yAxis: [
-      { type: 'value', name: '销售额', position: 'left',  ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} },
-      { type: 'value', name: 'UV',    position: 'right', ...axisStyle, nameTextStyle:{color:'#6e7681',fontSize:11} },
+      { type: 'value', name: '销售额', position: 'left',  max: Math.ceil(maxSales * 1.3),
+        ...axisStyle, nameTextStyle:{color:'#FF6B35',fontSize:11} },
+      { type: 'value', name: 'UV',    position: 'right', max: Math.ceil(maxUv * 1.3),
+        ...axisStyle, nameTextStyle:{color:'#388bfd',fontSize:11} },
     ],
     series: [
       {
         name: '销售额', type: 'bar', yAxisIndex: 0, data: sales, barMaxWidth: 40,
         itemStyle: {
-          color: params => {
-            const d = daily[params.dataIndex];
-            return (!d || d.date > today) ? 'rgba(255,107,53,0.2)' : '#FF6B35';
-          },
-          borderColor: params => {
-            const d = daily[params.dataIndex];
-            return (!d || d.date > today) ? '#FF6B35' : 'transparent';
-          },
-          borderWidth: params => {
-            const d = daily[params.dataIndex];
-            return (!d || d.date > today) ? 1 : 0;
-          },
-          borderType: 'dashed',
+          // 用单一函数，避免与静态属性混用导致 itemStyle 整体失效
+          color: p => (daily[p.dataIndex]?.date || '') > today ? 'rgba(255,107,53,0.25)' : '#FF6B35',
+          borderRadius: [3, 3, 0, 0],
         }
       },
       {
