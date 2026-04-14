@@ -1,5 +1,5 @@
 {
-  "export_time": "2026-04-14 08:42:45",
+  "export_time": "2026-04-14 17:22:31",
   "daily_stats": [
     {
       "date": "2026-04-07",
@@ -88,16 +88,16 @@
     {
       "date": "2026-04-13",
       "uv": 4930,
-      "pv": 24621,
-      "new_users": 386,
-      "active_users": 58,
-      "paying_users": 44,
+      "pv": 0,
+      "new_users": 0,
+      "active_users": 0,
+      "paying_users": 0,
       "sales": 3023.58,
-      "orders": 134,
-      "arpu": 37.08,
+      "orders": 0,
+      "arpu": 0.0,
       "growth_rate": -21.75,
       "conversion_rate": 2.72,
-      "created_at": "2026-04-14 08:42:45"
+      "created_at": "2026-04-14 17:22:31"
     }
   ],
   "game_sales": [
