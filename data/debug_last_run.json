@@ -1,16 +1,156 @@
 {
-  "run_time": "2026-04-14 17:20:22",
+  "run_time": "2026-04-15 13:12:32",
   "steps": {
-    "error": {
-      "msg": "HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)",
-      "trace": "Traceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 534, in _make_request\n    response = conn.getresponse()\n               ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connection.py\", line 571, in getresponse\n    httplib_response = super().getresponse()\n                       ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 1415, in getresponse\n    response.begin()\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 330, in begin\n    version, status, reason = self._read_status()\n                              ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/http/client.py\", line 291, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/socket.py\", line 718, in readinto\n    return self._sock.recv_into(b)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/ssl.py\", line 1314, in recv_into\n    return self.read(nbytes, buffer)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/ssl.py\", line 1166, in read\n    return self._sslobj.read(len, buffer)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: The read operation timed out\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/adapters.py\", line 645, in send\n    resp = conn.urlopen(\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 841, in urlopen\n    retries = retries.increment(\n              ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/util/retry.py\", line 490, in increment\n    raise reraise(type(error), error, _stacktrace)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/util/util.py\", line 39, in reraise\n    raise value\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 787, in urlopen\n    response = self._make_request(\n               ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 536, in _make_request\n    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py\", line 367, in _raise_timeout\n    raise ReadTimeoutError(\nurllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 408, in admin_login\n    r = requests.post(f\"{API_BASE}/auth/admin/login\",\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/api.py\", line 115, in post\n    return request(\"post\", url, data=data, json=json, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/api.py\", line 59, in request\n    return session.request(method=method, url=url, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/sessions.py\", line 592, in request\n    resp = self.send(prep, **send_kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/sessions.py\", line 706, in send\n    r = adapter.send(request, **kwargs)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/adapters.py\", line 691, in send\n    raise ReadTimeout(e, request=request)\nrequests.exceptions.ReadTimeout: HTTPSConnectionPool(host='admin.gamepark.co', port=443): Read timed out. (read timeout=15)\n"
+    "login": "ok",
+    "orders_recent": {
+      "yestoday_amount": 3515.16,
+      "today_amount": 1932.12,
+      "today_orders": 146
+    },
+    "daily_sales": {
+      "count": 29,
+      "last3": [
+        {
+          "date": "2026-04-12",
+          "amount": 3864.12
+        },
+        {
+          "date": "2026-04-13",
+          "amount": 3023.58
+        },
+        {
+          "date": "2026-04-14",
+          "amount": 3515.16
+        }
+      ]
+    },
+    "userstats_raw": [
+      {
+        "title": "pv",
+        "yesterday": 24283,
+        "today": 18057
+      },
+      {
+        "title": "uv",
+        "yesterday": 4959,
+        "today": 3765
+      },
+      {
+        "title": "ip",
+        "yesterday": 0,
+        "today": 3084
+      },
+      {
+        "title": "bounce_rate",
+        "yesterday": 0.35,
+        "today": 0.35
+      },
+      {
+        "title": "visit_avg_time",
+        "yesterday": 3984,
+        "today": 7391
+      },
+      {
+        "title": "register_total",
+        "yesterday": "129762",
+        "today": "130084"
+      },
+      {
+        "title": "register_new",
+        "yesterday": 403,
+        "today": 322
+      },
+      {
+        "title": "active_user",
+        "yesterday": 77,
+        "today": 27
+      },
+      {
+        "title": "recharged_count",
+        "yesterday": 39,
+        "today": 35
+      },
+      {
+        "title": "recharged_amount",
+        "yesterday": 1790,
+        "today": 2560
+      },
+      {
+        "title": "channel_order_user_count",
+        "yesterday": "3",
+        "today": "1"
+      },
+      {
+        "title": "channel_order_amount",
+        "yesterday": 249.37,
+        "today": 1
+      },
+      {
+        "title": "arpu",
+        "yesterday": 26.49,
+        "today": 94.85
+      },
+      {
+        "title": "average_order_value",
+        "yesterday": 48.56,
+        "today": 71.14
+      }
+    ],
+    "userstats_parsed": {
+      "uv": 4959,
+      "pv": 24283,
+      "new_reg": 403,
+      "active_users": 77,
+      "paid_users": 39,
+      "recharged_amount": 1790.0,
+      "arpu": 26.49,
+      "avg_order_value": 48.56
     },
     "playwright": {
       "status": "success",
-      "solo_top5": [],
-      "publisher_top5": [],
-      "views_top5": [],
-      "detail_rows_count": 0
+      "solo_top5": [
+        {
+          "game": "女神的最佳交易（Windows/安卓）",
+          "sales": 840.0
+        },
+        {
+          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+          "sales": 722.7
+        },
+        {
+          "game": "帝国后宫计划（Windows/安卓）",
+          "sales": 462.4
+        }
+      ],
+      "publisher_top5": [
+        {
+          "game": "欲界圣姬",
+          "sales": 4648.0
+        },
+        {
+          "game": "魅惑前线",
+          "sales": 980.0
+        },
+        {
+          "game": "全明星动漫乐园",
+          "sales": 518.0
+        }
+      ],
+      "views_top5": [
+        {
+          "game": "青楼大掌柜",
+          "views": 5322
+        },
+        {
+          "game": "欲界圣姬",
+          "views": 4747
+        },
+        {
+          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
+          "views": 1586
+        }
+      ],
+      "detail_rows_count": 26
     }
   }
 }
