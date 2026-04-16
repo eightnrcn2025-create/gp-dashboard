@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-04-15 17:16:35",
+  "run_time": "2026-04-16 17:25:46",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 3515.16,
-      "today_amount": 3031.21,
-      "today_orders": 146
+      "yestoday_amount": 3443.08,
+      "today_amount": 1888.41,
+      "today_orders": 126
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-04-12",
-          "amount": 3864.12
-        },
         {
           "date": "2026-04-13",
           "amount": 3023.58
@@ -21,136 +17,99 @@
         {
           "date": "2026-04-14",
           "amount": 3515.16
+        },
+        {
+          "date": "2026-04-15",
+          "amount": 3443.08
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 24283,
-        "today": 23429
+        "yesterday": 23429,
+        "today": 24619
       },
       {
         "title": "uv",
-        "yesterday": 4959,
-        "today": 4844
+        "yesterday": 4844,
+        "today": 4494
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 3911
+        "today": 4094
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.35,
-        "today": 0.35
+        "yesterday": 0.36,
+        "today": 0.32
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 3984,
-        "today": 6420
+        "yesterday": 7581,
+        "today": 14987
       },
       {
         "title": "register_total",
-        "yesterday": "129762",
-        "today": "130169"
+        "yesterday": "130169",
+        "today": "130610"
       },
       {
         "title": "register_new",
-        "yesterday": 403,
-        "today": 407
+        "yesterday": 407,
+        "today": 441
       },
       {
         "title": "active_user",
-        "yesterday": 77,
-        "today": 41
+        "yesterday": 52,
+        "today": 58
       },
       {
         "title": "recharged_count",
-        "yesterday": 39,
-        "today": 47
+        "yesterday": 47,
+        "today": 44
       },
       {
         "title": "recharged_amount",
-        "yesterday": 1790,
-        "today": 3080
+        "yesterday": 3080,
+        "today": 1610
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "3",
-        "today": "2"
+        "yesterday": "2",
+        "today": "3"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 249.37,
-        "today": 150
+        "yesterday": 150,
+        "today": 172.38
       },
       {
         "title": "arpu",
-        "yesterday": 26.49,
-        "today": 78.78
+        "yesterday": 62.12,
+        "today": 30.73
       },
       {
         "title": "average_order_value",
-        "yesterday": 48.56,
-        "today": 65.92
+        "yesterday": 65.92,
+        "today": 37.92
       }
     ],
     "userstats_parsed": {
-      "uv": 4959,
-      "pv": 24283,
-      "new_reg": 403,
-      "active_users": 77,
-      "paid_users": 39,
-      "recharged_amount": 1790.0,
-      "arpu": 26.49,
-      "avg_order_value": 48.56
+      "uv": 4844,
+      "pv": 23429,
+      "new_reg": 407,
+      "active_users": 52,
+      "paid_users": 47,
+      "recharged_amount": 3080.0,
+      "arpu": 62.12,
+      "avg_order_value": 65.92
     },
     "playwright": {
-      "status": "success",
-      "solo_top5": [
-        {
-          "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 816.0
-        },
-        {
-          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-          "sales": 673.2
-        },
-        {
-          "game": "帝国后宫计划（Windows/安卓）",
-          "sales": 491.3
-        }
-      ],
-      "publisher_top5": [
-        {
-          "game": "欲界圣姬",
-          "sales": 4480.0
-        },
-        {
-          "game": "魅惑前线",
-          "sales": 945.0
-        },
-        {
-          "game": "解禁无双",
-          "sales": 504.0
-        }
-      ],
-      "views_top5": [
-        {
-          "game": "青楼大掌柜",
-          "views": 4870
-        },
-        {
-          "game": "欲界圣姬",
-          "views": 4369
-        },
-        {
-          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1437
-        }
-      ],
-      "detail_rows_count": 25
+      "status": "failed",
+      "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n",
+      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 560, in fetch_admin_game_stats\n    page.goto(ADMIN_HOST, wait_until=\"networkidle\", timeout=30000)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/sync_api/_generated.py\", line 9054, in goto\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_page.py\", line 552, in goto\n    return await self._main_frame.goto(**locals_to_params(locals()))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_frame.py\", line 153, in goto\n    await self._channel.send(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 69, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 559, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n\n"
     }
   }
 }
