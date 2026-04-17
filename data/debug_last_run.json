@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-04-17 08:36:11",
+  "run_time": "2026-04-17 17:03:10",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 2764.88,
-      "today_amount": 849.05,
+      "today_amount": 3119.49,
       "today_orders": 156
     },
     "daily_sales": {
@@ -28,72 +28,72 @@
       {
         "title": "pv",
         "yesterday": 24619,
-        "today": 20180
+        "today": 34565
       },
       {
         "title": "uv",
         "yesterday": 4494,
-        "today": 3708
+        "today": 6150
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 3376
+        "today": 5491
       },
       {
         "title": "bounce_rate",
         "yesterday": 0.34,
-        "today": 0.37
+        "today": 0.32
       },
       {
         "title": "visit_avg_time",
         "yesterday": 15604,
-        "today": 5158
+        "today": 4802
       },
       {
         "title": "register_total",
         "yesterday": "130610",
-        "today": "130933"
+        "today": "131237"
       },
       {
         "title": "register_new",
         "yesterday": 441,
-        "today": 323
+        "today": 627
       },
       {
         "title": "active_user",
         "yesterday": 72,
-        "today": 27
+        "today": 86
       },
       {
         "title": "recharged_count",
         "yesterday": 44,
-        "today": 33
+        "today": 64
       },
       {
         "title": "recharged_amount",
         "yesterday": 1610,
-        "today": 1220
+        "today": 2450
       },
       {
         "title": "channel_order_user_count",
         "yesterday": "3",
-        "today": "2"
+        "today": "4"
       },
       {
         "title": "channel_order_amount",
         "yesterday": 172.38,
-        "today": 114.38
+        "today": 321.3
       },
       {
         "title": "arpu",
         "yesterday": 24.76,
-        "today": 49.42
+        "today": 32.22
       },
       {
         "title": "average_order_value",
         "yesterday": 37.92,
-        "today": 38.13
+        "today": 40.75
       }
     ],
     "userstats_parsed": {
@@ -111,21 +111,21 @@
       "solo_top5": [
         {
           "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 936.0
+          "sales": 816.0
         },
         {
           "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-          "sales": 693.0
+          "sales": 712.8
         },
         {
           "game": "帝国后宫计划（Windows/安卓）",
-          "sales": 491.3
+          "sales": 578.0
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 3703.0
+          "sales": 3395.0
         },
         {
           "game": "魅惑前线",
@@ -133,24 +133,24 @@
         },
         {
           "game": "火影娇妻村",
-          "sales": 384.0
+          "sales": 354.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 5366
+          "views": 5047
         },
         {
           "game": "欲界圣姬",
-          "views": 4855
+          "views": 4663
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1582
+          "views": 1505
         }
       ],
-      "detail_rows_count": 24
+      "detail_rows_count": 25
     }
   }
 }
