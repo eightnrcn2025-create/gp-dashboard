@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-04-16 17:25:46",
+  "run_time": "2026-04-17 08:36:11",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 3443.08,
-      "today_amount": 1888.41,
-      "today_orders": 126
+      "yestoday_amount": 2764.88,
+      "today_amount": 849.05,
+      "today_orders": 156
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-04-13",
-          "amount": 3023.58
-        },
         {
           "date": "2026-04-14",
           "amount": 3515.16
@@ -21,95 +17,140 @@
         {
           "date": "2026-04-15",
           "amount": 3443.08
+        },
+        {
+          "date": "2026-04-16",
+          "amount": 2764.88
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 23429,
-        "today": 24619
+        "yesterday": 24619,
+        "today": 20180
       },
       {
         "title": "uv",
-        "yesterday": 4844,
-        "today": 4494
+        "yesterday": 4494,
+        "today": 3708
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 4094
+        "today": 3376
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.36,
-        "today": 0.32
+        "yesterday": 0.34,
+        "today": 0.37
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 7581,
-        "today": 14987
+        "yesterday": 15604,
+        "today": 5158
       },
       {
         "title": "register_total",
-        "yesterday": "130169",
-        "today": "130610"
+        "yesterday": "130610",
+        "today": "130933"
       },
       {
         "title": "register_new",
-        "yesterday": 407,
-        "today": 441
+        "yesterday": 441,
+        "today": 323
       },
       {
         "title": "active_user",
-        "yesterday": 52,
-        "today": 58
+        "yesterday": 72,
+        "today": 27
       },
       {
         "title": "recharged_count",
-        "yesterday": 47,
-        "today": 44
+        "yesterday": 44,
+        "today": 33
       },
       {
         "title": "recharged_amount",
-        "yesterday": 3080,
-        "today": 1610
+        "yesterday": 1610,
+        "today": 1220
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "2",
-        "today": "3"
+        "yesterday": "3",
+        "today": "2"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 150,
-        "today": 172.38
+        "yesterday": 172.38,
+        "today": 114.38
       },
       {
         "title": "arpu",
-        "yesterday": 62.12,
-        "today": 30.73
+        "yesterday": 24.76,
+        "today": 49.42
       },
       {
         "title": "average_order_value",
-        "yesterday": 65.92,
-        "today": 37.92
+        "yesterday": 37.92,
+        "today": 38.13
       }
     ],
     "userstats_parsed": {
-      "uv": 4844,
-      "pv": 23429,
-      "new_reg": 407,
-      "active_users": 52,
-      "paid_users": 47,
-      "recharged_amount": 3080.0,
-      "arpu": 62.12,
-      "avg_order_value": 65.92
+      "uv": 4494,
+      "pv": 24619,
+      "new_reg": 441,
+      "active_users": 72,
+      "paid_users": 44,
+      "recharged_amount": 1610.0,
+      "arpu": 24.76,
+      "avg_order_value": 37.92
     },
     "playwright": {
-      "status": "failed",
-      "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n",
-      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 560, in fetch_admin_game_stats\n    page.goto(ADMIN_HOST, wait_until=\"networkidle\", timeout=30000)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/sync_api/_generated.py\", line 9054, in goto\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_page.py\", line 552, in goto\n    return await self._main_frame.goto(**locals_to_params(locals()))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_frame.py\", line 153, in goto\n    await self._channel.send(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 69, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 559, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n\n"
+      "status": "success",
+      "solo_top5": [
+        {
+          "game": "女神的最佳交易（Windows/安卓）",
+          "sales": 936.0
+        },
+        {
+          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+          "sales": 693.0
+        },
+        {
+          "game": "帝国后宫计划（Windows/安卓）",
+          "sales": 491.3
+        }
+      ],
+      "publisher_top5": [
+        {
+          "game": "欲界圣姬",
+          "sales": 3703.0
+        },
+        {
+          "game": "魅惑前线",
+          "sales": 1001.0
+        },
+        {
+          "game": "火影娇妻村",
+          "sales": 384.0
+        }
+      ],
+      "views_top5": [
+        {
+          "game": "青楼大掌柜",
+          "views": 5366
+        },
+        {
+          "game": "欲界圣姬",
+          "views": 4855
+        },
+        {
+          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
+          "views": 1582
+        }
+      ],
+      "detail_rows_count": 24
     }
   }
 }
