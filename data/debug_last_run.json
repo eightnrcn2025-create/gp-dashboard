@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-04-19 16:54:41",
+  "run_time": "2026-04-20 07:58:49",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 4921.24,
-      "today_amount": 2622.06,
-      "today_orders": 212
+      "yestoday_amount": 3047.7,
+      "today_amount": 772.8,
+      "today_orders": 157
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-04-16",
-          "amount": 2764.88
-        },
         {
           "date": "2026-04-17",
           "amount": 4260.49
@@ -21,90 +17,94 @@
         {
           "date": "2026-04-18",
           "amount": 4921.24
+        },
+        {
+          "date": "2026-04-19",
+          "amount": 3047.7
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 38785,
-        "today": 32857
+        "yesterday": 32974,
+        "today": 14823
       },
       {
         "title": "uv",
-        "yesterday": 6589,
-        "today": 5097
+        "yesterday": 5114,
+        "today": 2393
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 4861
+        "today": 2249
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.35,
-        "today": 0.31
+        "yesterday": 0.3,
+        "today": 0.34
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 5339,
-        "today": 7189
+        "yesterday": 7811,
+        "today": 5916
       },
       {
         "title": "register_total",
-        "yesterday": "132035",
-        "today": "132662"
+        "yesterday": "132664",
+        "today": "132917"
       },
       {
         "title": "register_new",
-        "yesterday": 798,
-        "today": 627
+        "yesterday": 629,
+        "today": 253
       },
       {
         "title": "active_user",
-        "yesterday": 140,
-        "today": 72
+        "yesterday": 90,
+        "today": 17
       },
       {
         "title": "recharged_count",
-        "yesterday": 80,
-        "today": 57
+        "yesterday": 59,
+        "today": 12
       },
       {
         "title": "recharged_amount",
-        "yesterday": 3080,
-        "today": 2980
+        "yesterday": 3010,
+        "today": 800
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "4",
-        "today": "5"
+        "yesterday": "5",
+        "today": "3"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 969.6,
-        "today": 275.37
+        "yesterday": 275.37,
+        "today": 120.53999999999999
       },
       {
         "title": "arpu",
-        "yesterday": 28.93,
-        "today": 45.21
+        "yesterday": 36.5,
+        "today": 54.15
       },
       {
         "title": "average_order_value",
-        "yesterday": 48.21,
-        "today": 52.51
+        "yesterday": 51.33,
+        "today": 61.37
       }
     ],
     "userstats_parsed": {
-      "uv": 6589,
-      "pv": 38785,
-      "new_reg": 798,
-      "active_users": 140,
-      "paid_users": 80,
-      "recharged_amount": 3080.0,
-      "arpu": 28.93,
-      "avg_order_value": 48.21
+      "uv": 5114,
+      "pv": 32974,
+      "new_reg": 629,
+      "active_users": 90,
+      "paid_users": 59,
+      "recharged_amount": 3010.0,
+      "arpu": 36.5,
+      "avg_order_value": 51.33
     },
     "playwright": {
       "status": "success",
@@ -129,7 +129,7 @@
         },
         {
           "game": "魅惑前线",
-          "sales": 1225.0
+          "sales": 1281.0
         },
         {
           "game": "青楼大掌柜",
@@ -139,18 +139,18 @@
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 5181
+          "views": 5499
         },
         {
           "game": "欲界圣姬",
-          "views": 4852
+          "views": 5171
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1559
+          "views": 1667
         }
       ],
-      "detail_rows_count": 26
+      "detail_rows_count": 27
     }
   }
 }
