@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-04-22 08:03:29",
+  "run_time": "2026-04-22 17:12:24",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 2750.24,
-      "today_amount": 614.79,
+      "today_amount": 2441.91,
       "today_orders": 134
     },
     "daily_sales": {
@@ -28,17 +28,17 @@
       {
         "title": "pv",
         "yesterday": 24692,
-        "today": 12424
+        "today": 21674
       },
       {
         "title": "uv",
         "yesterday": 4218,
-        "today": 2408
+        "today": 3835
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 2119
+        "today": 3487
       },
       {
         "title": "bounce_rate",
@@ -48,32 +48,32 @@
       {
         "title": "visit_avg_time",
         "yesterday": 7194,
-        "today": 6407
+        "today": 6201
       },
       {
         "title": "register_total",
         "yesterday": "133516",
-        "today": "133715"
+        "today": "133882"
       },
       {
         "title": "register_new",
         "yesterday": 426,
-        "today": 199
+        "today": 366
       },
       {
         "title": "active_user",
         "yesterday": 78,
-        "today": 23
+        "today": 65
       },
       {
         "title": "recharged_count",
         "yesterday": 42,
-        "today": 23
+        "today": 39
       },
       {
         "title": "recharged_amount",
         "yesterday": 1990,
-        "today": 890
+        "today": 1850
       },
       {
         "title": "channel_order_user_count",
@@ -88,12 +88,12 @@
       {
         "title": "arpu",
         "yesterday": 26.49,
-        "today": 39.54
+        "today": 28.76
       },
       {
         "title": "average_order_value",
         "yesterday": 45.91,
-        "today": 37.9
+        "today": 46.74
       }
     ],
     "userstats_parsed": {
@@ -111,43 +111,43 @@
       "solo_top5": [
         {
           "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 1128.0
+          "sales": 1056.0
         },
         {
           "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-          "sales": 653.4
+          "sales": 623.7
         },
         {
           "game": "特工17（Windows / 安卓）",
-          "sales": 557.7
+          "sales": 591.5
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2422.0
+          "sales": 1330.0
         },
         {
           "game": "解禁无双",
-          "sales": 931.0
+          "sales": 952.0
         },
         {
           "game": "魅惑前线",
-          "sales": 896.0
+          "sales": 742.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 5436
+          "views": 5131
         },
         {
           "game": "欲界圣姬",
-          "views": 5176
+          "views": 4860
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1674
+          "views": 1564
         }
       ],
       "detail_rows_count": 26
