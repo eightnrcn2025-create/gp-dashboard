@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-04-27 08:10:21",
+  "run_time": "2026-04-27 17:38:38",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 3630.58,
-      "today_amount": 1140.27,
+      "today_amount": 2692.2,
       "today_orders": 170
     },
     "daily_sales": {
@@ -28,17 +28,17 @@
       {
         "title": "pv",
         "yesterday": 28809,
-        "today": 12383
+        "today": 20782
       },
       {
         "title": "uv",
         "yesterday": 4201,
-        "today": 1996
+        "today": 3285
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 1966
+        "today": 3233
       },
       {
         "title": "bounce_rate",
@@ -48,32 +48,32 @@
       {
         "title": "visit_avg_time",
         "yesterday": 7084,
-        "today": 3355
+        "today": 5568
       },
       {
         "title": "register_total",
         "yesterday": "135891",
-        "today": "136104"
+        "today": "136244"
       },
       {
         "title": "register_new",
         "yesterday": 579,
-        "today": 213
+        "today": 353
       },
       {
         "title": "active_user",
         "yesterday": 106,
-        "today": 24
+        "today": 60
       },
       {
         "title": "recharged_count",
         "yesterday": 48,
-        "today": 23
+        "today": 36
       },
       {
         "title": "recharged_amount",
         "yesterday": 1910,
-        "today": 880
+        "today": 1660.13
       },
       {
         "title": "channel_order_user_count",
@@ -88,12 +88,12 @@
       {
         "title": "arpu",
         "yesterday": 22.06,
-        "today": 54.5
+        "today": 34.8
       },
       {
         "title": "average_order_value",
         "yesterday": 47.71,
-        "today": 54.5
+        "today": 56.44
       }
     ],
     "userstats_parsed": {
@@ -111,43 +111,43 @@
       "solo_top5": [
         {
           "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 816.0
+          "sales": 768.0
         },
         {
           "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-          "sales": 582.33
+          "sales": 602.07
         },
         {
           "game": "特工17（Windows / 安卓）",
-          "sales": 456.3
+          "sales": 439.4
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2856.0
+          "sales": 3024.0
         },
         {
           "game": "淫乱斗罗",
-          "sales": 1293.0
+          "sales": 1311.0
         },
         {
           "game": "解禁无双",
-          "sales": 959.0
+          "sales": 640.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 4554
+          "views": 4204
         },
         {
           "game": "欲界圣姬",
-          "views": 4254
+          "views": 3935
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1396
+          "views": 1285
         }
       ],
       "detail_rows_count": 26
