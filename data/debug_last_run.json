@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-04-27 17:38:38",
+  "run_time": "2026-04-28 08:01:21",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 3630.58,
-      "today_amount": 2692.2,
-      "today_orders": 170
+      "yestoday_amount": 3228.01,
+      "today_amount": 1106.17,
+      "today_orders": 141
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-04-24",
-          "amount": 2354.99
-        },
         {
           "date": "2026-04-25",
           "amount": 3116.54
@@ -21,115 +17,119 @@
         {
           "date": "2026-04-26",
           "amount": 3630.58
+        },
+        {
+          "date": "2026-04-27",
+          "amount": 3228.01
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 28809,
-        "today": 20782
+        "yesterday": 20782,
+        "today": 15718
       },
       {
         "title": "uv",
-        "yesterday": 4201,
-        "today": 3285
+        "yesterday": 3285,
+        "today": 2149
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 3233
+        "today": 2125
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.3,
-        "today": 0.34
+        "yesterday": 0.34,
+        "today": 0.36
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 7084,
-        "today": 5568
+        "yesterday": 6573,
+        "today": 7269
       },
       {
         "title": "register_total",
-        "yesterday": "135891",
-        "today": "136244"
+        "yesterday": "136244",
+        "today": "136436"
       },
       {
         "title": "register_new",
-        "yesterday": 579,
-        "today": 353
+        "yesterday": 353,
+        "today": 192
       },
       {
         "title": "active_user",
-        "yesterday": 106,
-        "today": 60
+        "yesterday": 70,
+        "today": 22
       },
       {
         "title": "recharged_count",
-        "yesterday": 48,
-        "today": 36
+        "yesterday": 36,
+        "today": 38
       },
       {
         "title": "recharged_amount",
-        "yesterday": 1910,
-        "today": 1660.13
+        "yesterday": 1690.13,
+        "today": 1530.13
       },
       {
         "title": "channel_order_user_count",
         "yesterday": "1",
-        "today": "1"
+        "today": "2"
       },
       {
         "title": "channel_order_amount",
         "yesterday": 428,
-        "today": 428
+        "today": 77.39
       },
       {
         "title": "arpu",
-        "yesterday": 22.06,
-        "today": 34.8
+        "yesterday": 30.26,
+        "today": 73.07
       },
       {
         "title": "average_order_value",
-        "yesterday": 47.71,
-        "today": 56.44
+        "yesterday": 57.25,
+        "today": 40.19
       }
     ],
     "userstats_parsed": {
-      "uv": 4201,
-      "pv": 28809,
-      "new_reg": 579,
-      "active_users": 106,
-      "paid_users": 48,
-      "recharged_amount": 1910.0,
-      "arpu": 22.06,
-      "avg_order_value": 47.71
+      "uv": 3285,
+      "pv": 20782,
+      "new_reg": 353,
+      "active_users": 70,
+      "paid_users": 36,
+      "recharged_amount": 1690.13,
+      "arpu": 30.26,
+      "avg_order_value": 57.25
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
           "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 768.0
+          "sales": 792.0
         },
         {
           "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-          "sales": 602.07
+          "sales": 671.16
         },
         {
-          "game": "特工17（Windows / 安卓）",
-          "sales": 439.4
+          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+          "sales": 465.3
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 3024.0
+          "sales": 3318.0
         },
         {
           "game": "淫乱斗罗",
-          "sales": 1311.0
+          "sales": 1346.0
         },
         {
           "game": "解禁无双",
@@ -139,15 +139,15 @@
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 4204
+          "views": 4456
         },
         {
           "game": "欲界圣姬",
-          "views": 3935
+          "views": 4175
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1285
+          "views": 1369
         }
       ],
       "detail_rows_count": 26
