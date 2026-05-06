@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-05-06 16:11:02",
+  "run_time": "2026-05-06 17:49:17",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 2842.34,
-      "today_amount": 1851.49,
+      "today_amount": 2773.75,
       "today_orders": 115
     },
     "daily_sales": {
@@ -28,17 +28,17 @@
       {
         "title": "pv",
         "yesterday": 22871,
-        "today": 17557
+        "today": 17637
       },
       {
         "title": "uv",
         "yesterday": 3529,
-        "today": 3006
+        "today": 3020
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 2870
+        "today": 2880
       },
       {
         "title": "bounce_rate",
@@ -48,22 +48,22 @@
       {
         "title": "visit_avg_time",
         "yesterday": 10190,
-        "today": 7120
+        "today": 8197
       },
       {
         "title": "register_total",
         "yesterday": "140197",
-        "today": "140529"
+        "today": "140530"
       },
       {
         "title": "register_new",
         "yesterday": 524,
-        "today": 332
+        "today": 333
       },
       {
         "title": "active_user",
         "yesterday": 91,
-        "today": 46
+        "today": 51
       },
       {
         "title": "recharged_count",
@@ -88,7 +88,7 @@
       {
         "title": "arpu",
         "yesterday": 16.81,
-        "today": 51.7
+        "today": 46.63
       },
       {
         "title": "average_order_value",
@@ -133,21 +133,21 @@
         },
         {
           "game": "欲界圣姬",
-          "sales": 1260.0
+          "sales": 1589.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 4487
+          "views": 4515
         },
         {
           "game": "欲界圣姬",
-          "views": 4193
+          "views": 4222
         },
         {
           "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 1229
+          "views": 1235
         }
       ],
       "detail_rows_count": 26
