@@ -1,5 +1,5 @@
 {
-  "export_time": "2026-05-25 07:15:34",
+  "export_time": "2026-05-25 08:36:10",
   "daily_stats": [
     {
       "date": "2026-04-07",
@@ -666,12 +666,12 @@
       "new_users": 469,
       "active_users": 91,
       "paying_users": 52,
-      "sales": 2672.15,
-      "orders": 121,
+      "sales": 2738.15,
+      "orders": 126,
       "arpu": 30.08,
-      "growth_rate": -33.03,
-      "conversion_rate": 3.19,
-      "created_at": "2026-05-25 07:15:34"
+      "growth_rate": -31.38,
+      "conversion_rate": 3.33,
+      "created_at": "2026-05-25 08:36:10"
     }
   ],
   "game_sales": [
@@ -10687,7 +10687,7 @@
       "data_date": "2026-05-24",
       "game_name": "女神的最佳交易（Windows/安卓）",
       "game_type": "solo",
-      "sales_amount": 768.0,
+      "sales_amount": 792.0,
       "uv": 0,
       "orders": 0
     },
@@ -10728,7 +10728,7 @@
       "game_name": "缚缘：特殊兴趣交友（Windows/安卓）",
       "game_type": "solo",
       "sales_amount": 296.25,
-      "uv": 924,
+      "uv": 925,
       "orders": 14
     },
     {
@@ -10776,8 +10776,8 @@
       "game_name": "全明星动漫乐园",
       "game_type": "publisher",
       "sales_amount": 174.0,
-      "uv": 1217,
-      "orders": 4
+      "uv": 1221,
+      "orders": 5
     },
     {
       "data_date": "2026-05-24",
@@ -10800,7 +10800,7 @@
       "game_name": "心灵协会（Windows/安卓）",
       "game_type": "solo",
       "sales_amount": 163.8,
-      "uv": 189,
+      "uv": 191,
       "orders": 6
     },
     {
@@ -10808,7 +10808,7 @@
       "game_name": "永恒世界（Windows/安卓）",
       "game_type": "solo",
       "sales_amount": 162.0,
-      "uv": 132,
+      "uv": 133,
       "orders": 9
     },
     {
@@ -10816,7 +10816,7 @@
       "game_name": "（双游戏折扣包）情欲古式按摩店 -沉迷秘密服务的母女+对性感店员进行NTR行为!?（Windows/安卓）",
       "game_type": "solo",
       "sales_amount": 160.16,
-      "uv": 115,
+      "uv": 116,
       "orders": 4
     },
     {
@@ -10847,24 +10847,24 @@
       "data_date": "2026-05-24",
       "game_name": "爱欲之都 - 超大版本更新 ！！！ (Windows/安卓)",
       "game_type": "solo",
-      "sales_amount": 131.1,
-      "uv": 344,
-      "orders": 18
+      "sales_amount": 138.0,
+      "uv": 346,
+      "orders": 19
     },
     {
       "data_date": "2026-05-24",
       "game_name": "与女大生的同居生活（Windows/安卓）",
       "game_type": "solo",
       "sales_amount": 126.72,
-      "uv": 137,
-      "orders": 9
+      "uv": 138,
+      "orders": 8
     },
     {
       "data_date": "2026-05-24",
       "game_name": "邻居人妻2 - 在丈夫旁边忘我地中出SEX（Windows）",
       "game_type": "solo",
       "sales_amount": 122.22,
-      "uv": 123,
+      "uv": 127,
       "orders": 6
     }
   ]
