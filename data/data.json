@@ -1,19 +1,15 @@
 {
-  "last_updated": "2026-05-29 18:40:18",
-  "data_date": "2026-05-28",
-  "update_time": "2026-05-29 18:40:18",
+  "last_updated": "2026-05-30 17:19:30",
+  "data_date": "2026-05-29",
+  "update_time": "2026-05-30 17:19:30",
   "kpi": {
-    "today_sales": 4329.6,
-    "yesterday_sales": 2612.09,
-    "growth_rate": 65.75,
-    "total_traffic": 2420,
-    "conversion_rate": 4.21
+    "today_sales": 2445.72,
+    "yesterday_sales": 4329.6,
+    "growth_rate": -43.51,
+    "total_traffic": 3032,
+    "conversion_rate": 3.5
   },
   "daily_sales": [
-    {
-      "date": "2026-04-30",
-      "amount": 4352.06
-    },
     {
       "date": "2026-05-01",
       "amount": 4703.99
@@ -125,37 +121,41 @@
     {
       "date": "2026-05-28",
       "amount": 4329.6
+    },
+    {
+      "date": "2026-05-29",
+      "amount": 2445.72
     }
   ],
   "solo_game_top5": [
     {
       "rank": 1,
       "game": "特工17（Windows / 安卓）",
-      "sales": 473.2,
+      "sales": 388.7,
       "growth": 0
     },
     {
       "rank": 2,
       "game": "女神的最佳交易（Windows/安卓）",
-      "sales": 456.0,
+      "sales": 384.0,
       "growth": 0
     },
     {
       "rank": 3,
       "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-      "sales": 355.32,
+      "sales": 335.58,
       "growth": 0
     },
     {
       "rank": 4,
       "game": "火影忍者：女忍者训练师（Windows/安卓）",
-      "sales": 284.4,
+      "sales": 237.0,
       "growth": 0
     },
     {
       "rank": 5,
-      "game": "沙漠追猎者 (Windows/安卓)",
-      "sales": 249.0,
+      "game": "幸福家里蹲的养成方法（Windows/安卓）",
+      "sales": 234.9,
       "growth": 0
     }
   ],
@@ -163,31 +163,31 @@
     {
       "rank": 1,
       "game": "全明星动漫乐园",
-      "sales": 3420.0,
+      "sales": 3432.0,
       "growth": 0
     },
     {
       "rank": 2,
       "game": "欲界圣姬",
-      "sales": 1246.0,
+      "sales": 1134.0,
       "growth": 0
     },
     {
       "rank": 3,
       "game": "淫乱斗罗",
-      "sales": 984.0,
+      "sales": 996.0,
       "growth": 0
     },
     {
       "rank": 4,
       "game": "姬霸天下",
-      "sales": 903.0,
+      "sales": 875.0,
       "growth": 0
     },
     {
       "rank": 5,
       "game": "解禁无双",
-      "sales": 588.0,
+      "sales": 644.0,
       "growth": 0
     }
   ],
@@ -195,61 +195,57 @@
     {
       "rank": 1,
       "game": "青楼大掌柜",
-      "views": 2894
+      "views": 2717
     },
     {
       "rank": 2,
       "game": "欲界圣姬",
-      "views": 2425
+      "views": 2220
     },
     {
       "rank": 3,
       "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-      "views": 742
+      "views": 695
     },
     {
       "rank": 4,
-      "game": "女神的最佳交易（Windows/安卓）",
-      "views": 666
+      "game": "【手机可玩电脑游戏】JOIPLAY模拟器",
+      "views": 604
     },
     {
       "rank": 5,
-      "game": "【手机可玩电脑游戏】JOIPLAY模拟器",
-      "views": 634
+      "game": "女神的最佳交易（Windows/安卓）",
+      "views": 567
     }
   ],
   "game_views_publisher_top5": [
     {
       "rank": 1,
       "game": "淫乱斗罗",
-      "views": 1475
+      "views": 1361
     },
     {
       "rank": 2,
       "game": "海王传奇海王篇",
-      "views": 1289
+      "views": 1175
     },
     {
       "rank": 3,
       "game": "全明星动漫乐园",
-      "views": 883
+      "views": 798
     },
     {
       "rank": 4,
       "game": "妻龙珠",
-      "views": 668
+      "views": 599
     },
     {
       "rank": 5,
       "game": "火影娇妻村",
-      "views": 604
+      "views": 539
     }
   ],
   "weekly_heatmap": [
-    {
-      "date": "2026-04-30",
-      "amount": 4352.06
-    },
     {
       "date": "2026-05-01",
       "amount": 4703.99
@@ -361,21 +357,25 @@
     {
       "date": "2026-05-28",
       "amount": 4329.6
+    },
+    {
+      "date": "2026-05-29",
+      "amount": 2445.72
     }
   ],
-  "monthly_total": 85475.51,
+  "monthly_total": 87383.89,
   "active_games": 26,
   "traffic_stats": {
-    "pv": 15934,
-    "uv": 2420,
-    "new_users": 235,
-    "active_users": 36,
-    "paying_users": 35,
-    "payment_amount": 1930.0,
-    "order_count": 102,
-    "order_amount": 4329.6,
-    "arpu": 55.03,
-    "avg_order_value": 55.03,
+    "pv": 16485,
+    "uv": 3032,
+    "new_users": 261,
+    "active_users": 53,
+    "paying_users": 31,
+    "payment_amount": 3520.0,
+    "order_count": 106,
+    "order_amount": 2445.72,
+    "arpu": 69.16,
+    "avg_order_value": 107.81,
     "ip": 0,
     "bounce_rate": "",
     "avg_duration": "",
@@ -384,203 +384,203 @@
   "traffic_source": [
     {
       "source": "仅浏览（未注册）",
-      "value": 2185
+      "value": 2771
     },
     {
       "source": "新注册用户",
-      "value": 235
+      "value": 261
     },
     {
       "source": "活跃老用户",
-      "value": 36
+      "value": 53
     },
     {
       "source": "付费/充值用户",
-      "value": 35
+      "value": 31
     }
   ],
   "detail_table": [
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "（双游戏折扣包）防身术道场秘密的NTR课程 + DLC 葵篇（Windows/安卓）",
-      "traffic": 52,
+      "traffic": 42,
       "sales": 163.2,
-      "conversion": 7.69
+      "conversion": 9.52
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "（双游戏折扣包）情欲古式按摩店 -沉迷秘密服务的母女+对性感店员进行NTR行为!?（Windows/安卓）",
-      "traffic": 114,
-      "sales": 120.12,
-      "conversion": 2.63
+      "traffic": 98,
+      "sales": 160.16,
+      "conversion": 4.08
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "魅惑前线",
-      "traffic": 435,
+      "traffic": 380,
       "sales": 161.0,
-      "conversion": 0.46
+      "conversion": 0.53
     },
     {
-      "date": "2026-05-28",
-      "game": "这样一来你也是性处理科的一员了！（Windows/安卓）",
+      "date": "2026-05-29",
+      "game": "解禁无双",
+      "traffic": 480,
+      "sales": 644.0,
+      "conversion": 7.5
+    },
+    {
+      "date": "2026-05-29",
+      "game": "腐蚀",
+      "traffic": 54,
+      "sales": 100.0,
+      "conversion": 7.41
+    },
+    {
+      "date": "2026-05-29",
+      "game": "痴女调教师（Windows/安卓）",
+      "traffic": 40,
+      "sales": 117.0,
+      "conversion": 12.5
+    },
+    {
+      "date": "2026-05-29",
+      "game": "特工17（Windows / 安卓）",
+      "traffic": 354,
+      "sales": 388.7,
+      "conversion": 6.5
+    },
+    {
+      "date": "2026-05-29",
+      "game": "爱欲之都 - 超大版本更新 ！！！ (Windows/安卓)",
+      "traffic": 331,
+      "sales": 193.2,
+      "conversion": 8.46
+    },
+    {
+      "date": "2026-05-29",
+      "game": "火影忍者：女忍者训练师（Windows/安卓）",
+      "traffic": 250,
+      "sales": 237.0,
+      "conversion": 6.0
+    },
+    {
+      "date": "2026-05-29",
+      "game": "淫乱斗罗",
+      "traffic": 1361,
+      "sales": 996.0,
+      "conversion": 2.65
+    },
+    {
+      "date": "2026-05-29",
+      "game": "沙漠追猎者 (Windows/安卓)",
+      "traffic": 87,
+      "sales": 199.2,
+      "conversion": 9.2
+    },
+    {
+      "date": "2026-05-29",
+      "game": "永恒世界（Windows/安卓）",
+      "traffic": 120,
+      "sales": 180.0,
+      "conversion": 8.33
+    },
+    {
+      "date": "2026-05-29",
+      "game": "欲界圣姬",
+      "traffic": 2220,
+      "sales": 1134.0,
+      "conversion": 1.53
+    },
+    {
+      "date": "2026-05-29",
+      "game": "异世界乐园（Windows/安卓）",
+      "traffic": 58,
+      "sales": 134.88,
+      "conversion": 10.34
+    },
+    {
+      "date": "2026-05-29",
+      "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+      "traffic": 267,
+      "sales": 178.2,
+      "conversion": 6.74
+    },
+    {
+      "date": "2026-05-29",
+      "game": "幸福家里蹲的养成方法（Windows/安卓）",
+      "traffic": 143,
+      "sales": 234.9,
+      "conversion": 6.99
+    },
+    {
+      "date": "2026-05-29",
+      "game": "帝国后宫计划（Windows/安卓）",
       "traffic": 86,
-      "sales": 135.24,
+      "sales": 115.6,
       "conversion": 4.65
     },
     {
-      "date": "2026-05-28",
-      "game": "解禁无双",
-      "traffic": 524,
-      "sales": 588.0,
-      "conversion": 7.25
-    },
-    {
-      "date": "2026-05-28",
-      "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-      "traffic": 742,
-      "sales": 138.25,
-      "conversion": 0.94
-    },
-    {
-      "date": "2026-05-28",
-      "game": "特工17（Windows / 安卓）",
-      "traffic": 368,
-      "sales": 473.2,
-      "conversion": 7.61
-    },
-    {
-      "date": "2026-05-28",
-      "game": "爱欲之都 - 超大版本更新 ！！！ (Windows/安卓)",
-      "traffic": 337,
-      "sales": 200.1,
-      "conversion": 8.61
-    },
-    {
-      "date": "2026-05-28",
-      "game": "火影忍者：女忍者训练师（Windows/安卓）",
-      "traffic": 280,
-      "sales": 284.4,
-      "conversion": 6.43
-    },
-    {
-      "date": "2026-05-28",
-      "game": "淫乱斗罗",
-      "traffic": 1475,
-      "sales": 984.0,
-      "conversion": 2.31
-    },
-    {
-      "date": "2026-05-28",
-      "game": "沙漠追猎者 (Windows/安卓)",
-      "traffic": 97,
-      "sales": 249.0,
-      "conversion": 10.31
-    },
-    {
-      "date": "2026-05-28",
-      "game": "永恒世界（Windows/安卓）",
-      "traffic": 122,
-      "sales": 180.0,
-      "conversion": 8.2
-    },
-    {
-      "date": "2026-05-28",
-      "game": "欲界圣姬",
-      "traffic": 2425,
-      "sales": 1246.0,
-      "conversion": 1.65
-    },
-    {
-      "date": "2026-05-28",
-      "game": "教訓!?撫摸!?滿員電車!!一之宮 美月編（Windows/安卓）",
-      "traffic": 113,
-      "sales": 129.22,
-      "conversion": 11.5
-    },
-    {
-      "date": "2026-05-28",
-      "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-      "traffic": 299,
-      "sales": 217.8,
-      "conversion": 7.36
-    },
-    {
-      "date": "2026-05-28",
-      "game": "幸福家里蹲的养成方法（Windows/安卓）",
-      "traffic": 142,
-      "sales": 234.9,
-      "conversion": 7.04
-    },
-    {
-      "date": "2026-05-28",
-      "game": "帝国后宫计划（Windows/安卓）",
-      "traffic": 88,
-      "sales": 115.6,
-      "conversion": 4.55
-    },
-    {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "姬霸天下",
-      "traffic": 531,
-      "sales": 903.0,
-      "conversion": 1.88
+      "traffic": 523,
+      "sales": 875.0,
+      "conversion": 1.53
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "女神的最佳交易（Windows/安卓）",
-      "traffic": 666,
-      "sales": 456.0,
-      "conversion": 2.85
+      "traffic": 567,
+      "sales": 384.0,
+      "conversion": 2.82
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "女仆調教日誌（Windows/安卓）",
-      "traffic": 120,
+      "traffic": 106,
       "sales": 183.0,
-      "conversion": 10.0
+      "conversion": 11.32
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "天结神缘",
       "traffic": 8,
       "sales": 149.0,
       "conversion": 12.5
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
-      "traffic": 207,
-      "sales": 218.9,
-      "conversion": 5.31
+      "traffic": 178,
+      "sales": 199.0,
+      "conversion": 5.62
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "办公室妻子（Windows/安卓）",
-      "traffic": 69,
+      "traffic": 66,
       "sales": 112.35,
-      "conversion": 7.25
+      "conversion": 7.58
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-      "traffic": 448,
-      "sales": 355.32,
-      "conversion": 8.04
+      "traffic": 428,
+      "sales": 335.58,
+      "conversion": 7.94
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "全明星动漫乐园",
-      "traffic": 883,
-      "sales": 3420.0,
-      "conversion": 3.85
+      "traffic": 798,
+      "sales": 3432.0,
+      "conversion": 4.39
     },
     {
-      "date": "2026-05-28",
+      "date": "2026-05-29",
       "game": "与女大生的同居生活（Windows/安卓）",
-      "traffic": 132,
-      "sales": 154.88,
-      "conversion": 8.33
+      "traffic": 121,
+      "sales": 126.72,
+      "conversion": 7.44
     },
     {
       "date": "2026-04-09",
