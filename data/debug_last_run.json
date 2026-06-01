@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-05-31 17:18:52",
+  "run_time": "2026-06-01 20:23:03",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 2325.37,
-      "today_amount": 2320.8,
-      "today_orders": 106
+      "yestoday_amount": 2859.66,
+      "today_amount": 1421.53,
+      "today_orders": 131
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-05-28",
-          "amount": 4329.6
-        },
         {
           "date": "2026-05-29",
           "amount": 2445.72
@@ -21,136 +17,99 @@
         {
           "date": "2026-05-30",
           "amount": 2325.37
+        },
+        {
+          "date": "2026-05-31",
+          "amount": 2859.66
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 19346,
-        "today": 17723
+        "yesterday": 17723,
+        "today": 14282
       },
       {
         "title": "uv",
-        "yesterday": 3403,
-        "today": 2996
+        "yesterday": 2996,
+        "today": 2398
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 2818
+        "today": 2474
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.32,
-        "today": 0.34
+        "yesterday": 0.34,
+        "today": 0.28
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 4362,
-        "today": 6564
+        "yesterday": 6858,
+        "today": 7180
       },
       {
         "title": "register_total",
-        "yesterday": "148455",
-        "today": "148763"
+        "yesterday": "148763",
+        "today": "148989"
       },
       {
         "title": "register_new",
-        "yesterday": 343,
-        "today": 308
+        "yesterday": 308,
+        "today": 226
       },
       {
         "title": "active_user",
-        "yesterday": 67,
-        "today": 45
+        "yesterday": 51,
+        "today": 34
       },
       {
         "title": "recharged_count",
-        "yesterday": 33,
-        "today": 40
+        "yesterday": 40,
+        "today": 28
       },
       {
         "title": "recharged_amount",
-        "yesterday": 1170,
-        "today": 2110
+        "yesterday": 2110,
+        "today": 1440
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "3",
+        "yesterday": "2",
         "today": "2"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 236.9,
-        "today": 71.15
+        "yesterday": 71.15,
+        "today": 52.81
       },
       {
         "title": "arpu",
-        "yesterday": 21,
-        "today": 48.47
+        "yesterday": 42.77,
+        "today": 43.91
       },
       {
         "title": "average_order_value",
-        "yesterday": 39.08,
-        "today": 51.93
+        "yesterday": 51.93,
+        "today": 49.76
       }
     ],
     "userstats_parsed": {
-      "uv": 3403,
-      "pv": 19346,
-      "new_reg": 343,
-      "active_users": 67,
-      "paid_users": 33,
-      "recharged_amount": 1170.0,
-      "arpu": 21.0,
-      "avg_order_value": 39.08
+      "uv": 2996,
+      "pv": 17723,
+      "new_reg": 308,
+      "active_users": 51,
+      "paid_users": 40,
+      "recharged_amount": 2110.0,
+      "arpu": 42.77,
+      "avg_order_value": 51.93
     },
     "playwright": {
-      "status": "success",
-      "solo_top5": [
-        {
-          "game": "特工17（Windows / 安卓）",
-          "sales": 371.8
-        },
-        {
-          "game": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
-          "sales": 345.45
-        },
-        {
-          "game": "女神的最佳交易（Windows/安卓）",
-          "sales": 336.0
-        }
-      ],
-      "publisher_top5": [
-        {
-          "game": "全明星动漫乐园",
-          "sales": 3304.0
-        },
-        {
-          "game": "解禁无双",
-          "sales": 1072.0
-        },
-        {
-          "game": "欲界圣姬",
-          "sales": 1036.0
-        }
-      ],
-      "views_top5": [
-        {
-          "game": "青楼大掌柜",
-          "views": 2554
-        },
-        {
-          "game": "欲界圣姬",
-          "views": 2047
-        },
-        {
-          "game": "缚缘：特殊兴趣交友（Windows/安卓）",
-          "views": 636
-        }
-      ],
-      "detail_rows_count": 26
+      "status": "failed",
+      "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n",
+      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 560, in fetch_admin_game_stats\n    page.goto(ADMIN_HOST, wait_until=\"networkidle\", timeout=30000)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/sync_api/_generated.py\", line 9612, in goto\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_page.py\", line 557, in goto\n    return await self._main_frame.goto(**locals_to_params(locals()))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_frame.py\", line 156, in goto\n    await self._channel.send(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 69, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 559, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n\n"
     }
   }
 }
