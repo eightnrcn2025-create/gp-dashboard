@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-16 19:45:42",
+  "run_time": "2026-06-17 18:28:25",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 1570.68,
-      "today_amount": 1878.19,
+      "yestoday_amount": 1922.43,
+      "today_amount": 1104.22,
       "today_orders": 54
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-13",
-          "amount": 2777.68
-        },
         {
           "date": "2026-06-14",
           "amount": 1969.9
@@ -21,136 +17,140 @@
         {
           "date": "2026-06-15",
           "amount": 1570.68
+        },
+        {
+          "date": "2026-06-16",
+          "amount": 1922.43
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 6927,
-        "today": 7099
+        "yesterday": 7099,
+        "today": 5507
       },
       {
         "title": "uv",
-        "yesterday": 1592,
-        "today": 1354
+        "yesterday": 1354,
+        "today": 1130
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 1293
+        "today": 1124
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.39,
-        "today": 0.42
+        "yesterday": 0.43,
+        "today": 0.29
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 3533,
-        "today": 3715
+        "yesterday": 3819,
+        "today": 2947
       },
       {
         "title": "register_total",
-        "yesterday": "150001",
-        "today": "150060"
+        "yesterday": "150060",
+        "today": "150107"
       },
       {
         "title": "register_new",
-        "yesterday": 58,
-        "today": 59
+        "yesterday": 59,
+        "today": 47
       },
       {
         "title": "active_user",
-        "yesterday": 21,
-        "today": 28
+        "yesterday": 30,
+        "today": 27
       },
       {
         "title": "recharged_count",
-        "yesterday": 16,
-        "today": 15
+        "yesterday": 15,
+        "today": 8
       },
       {
         "title": "recharged_amount",
-        "yesterday": 980,
-        "today": 870
+        "yesterday": 870,
+        "today": 330
       },
       {
         "title": "channel_order_user_count",
         "yesterday": "3",
-        "today": "3"
+        "today": "2"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 533.47,
-        "today": 315.88
+        "yesterday": 315.88,
+        "today": 577
       },
       {
         "title": "arpu",
-        "yesterday": 72.07,
-        "today": 42.35
+        "yesterday": 39.53,
+        "today": 33.59
       },
       {
         "title": "average_order_value",
-        "yesterday": 79.66,
-        "today": 65.88
+        "yesterday": 65.88,
+        "today": 90.7
       }
     ],
     "userstats_parsed": {
-      "uv": 1592,
-      "pv": 6927,
-      "new_reg": 58,
-      "active_users": 21,
-      "paid_users": 16,
-      "recharged_amount": 980.0,
-      "arpu": 72.07,
-      "avg_order_value": 79.66
+      "uv": 1354,
+      "pv": 7099,
+      "new_reg": 59,
+      "active_users": 30,
+      "paid_users": 15,
+      "recharged_amount": 870.0,
+      "arpu": 39.53,
+      "avg_order_value": 65.88
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
-          "game": "女仆調教日誌（Windows/安卓）",
-          "sales": 167.75
-        },
-        {
           "game": "蜉蝣（Windows/安卓）",
-          "sales": 165.0
+          "sales": 150.0
         },
         {
           "game": "熟女日（Windows/安卓）",
-          "sales": 162.0
+          "sales": 144.0
+        },
+        {
+          "game": "女仆調教日誌（Windows/安卓）",
+          "sales": 137.25
         }
       ],
       "publisher_top5": [
         {
           "game": "全明星动漫乐园",
-          "sales": 2990.0
+          "sales": 2960.0
         },
         {
           "game": "欲界圣姬",
-          "sales": 1533.0
+          "sales": 1365.0
         },
         {
-          "game": "解禁无双",
-          "sales": 870.0
+          "game": "魅惑前线",
+          "sales": 1057.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 725
+          "views": 721
         },
         {
           "game": "欲界圣姬",
-          "views": 441
+          "views": 434
         },
         {
           "game": "魔女的侵袭（Windows）",
-          "views": 260
+          "views": 250
         }
       ],
-      "detail_rows_count": 25
+      "detail_rows_count": 26
     }
   }
 }
