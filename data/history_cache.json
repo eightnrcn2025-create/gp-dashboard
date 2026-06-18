@@ -1,5 +1,5 @@
 {
-  "export_time": "2026-06-17 18:29:20",
+  "export_time": "2026-06-18 18:36:44",
   "daily_stats": [
     {
       "date": "2026-04-07",
@@ -994,6 +994,20 @@
       "growth_rate": 22.39,
       "conversion_rate": 3.99,
       "created_at": "2026-06-17 18:29:20"
+    },
+    {
+      "date": "2026-06-17",
+      "uv": 1130,
+      "pv": 5507,
+      "new_users": 47,
+      "active_users": 27,
+      "paying_users": 8,
+      "sales": 1194.12,
+      "orders": 40,
+      "arpu": 33.59,
+      "growth_rate": -37.88,
+      "conversion_rate": 3.54,
+      "created_at": "2026-06-18 18:36:44"
     }
   ],
   "game_sales": [
@@ -15732,6 +15746,214 @@
       "sales_amount": 75.0,
       "uv": 67,
       "orders": 4
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "全明星动漫乐园",
+      "game_type": "publisher",
+      "sales_amount": 2996.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "欲界圣姬",
+      "game_type": "publisher",
+      "sales_amount": 1197.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "魅惑前线",
+      "game_type": "publisher",
+      "sales_amount": 938.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "解禁无双",
+      "game_type": "publisher",
+      "sales_amount": 823.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "淫乱斗罗",
+      "game_type": "publisher",
+      "sales_amount": 440.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "女仆調教日誌（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 137.25,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "沙漠追猎者 (Windows/安卓)",
+      "game_type": "solo",
+      "sales_amount": 124.5,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "（双游戏折扣包）情欲古式按摩店 -沉迷秘密服务的母女+对性感店员进行NTR行为!?（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 120.12,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 119.4,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "帝国后宫计划（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 115.6,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "熟女日（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 108.0,
+      "uv": 91,
+      "orders": 5
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "这样一来你也是性处理科的一员了！（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 101.43,
+      "uv": 70,
+      "orders": 3
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "特工17（Windows / 安卓）",
+      "game_type": "solo",
+      "sales_amount": 101.4,
+      "uv": 132,
+      "orders": 6
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "前略，我终于入手了一个盒中少女。（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 98.7,
+      "uv": 110,
+      "orders": 9
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "2990年的回响（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 91.2,
+      "uv": 49,
+      "orders": 3
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "蜉蝣（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 90.0,
+      "uv": 116,
+      "orders": 5
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "火影娇妻村",
+      "game_type": "publisher",
+      "sales_amount": 90.0,
+      "uv": 147,
+      "orders": 2
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "永恒世界（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 90.0,
+      "uv": 75,
+      "orders": 5
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "太妃物语-第一季重制版（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 90.0,
+      "uv": 37,
+      "orders": 2
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 89.1,
+      "uv": 96,
+      "orders": 9
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "梦幻约会（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 81.6,
+      "uv": 27,
+      "orders": 3
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "色情学校怪谈 ～我的御姐正太妖怪大战～（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 75.0,
+      "uv": 14,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "腐蚀",
+      "game_type": "solo",
+      "sales_amount": 75.0,
+      "uv": 19,
+      "orders": 3
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "新天域（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 75.0,
+      "uv": 58,
+      "orders": 2
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "我的变态幻想（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 75.0,
+      "uv": 64,
+      "orders": 4
+    },
+    {
+      "data_date": "2026-06-17",
+      "game_name": "困在自己的游戏里（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 75.0,
+      "uv": 106,
+      "orders": 5
     }
   ]
 }
