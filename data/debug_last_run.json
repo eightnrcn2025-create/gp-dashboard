@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-18 18:35:49",
+  "run_time": "2026-06-19 18:04:46",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 1194.12,
-      "today_amount": 1471.58,
-      "today_orders": 40
+      "yestoday_amount": 2165.3,
+      "today_amount": 2434.3,
+      "today_orders": 64
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-15",
-          "amount": 1570.68
-        },
         {
           "date": "2026-06-16",
           "amount": 1922.43
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-17",
           "amount": 1194.12
+        },
+        {
+          "date": "2026-06-18",
+          "amount": 2165.3
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 5507,
-        "today": 6445
+        "yesterday": 6445,
+        "today": 8689
       },
       {
         "title": "uv",
-        "yesterday": 1130,
-        "today": 1344
+        "yesterday": 1344,
+        "today": 1594
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 1204
+        "today": 1526
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.3,
-        "today": 0.4
+        "yesterday": 0.38,
+        "today": 0.42
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 3175,
-        "today": 4123
+        "yesterday": 4498,
+        "today": 5665
       },
       {
         "title": "register_total",
@@ -57,54 +57,54 @@
       },
       {
         "title": "register_new",
-        "yesterday": 47,
+        "yesterday": 0,
         "today": 0
       },
       {
         "title": "active_user",
-        "yesterday": 27,
-        "today": 28
+        "yesterday": 32,
+        "today": 22
       },
       {
         "title": "recharged_count",
-        "yesterday": 8,
-        "today": 20
+        "yesterday": 20,
+        "today": 16
       },
       {
         "title": "recharged_amount",
-        "yesterday": 330,
-        "today": 1780
+        "yesterday": 1780,
+        "today": 2810
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "2",
-        "today": "1"
+        "yesterday": "1",
+        "today": "2"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 577,
-        "today": 10.44
+        "yesterday": 10.44,
+        "today": 76
       },
       {
         "title": "arpu",
-        "yesterday": 33.59,
-        "today": 63.94
+        "yesterday": 55.95,
+        "today": 131.18
       },
       {
         "title": "average_order_value",
-        "yesterday": 90.7,
-        "today": 85.26
+        "yesterday": 85.26,
+        "today": 160.33
       }
     ],
     "userstats_parsed": {
-      "uv": 1130,
-      "pv": 5507,
-      "new_reg": 47,
-      "active_users": 27,
-      "paid_users": 8,
-      "recharged_amount": 330.0,
-      "arpu": 33.59,
-      "avg_order_value": 90.7
+      "uv": 1344,
+      "pv": 6445,
+      "new_reg": 0,
+      "active_users": 32,
+      "paid_users": 20,
+      "recharged_amount": 1780.0,
+      "arpu": 55.95,
+      "avg_order_value": 85.26
     },
     "playwright": {
       "status": "success",
@@ -114,8 +114,8 @@
           "sales": 137.25
         },
         {
-          "game": "沙漠追猎者 (Windows/安卓)",
-          "sales": 124.5
+          "game": "太妃物语-第一季重制版（Windows/安卓）",
+          "sales": 135.0
         },
         {
           "game": "（双游戏折扣包）情欲古式按摩店 -沉迷秘密服务的母女+对性感店员进行NTR行为!?（Windows/安卓）",
@@ -124,30 +124,30 @@
       ],
       "publisher_top5": [
         {
-          "game": "全明星动漫乐园",
-          "sales": 2996.0
+          "game": "欲界圣姬",
+          "sales": 2296.0
         },
         {
-          "game": "欲界圣姬",
-          "sales": 1197.0
+          "game": "解禁无双",
+          "sales": 1292.0
         },
         {
           "game": "魅惑前线",
-          "sales": 938.0
+          "sales": 973.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 740
+          "views": 804
         },
         {
           "game": "欲界圣姬",
-          "views": 438
+          "views": 456
         },
         {
-          "game": "魔女的侵袭（Windows）",
-          "views": 250
+          "game": "【手机可玩电脑游戏】JOIPLAY模拟器",
+          "views": 253
         }
       ],
       "detail_rows_count": 26
