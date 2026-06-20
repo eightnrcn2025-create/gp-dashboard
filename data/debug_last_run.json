@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-19 18:04:46",
+  "run_time": "2026-06-20 17:41:58",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 2165.3,
-      "today_amount": 2434.3,
-      "today_orders": 64
+      "yestoday_amount": 2491.38,
+      "today_amount": 1041.05,
+      "today_orders": 65
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-16",
-          "amount": 1922.43
-        },
         {
           "date": "2026-06-17",
           "amount": 1194.12
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-18",
           "amount": 2165.3
+        },
+        {
+          "date": "2026-06-19",
+          "amount": 2491.38
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 6445,
-        "today": 8689
+        "yesterday": 8689,
+        "today": 8566
       },
       {
         "title": "uv",
-        "yesterday": 1344,
-        "today": 1594
+        "yesterday": 1594,
+        "today": 1591
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 1526
+        "today": 1533
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.38,
-        "today": 0.42
+        "yesterday": 0.43,
+        "today": 0.36
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 4498,
-        "today": 5665
+        "yesterday": 6000,
+        "today": 25804
       },
       {
         "title": "register_total",
@@ -62,60 +62,60 @@
       },
       {
         "title": "active_user",
-        "yesterday": 32,
-        "today": 22
+        "yesterday": 26,
+        "today": 18
       },
       {
         "title": "recharged_count",
-        "yesterday": 20,
-        "today": 16
+        "yesterday": 16,
+        "today": 13
       },
       {
         "title": "recharged_amount",
-        "yesterday": 1780,
-        "today": 2810
+        "yesterday": 2810,
+        "today": 440
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "1",
+        "yesterday": "2",
         "today": "2"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 10.44,
-        "today": 76
+        "yesterday": 76,
+        "today": 114.95
       },
       {
         "title": "arpu",
-        "yesterday": 55.95,
-        "today": 131.18
+        "yesterday": 111,
+        "today": 30.83
       },
       {
         "title": "average_order_value",
-        "yesterday": 85.26,
-        "today": 160.33
+        "yesterday": 160.33,
+        "today": 37
       }
     ],
     "userstats_parsed": {
-      "uv": 1344,
-      "pv": 6445,
+      "uv": 1594,
+      "pv": 8689,
       "new_reg": 0,
-      "active_users": 32,
-      "paid_users": 20,
-      "recharged_amount": 1780.0,
-      "arpu": 55.95,
-      "avg_order_value": 85.26
+      "active_users": 26,
+      "paid_users": 16,
+      "recharged_amount": 2810.0,
+      "arpu": 111.0,
+      "avg_order_value": 160.33
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
-          "game": "女仆調教日誌（Windows/安卓）",
-          "sales": 137.25
-        },
-        {
           "game": "太妃物语-第一季重制版（Windows/安卓）",
           "sales": 135.0
+        },
+        {
+          "game": "女仆調教日誌（Windows/安卓）",
+          "sales": 122.0
         },
         {
           "game": "（双游戏折扣包）情欲古式按摩店 -沉迷秘密服务的母女+对性感店员进行NTR行为!?（Windows/安卓）",
@@ -125,29 +125,29 @@
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2296.0
+          "sales": 2254.0
         },
         {
           "game": "解禁无双",
-          "sales": 1292.0
+          "sales": 1293.0
         },
         {
           "game": "魅惑前线",
-          "sales": 973.0
+          "sales": 896.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 804
+          "views": 783
         },
         {
           "game": "欲界圣姬",
-          "views": 456
+          "views": 468
         },
         {
           "game": "【手机可玩电脑游戏】JOIPLAY模拟器",
-          "views": 253
+          "views": 233
         }
       ],
       "detail_rows_count": 26
