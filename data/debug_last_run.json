@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-23 18:07:25",
+  "run_time": "2026-06-24 18:03:32",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 741.07,
-      "today_amount": 472.65,
-      "today_orders": 30
+      "yestoday_amount": 472.65,
+      "today_amount": 170.0,
+      "today_orders": 27
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-20",
-          "amount": 1325.67
-        },
         {
           "date": "2026-06-21",
           "amount": 1670.33
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-22",
           "amount": 741.07
+        },
+        {
+          "date": "2026-06-23",
+          "amount": 472.65
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 5516,
-        "today": 4156
+        "yesterday": 4156,
+        "today": 554
       },
       {
         "title": "uv",
-        "yesterday": 1307,
-        "today": 1092
+        "yesterday": 1092,
+        "today": 24
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 1002
+        "today": 36
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.38,
-        "today": 0.37
+        "yesterday": 0.37,
+        "today": 0.09
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 7830,
-        "today": 3100
+        "yesterday": 3100,
+        "today": 9444
       },
       {
         "title": "register_total",
@@ -62,74 +62,74 @@
       },
       {
         "title": "active_user",
-        "yesterday": 18,
-        "today": 11
-      },
-      {
-        "title": "recharged_count",
-        "yesterday": 7,
+        "yesterday": 11,
         "today": 8
       },
       {
+        "title": "recharged_count",
+        "yesterday": 8,
+        "today": 2
+      },
+      {
         "title": "recharged_amount",
-        "yesterday": 960,
-        "today": 350
+        "yesterday": 350,
+        "today": 130
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "3",
-        "today": "1"
+        "yesterday": "1",
+        "today": "0"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 149.59,
-        "today": 58
+        "yesterday": 58,
+        "today": 0
       },
       {
         "title": "arpu",
-        "yesterday": 61.64,
-        "today": 37.09
+        "yesterday": 37.09,
+        "today": 16.25
       },
       {
         "title": "average_order_value",
-        "yesterday": 110.96,
-        "today": 45.33
+        "yesterday": 45.33,
+        "today": 65
       }
     ],
     "userstats_parsed": {
-      "uv": 1307,
-      "pv": 5516,
+      "uv": 1092,
+      "pv": 4156,
       "new_reg": 0,
-      "active_users": 18,
-      "paid_users": 7,
-      "recharged_amount": 960.0,
-      "arpu": 61.64,
-      "avg_order_value": 110.96
+      "active_users": 11,
+      "paid_users": 8,
+      "recharged_amount": 350.0,
+      "arpu": 37.09,
+      "avg_order_value": 45.33
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
           "game": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
-          "sales": 99.5
+          "sales": 79.6
         },
         {
-          "game": "太妃物语-第一季重制版（Windows/安卓）",
-          "sales": 90.0
+          "game": "新天域（Windows/安卓）",
+          "sales": 75.0
         },
         {
-          "game": "特工17（Windows / 安卓）",
-          "sales": 84.5
+          "game": "幸福家里蹲的养成方法（Windows/安卓）",
+          "sales": 70.47
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2926.0
+          "sales": 2989.0
         },
         {
           "game": "解禁无双",
-          "sales": 1157.0
+          "sales": 1154.0
         },
         {
           "game": "魅惑前线",
@@ -139,15 +139,15 @@
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 749
+          "views": 658
         },
         {
           "game": "欲界圣姬",
-          "views": 413
+          "views": 369
         },
         {
           "game": "魔女的侵袭（Windows）",
-          "views": 198
+          "views": 172
         }
       ],
       "detail_rows_count": 26
