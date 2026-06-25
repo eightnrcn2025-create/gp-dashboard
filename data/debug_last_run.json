@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-24 18:03:32",
+  "run_time": "2026-06-25 15:54:46",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 472.65,
-      "today_amount": 170.0,
-      "today_orders": 27
+      "yestoday_amount": 198.0,
+      "today_amount": 52.47,
+      "today_orders": 6
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-21",
-          "amount": 1670.33
-        },
         {
           "date": "2026-06-22",
           "amount": 741.07
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-23",
           "amount": 472.65
+        },
+        {
+          "date": "2026-06-24",
+          "amount": 198.0
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 4156,
-        "today": 554
+        "yesterday": 554,
+        "today": 594
       },
       {
         "title": "uv",
-        "yesterday": 1092,
-        "today": 24
+        "yesterday": 24,
+        "today": 21
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 36
+        "today": 29
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.37,
-        "today": 0.09
+        "yesterday": 0.09,
+        "today": 0.32
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 3100,
-        "today": 9444
+        "yesterday": 14860,
+        "today": 5700
       },
       {
         "title": "register_total",
@@ -62,49 +62,49 @@
       },
       {
         "title": "active_user",
-        "yesterday": 11,
-        "today": 8
+        "yesterday": 9,
+        "today": 3
       },
       {
         "title": "recharged_count",
-        "yesterday": 8,
-        "today": 2
+        "yesterday": 2,
+        "today": 3
       },
       {
         "title": "recharged_amount",
-        "yesterday": 350,
-        "today": 130
+        "yesterday": 130,
+        "today": 90
       },
       {
         "title": "channel_order_user_count",
-        "yesterday": "1",
+        "yesterday": "0",
         "today": "0"
       },
       {
         "title": "channel_order_amount",
-        "yesterday": 58,
+        "yesterday": 0,
         "today": 0
       },
       {
         "title": "arpu",
-        "yesterday": 37.09,
-        "today": 16.25
+        "yesterday": 14.44,
+        "today": 30
       },
       {
         "title": "average_order_value",
-        "yesterday": 45.33,
-        "today": 65
+        "yesterday": 65,
+        "today": 30
       }
     ],
     "userstats_parsed": {
-      "uv": 1092,
-      "pv": 4156,
+      "uv": 24,
+      "pv": 554,
       "new_reg": 0,
-      "active_users": 11,
-      "paid_users": 8,
-      "recharged_amount": 350.0,
-      "arpu": 37.09,
-      "avg_order_value": 45.33
+      "active_users": 9,
+      "paid_users": 2,
+      "recharged_amount": 130.0,
+      "arpu": 14.44,
+      "avg_order_value": 65.0
     },
     "playwright": {
       "status": "success",
@@ -125,7 +125,7 @@
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2989.0
+          "sales": 3017.0
         },
         {
           "game": "解禁无双",
