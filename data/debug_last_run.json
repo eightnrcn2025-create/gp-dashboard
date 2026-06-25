@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-06-25 15:54:46",
+  "run_time": "2026-06-25 18:21:26",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 198.0,
-      "today_amount": 52.47,
+      "today_amount": 66.47,
       "today_orders": 6
     },
     "daily_sales": {
@@ -43,7 +43,7 @@
       {
         "title": "bounce_rate",
         "yesterday": 0.09,
-        "today": 0.32
+        "today": 0.3
       },
       {
         "title": "visit_avg_time",
@@ -114,40 +114,40 @@
           "sales": 79.6
         },
         {
-          "game": "新天域（Windows/安卓）",
-          "sales": 75.0
-        },
-        {
           "game": "幸福家里蹲的养成方法（Windows/安卓）",
           "sales": 70.47
+        },
+        {
+          "game": "孕育希望的摇篮之卵（Windows/安卓）",
+          "sales": 68.4
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 3017.0
+          "sales": 2814.0
         },
         {
           "game": "解禁无双",
           "sales": 1154.0
         },
         {
-          "game": "魅惑前线",
-          "sales": 924.0
+          "game": "淫乱斗罗",
+          "sales": 388.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 658
+          "views": 560
         },
         {
           "game": "欲界圣姬",
-          "views": 369
+          "views": 321
         },
         {
           "game": "魔女的侵袭（Windows）",
-          "views": 172
+          "views": 139
         }
       ],
       "detail_rows_count": 26
