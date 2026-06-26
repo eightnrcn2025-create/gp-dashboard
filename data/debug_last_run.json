@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-25 18:21:26",
+  "run_time": "2026-06-26 17:59:50",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 198.0,
-      "today_amount": 66.47,
-      "today_orders": 6
+      "yestoday_amount": 78.47,
+      "today_amount": 173.31,
+      "today_orders": 4
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-22",
-          "amount": 741.07
-        },
         {
           "date": "2026-06-23",
           "amount": 472.65
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-24",
           "amount": 198.0
+        },
+        {
+          "date": "2026-06-25",
+          "amount": 78.47
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 554,
-        "today": 594
+        "yesterday": 594,
+        "today": 878
       },
       {
         "title": "uv",
-        "yesterday": 24,
-        "today": 21
+        "yesterday": 21,
+        "today": 17
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 29
+        "today": 24
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.09,
-        "today": 0.3
+        "yesterday": 0.3,
+        "today": 0.15
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 14860,
-        "today": 5700
+        "yesterday": 13770,
+        "today": 31740
       },
       {
         "title": "register_total",
@@ -62,18 +62,18 @@
       },
       {
         "title": "active_user",
-        "yesterday": 9,
-        "today": 3
+        "yesterday": 4,
+        "today": 2
       },
       {
         "title": "recharged_count",
-        "yesterday": 2,
-        "today": 3
+        "yesterday": 3,
+        "today": 1
       },
       {
         "title": "recharged_amount",
-        "yesterday": 130,
-        "today": 90
+        "yesterday": 90,
+        "today": 30
       },
       {
         "title": "channel_order_user_count",
@@ -87,70 +87,70 @@
       },
       {
         "title": "arpu",
-        "yesterday": 14.44,
-        "today": 30
+        "yesterday": 22.5,
+        "today": 15
       },
       {
         "title": "average_order_value",
-        "yesterday": 65,
+        "yesterday": 30,
         "today": 30
       }
     ],
     "userstats_parsed": {
-      "uv": 24,
-      "pv": 554,
+      "uv": 21,
+      "pv": 594,
       "new_reg": 0,
-      "active_users": 9,
-      "paid_users": 2,
-      "recharged_amount": 130.0,
-      "arpu": 14.44,
-      "avg_order_value": 65.0
+      "active_users": 4,
+      "paid_users": 3,
+      "recharged_amount": 90.0,
+      "arpu": 22.5,
+      "avg_order_value": 30.0
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
+          "game": "这样一来你也是性处理科的一员了！（Windows/安卓）",
+          "sales": 67.62
+        },
+        {
+          "game": "我的变态幻想（Windows/安卓）",
+          "sales": 60.0
+        },
+        {
           "game": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
-          "sales": 79.6
-        },
-        {
-          "game": "幸福家里蹲的养成方法（Windows/安卓）",
-          "sales": 70.47
-        },
-        {
-          "game": "孕育希望的摇篮之卵（Windows/安卓）",
-          "sales": 68.4
+          "sales": 59.7
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 2814.0
+          "sales": 1659.0
         },
         {
-          "game": "解禁无双",
-          "sales": 1154.0
+          "game": "魅惑前线",
+          "sales": 280.0
         },
         {
           "game": "淫乱斗罗",
-          "sales": 388.0
+          "sales": 276.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 560
+          "views": 426
         },
         {
           "game": "欲界圣姬",
-          "views": 321
+          "views": 250
         },
         {
-          "game": "魔女的侵袭（Windows）",
-          "views": 139
+          "game": "我的感官遮断触手地牢！",
+          "views": 110
         }
       ],
-      "detail_rows_count": 26
+      "detail_rows_count": 25
     }
   }
 }
