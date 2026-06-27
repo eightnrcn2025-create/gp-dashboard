@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-26 17:59:50",
+  "run_time": "2026-06-27 17:19:48",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 78.47,
-      "today_amount": 173.31,
-      "today_orders": 4
+      "yestoday_amount": 173.31,
+      "today_amount": 220.0,
+      "today_orders": 8
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-23",
-          "amount": 472.65
-        },
         {
           "date": "2026-06-24",
           "amount": 198.0
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-25",
           "amount": 78.47
+        },
+        {
+          "date": "2026-06-26",
+          "amount": 173.31
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 594,
-        "today": 878
+        "yesterday": 878,
+        "today": 226
       },
       {
         "title": "uv",
-        "yesterday": 21,
-        "today": 17
+        "yesterday": 17,
+        "today": 20
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 24
+        "today": 21
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.3,
-        "today": 0.15
+        "yesterday": 0.16,
+        "today": 0.04
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 13770,
-        "today": 31740
+        "yesterday": 33360,
+        "today": 1356
       },
       {
         "title": "register_total",
@@ -62,17 +62,17 @@
       },
       {
         "title": "active_user",
-        "yesterday": 4,
-        "today": 2
+        "yesterday": 3,
+        "today": 6
       },
       {
         "title": "recharged_count",
-        "yesterday": 3,
+        "yesterday": 1,
         "today": 1
       },
       {
         "title": "recharged_amount",
-        "yesterday": 90,
+        "yesterday": 30,
         "today": 30
       },
       {
@@ -87,8 +87,8 @@
       },
       {
         "title": "arpu",
-        "yesterday": 22.5,
-        "today": 15
+        "yesterday": 10,
+        "today": 5
       },
       {
         "title": "average_order_value",
@@ -97,13 +97,13 @@
       }
     ],
     "userstats_parsed": {
-      "uv": 21,
-      "pv": 594,
+      "uv": 17,
+      "pv": 878,
       "new_reg": 0,
-      "active_users": 4,
-      "paid_users": 3,
-      "recharged_amount": 90.0,
-      "arpu": 22.5,
+      "active_users": 3,
+      "paid_users": 1,
+      "recharged_amount": 30.0,
+      "arpu": 10.0,
       "avg_order_value": 30.0
     },
     "playwright": {
@@ -118,36 +118,36 @@
           "sales": 60.0
         },
         {
-          "game": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
-          "sales": 59.7
+          "game": "孕育希望的摇篮之卵（Windows/安卓）",
+          "sales": 51.3
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 1659.0
+          "sales": 1610.0
         },
         {
           "game": "魅惑前线",
-          "sales": 280.0
+          "sales": 252.0
         },
         {
-          "game": "淫乱斗罗",
-          "sales": 276.0
+          "game": "全明星动漫乐园",
+          "sales": 210.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 426
+          "views": 297
         },
         {
           "game": "欲界圣姬",
-          "views": 250
+          "views": 171
         },
         {
           "game": "我的感官遮断触手地牢！",
-          "views": 110
+          "views": 76
         }
       ],
       "detail_rows_count": 25
