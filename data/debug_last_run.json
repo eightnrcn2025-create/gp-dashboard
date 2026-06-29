@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-28 17:22:41",
+  "run_time": "2026-06-29 18:18:28",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 227.0,
-      "today_amount": 92.96,
-      "today_orders": 4
+      "yestoday_amount": 106.96,
+      "today_amount": 133.0,
+      "today_orders": 7
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-25",
-          "amount": 78.47
-        },
         {
           "date": "2026-06-26",
           "amount": 173.31
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-27",
           "amount": 227.0
+        },
+        {
+          "date": "2026-06-28",
+          "amount": 106.96
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 226,
-        "today": 201
+        "yesterday": 201,
+        "today": 121
       },
       {
         "title": "uv",
-        "yesterday": 20,
-        "today": 14
+        "yesterday": 14,
+        "today": 13
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 13
+        "today": 14
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.05,
-        "today": 0.14
+        "yesterday": 0.15,
+        "today": 0.02
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 1368,
-        "today": 1320
+        "yesterday": 1320,
+        "today": 600
       },
       {
         "title": "register_total",
@@ -62,18 +62,18 @@
       },
       {
         "title": "active_user",
-        "yesterday": 6,
-        "today": 3
+        "yesterday": 3,
+        "today": 4
       },
       {
         "title": "recharged_count",
-        "yesterday": 1,
-        "today": 0
+        "yesterday": 0,
+        "today": 1
       },
       {
         "title": "recharged_amount",
-        "yesterday": 30,
-        "today": 0
+        "yesterday": 0,
+        "today": 160
       },
       {
         "title": "channel_order_user_count",
@@ -87,32 +87,28 @@
       },
       {
         "title": "arpu",
-        "yesterday": 5,
-        "today": 0
+        "yesterday": 0,
+        "today": 40
       },
       {
         "title": "average_order_value",
-        "yesterday": 30,
-        "today": 0
+        "yesterday": 0,
+        "today": 160
       }
     ],
     "userstats_parsed": {
-      "uv": 20,
-      "pv": 226,
+      "uv": 14,
+      "pv": 201,
       "new_reg": 0,
-      "active_users": 6,
-      "paid_users": 1,
-      "recharged_amount": 30.0,
-      "arpu": 5.0,
-      "avg_order_value": 30.0
+      "active_users": 3,
+      "paid_users": 0,
+      "recharged_amount": 0.0,
+      "arpu": 0.0,
+      "avg_order_value": 0.0
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
-        {
-          "game": "（双游戏折扣包）防身术道场秘密的NTR课程 + DLC 葵篇（Windows/安卓）",
-          "sales": 40.8
-        },
         {
           "game": "太空之旅X（Windows/安卓）",
           "sales": 35.6
@@ -120,34 +116,38 @@
         {
           "game": "复仇天堂〜祖父的遗产竟是一个秘密组织〜",
           "sales": 35.0
+        },
+        {
+          "game": "孕育希望的摇篮之卵（Windows/安卓）",
+          "sales": 34.2
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 1057.0
+          "sales": 399.0
+        },
+        {
+          "game": "魅惑前线",
+          "sales": 273.0
         },
         {
           "game": "全明星动漫乐园",
           "sales": 210.0
-        },
-        {
-          "game": "魅惑前线",
-          "sales": 126.0
         }
       ],
       "views_top5": [
         {
           "game": "青楼大掌柜",
-          "views": 187
+          "views": 88
         },
         {
           "game": "欲界圣姬",
-          "views": 89
+          "views": 52
         },
         {
           "game": "我的感官遮断触手地牢！",
-          "views": 44
+          "views": 22
         }
       ],
       "detail_rows_count": 24
