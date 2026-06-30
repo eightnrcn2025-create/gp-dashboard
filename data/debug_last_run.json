@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-29 18:18:28",
+  "run_time": "2026-06-30 18:06:45",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 106.96,
-      "today_amount": 133.0,
-      "today_orders": 7
+      "yestoday_amount": 177.0,
+      "today_amount": 63.0,
+      "today_orders": 4
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-26",
-          "amount": 173.31
-        },
         {
           "date": "2026-06-27",
           "amount": 227.0
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-28",
           "amount": 106.96
+        },
+        {
+          "date": "2026-06-29",
+          "amount": 177.0
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 201,
-        "today": 121
+        "yesterday": 121,
+        "today": 95
       },
       {
         "title": "uv",
-        "yesterday": 14,
-        "today": 13
+        "yesterday": 13,
+        "today": 20
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 14
+        "today": 19
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.15,
-        "today": 0.02
+        "yesterday": 0.08,
+        "today": 0.21
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 1320,
-        "today": 600
+        "yesterday": 540,
+        "today": 200
       },
       {
         "title": "register_total",
@@ -62,18 +62,18 @@
       },
       {
         "title": "active_user",
-        "yesterday": 3,
-        "today": 4
+        "yesterday": 5,
+        "today": 3
       },
       {
         "title": "recharged_count",
-        "yesterday": 0,
+        "yesterday": 1,
         "today": 1
       },
       {
         "title": "recharged_amount",
-        "yesterday": 0,
-        "today": 160
+        "yesterday": 160,
+        "today": 50
       },
       {
         "title": "channel_order_user_count",
@@ -87,49 +87,49 @@
       },
       {
         "title": "arpu",
-        "yesterday": 0,
-        "today": 40
+        "yesterday": 32,
+        "today": 16.67
       },
       {
         "title": "average_order_value",
-        "yesterday": 0,
-        "today": 160
+        "yesterday": 160,
+        "today": 50
       }
     ],
     "userstats_parsed": {
-      "uv": 14,
-      "pv": 201,
+      "uv": 13,
+      "pv": 121,
       "new_reg": 0,
-      "active_users": 3,
-      "paid_users": 0,
-      "recharged_amount": 0.0,
-      "arpu": 0.0,
-      "avg_order_value": 0.0
+      "active_users": 5,
+      "paid_users": 1,
+      "recharged_amount": 160.0,
+      "arpu": 32.0,
+      "avg_order_value": 160.0
     },
     "playwright": {
       "status": "success",
       "solo_top5": [
         {
-          "game": "太空之旅X（Windows/安卓）",
-          "sales": 35.6
+          "game": "腐蚀",
+          "sales": 25.0
         },
         {
-          "game": "复仇天堂〜祖父的遗产竟是一个秘密组织〜",
-          "sales": 35.0
+          "game": "妈妈为何这样（Windows/安卓）",
+          "sales": 24.0
         },
         {
-          "game": "孕育希望的摇篮之卵（Windows/安卓）",
-          "sales": 34.2
+          "game": "办公室妻子（Windows/安卓）",
+          "sales": 22.47
         }
       ],
       "publisher_top5": [
         {
-          "game": "欲界圣姬",
-          "sales": 399.0
+          "game": "魅惑前线",
+          "sales": 350.0
         },
         {
-          "game": "魅惑前线",
-          "sales": 273.0
+          "game": "欲界圣姬",
+          "sales": 245.0
         },
         {
           "game": "全明星动漫乐园",
@@ -138,19 +138,19 @@
       ],
       "views_top5": [
         {
-          "game": "青楼大掌柜",
-          "views": 88
-        },
-        {
           "game": "欲界圣姬",
-          "views": 52
+          "views": 10
         },
         {
-          "game": "我的感官遮断触手地牢！",
-          "views": 22
+          "game": "青楼大掌柜",
+          "views": 8
+        },
+        {
+          "game": "魅惑前线",
+          "views": 4
         }
       ],
-      "detail_rows_count": 24
+      "detail_rows_count": 28
     }
   }
 }
