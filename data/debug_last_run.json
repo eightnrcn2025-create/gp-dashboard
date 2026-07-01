@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-06-30 18:06:45",
+  "run_time": "2026-07-01 18:06:35",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 177.0,
-      "today_amount": 63.0,
-      "today_orders": 4
+      "yestoday_amount": 63.0,
+      "today_amount": 296.0,
+      "today_orders": 3
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-06-27",
-          "amount": 227.0
-        },
         {
           "date": "2026-06-28",
           "amount": 106.96
@@ -21,34 +17,38 @@
         {
           "date": "2026-06-29",
           "amount": 177.0
+        },
+        {
+          "date": "2026-06-30",
+          "amount": 63.0
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 121,
-        "today": 95
+        "yesterday": 95,
+        "today": 138
       },
       {
         "title": "uv",
-        "yesterday": 13,
-        "today": 20
+        "yesterday": 20,
+        "today": 25
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 19
+        "today": 20
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0.08,
-        "today": 0.21
+        "yesterday": 0.22,
+        "today": 0.22
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 540,
-        "today": 200
+        "yesterday": 200,
+        "today": 230
       },
       {
         "title": "register_total",
@@ -62,18 +62,18 @@
       },
       {
         "title": "active_user",
-        "yesterday": 5,
-        "today": 3
+        "yesterday": 3,
+        "today": 6
       },
       {
         "title": "recharged_count",
         "yesterday": 1,
-        "today": 1
+        "today": 2
       },
       {
         "title": "recharged_amount",
-        "yesterday": 160,
-        "today": 50
+        "yesterday": 50,
+        "today": 150
       },
       {
         "title": "channel_order_user_count",
@@ -87,24 +87,24 @@
       },
       {
         "title": "arpu",
-        "yesterday": 32,
-        "today": 16.67
+        "yesterday": 16.67,
+        "today": 25
       },
       {
         "title": "average_order_value",
-        "yesterday": 160,
-        "today": 50
+        "yesterday": 50,
+        "today": 75
       }
     ],
     "userstats_parsed": {
-      "uv": 13,
-      "pv": 121,
+      "uv": 20,
+      "pv": 95,
       "new_reg": 0,
-      "active_users": 5,
+      "active_users": 3,
       "paid_users": 1,
-      "recharged_amount": 160.0,
-      "arpu": 32.0,
-      "avg_order_value": 160.0
+      "recharged_amount": 50.0,
+      "arpu": 16.67,
+      "avg_order_value": 50.0
     },
     "playwright": {
       "status": "success",
@@ -124,12 +124,12 @@
       ],
       "publisher_top5": [
         {
-          "game": "魅惑前线",
+          "game": "欲界圣姬",
           "sales": 350.0
         },
         {
-          "game": "欲界圣姬",
-          "sales": 245.0
+          "game": "魅惑前线",
+          "sales": 350.0
         },
         {
           "game": "全明星动漫乐园",
@@ -138,16 +138,16 @@
       ],
       "views_top5": [
         {
-          "game": "欲界圣姬",
-          "views": 10
-        },
-        {
           "game": "青楼大掌柜",
-          "views": 8
+          "views": 6
         },
         {
-          "game": "魅惑前线",
-          "views": 4
+          "game": "欲界圣姬",
+          "views": 6
+        },
+        {
+          "game": "航空公司的丝袜艳母",
+          "views": 5
         }
       ],
       "detail_rows_count": 28
