@@ -1,19 +1,15 @@
 {
-  "last_updated": "2026-07-06 18:18:35",
-  "data_date": "2026-07-05",
-  "update_time": "2026-07-06 18:18:35",
+  "last_updated": "2026-07-07 18:10:31",
+  "data_date": "2026-07-06",
+  "update_time": "2026-07-07 18:10:31",
   "kpi": {
-    "today_sales": 77.0,
-    "yesterday_sales": 4.0,
-    "growth_rate": 1825.0,
-    "total_traffic": 14,
-    "conversion_rate": 14.29
+    "today_sales": 67.0,
+    "yesterday_sales": 77.0,
+    "growth_rate": -12.99,
+    "total_traffic": 7,
+    "conversion_rate": 42.86
   },
   "daily_sales": [
-    {
-      "date": "2026-06-07",
-      "amount": 1962.5
-    },
     {
       "date": "2026-06-08",
       "amount": 968.12
@@ -125,6 +121,10 @@
     {
       "date": "2026-07-05",
       "amount": 77.0
+    },
+    {
+      "date": "2026-07-06",
+      "amount": 67.0
     }
   ],
   "solo_game_top5": [
@@ -169,7 +169,7 @@
     {
       "rank": 2,
       "game": "魅惑前线",
-      "sales": 217.0,
+      "sales": 175.0,
       "growth": 0
     },
     {
@@ -195,26 +195,26 @@
     {
       "rank": 1,
       "game": "青楼大掌柜",
-      "views": 6
-    },
-    {
-      "rank": 2,
-      "game": "欲界圣姬",
       "views": 5
     },
     {
-      "rank": 3,
+      "rank": 2,
       "game": "航空公司的丝袜艳母",
       "views": 4
     },
     {
-      "rank": 4,
+      "rank": 3,
       "game": "上吧！辣妹酱2 ～乳交篇、骑乘位篇～（Windows/安卓）",
       "views": 3
     },
     {
-      "rank": 5,
+      "rank": 4,
       "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+      "views": 2
+    },
+    {
+      "rank": 5,
+      "game": "嗑药性爱！地雷酱 ～一边追星一边爸爸活！嗑药嗨翻天！～（Windows/安卓）",
       "views": 2
     }
   ],
@@ -227,19 +227,10 @@
     {
       "rank": 2,
       "game": "全明星动漫乐园",
-      "views": 4
-    },
-    {
-      "rank": 3,
-      "game": "解禁无双",
-      "views": 1
+      "views": 2
     }
   ],
   "weekly_heatmap": [
-    {
-      "date": "2026-06-07",
-      "amount": 1962.5
-    },
     {
       "date": "2026-06-08",
       "amount": 968.12
@@ -351,20 +342,24 @@
     {
       "date": "2026-07-05",
       "amount": 77.0
+    },
+    {
+      "date": "2026-07-06",
+      "amount": 67.0
     }
   ],
-  "monthly_total": 670.9,
+  "monthly_total": 700.9,
   "active_games": 28,
   "traffic_stats": {
-    "pv": 147,
-    "uv": 14,
+    "pv": 30,
+    "uv": 7,
     "new_users": 0,
-    "active_users": 4,
+    "active_users": 3,
     "paying_users": 1,
     "payment_amount": 80.0,
-    "order_count": 2,
-    "order_amount": 77.0,
-    "arpu": 20.0,
+    "order_count": 3,
+    "order_amount": 67.0,
+    "arpu": 26.67,
     "avg_order_value": 80.0,
     "ip": 0,
     "bounce_rate": "",
@@ -374,7 +369,7 @@
   "traffic_source": [
     {
       "source": "仅浏览（未注册）",
-      "value": 14
+      "value": 7
     },
     {
       "source": "新注册用户",
@@ -382,7 +377,7 @@
     },
     {
       "source": "活跃老用户",
-      "value": 4
+      "value": 3
     },
     {
       "source": "付费/充值用户",
@@ -391,196 +386,196 @@
   ],
   "detail_table": [
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "魅惑前线",
-      "traffic": 2,
-      "sales": 217.0,
-      "conversion": 500.0
+      "traffic": 1,
+      "sales": 175.0,
+      "conversion": 700.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "隔壁班的可爱女孩～从掌握秘密到亲密互动再到排泄管理～",
       "traffic": 1,
       "sales": 0.0,
       "conversion": 0.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "追逐欲望（Windows/安卓）",
       "traffic": 1,
       "sales": 0.0,
       "conversion": 0.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "解禁无双",
-      "traffic": 1,
-      "sales": 7.0,
-      "conversion": 200.0
-    },
-    {
-      "date": "2026-07-05",
-      "game": "职场30天",
       "traffic": 0,
-      "sales": 0.0,
+      "sales": 7.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
+      "game": "职场30天",
+      "traffic": 1,
+      "sales": 0.0,
+      "conversion": 0.0
+    },
+    {
+      "date": "2026-07-06",
       "game": "离家出走少女模拟器（Windows）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "炼金术士任务炼金术的材料果然是精液的冒险RPG",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "火影娇妻村",
       "traffic": 1,
       "sales": 160.0,
       "conversion": 600.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "满车率300%≒（Windows）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "淫乱斗罗",
       "traffic": 7,
       "sales": 74.0,
       "conversion": 85.71
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "沙漠王国与奴隶猎手",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "欸！！！！潜入搜查官",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "欲界圣姬",
-      "traffic": 5,
+      "traffic": 2,
       "sales": 280.0,
-      "conversion": 180.0
+      "conversion": 450.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "欢迎来到实力至上主义的教室：红色奏鸣曲（Windows/安卓）",
       "traffic": 2,
       "sales": 15.0,
       "conversion": 50.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "枪与退魔之流浪修女",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "末日避难所性活（Windows/安卓JOI模拟）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
-      "traffic": 0,
+      "traffic": 1,
       "sales": 0.0,
-      "conversion": 0
+      "conversion": 0.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "战令姬拉西亚与失落要塞",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "我和她（女医师）的诊察日志",
       "traffic": 1,
       "sales": 15.0,
       "conversion": 100.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
       "traffic": 2,
       "sales": 9.9,
       "conversion": 50.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "夏日之王（Windows/安卓）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "在末日中堕落的女友（Windows/安卓JOI模拟）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "哥布林巢穴的一日光阴",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "同居百合娘",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "于是，夏天悄然而至。",
-      "traffic": 0,
+      "traffic": 1,
       "sales": 0.0,
-      "conversion": 0
+      "conversion": 0.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "个子矮小的栗美学姐（Windows/安卓JOI模拟）",
-      "traffic": 0,
+      "traffic": 2,
       "sales": 0.0,
-      "conversion": 0
+      "conversion": 0.0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "丧尸 NTR",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "game": "AV导演生活！-请拍下各种模样的我-（Windows）",
       "traffic": 0,
       "sales": 0.0,
