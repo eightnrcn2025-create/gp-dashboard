@@ -1,5 +1,5 @@
 {
-  "export_time": "2026-07-07 18:10:31",
+  "export_time": "2026-07-08 17:48:55",
   "daily_stats": [
     {
       "date": "2026-04-07",
@@ -1274,6 +1274,20 @@
       "growth_rate": -12.99,
       "conversion_rate": 42.86,
       "created_at": "2026-07-07 18:10:31"
+    },
+    {
+      "date": "2026-07-07",
+      "uv": 3,
+      "pv": 415,
+      "new_users": 0,
+      "active_users": 3,
+      "paying_users": 0,
+      "sales": 15.0,
+      "orders": 1,
+      "arpu": 0.0,
+      "growth_rate": -77.61,
+      "conversion_rate": 33.33,
+      "created_at": "2026-07-08 17:48:55"
     }
   ],
   "game_sales": [
@@ -20279,6 +20293,222 @@
     },
     {
       "data_date": "2026-07-06",
+      "game_name": "AV导演生活！-请拍下各种模样的我-（Windows）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "欲界圣姬",
+      "game_type": "publisher",
+      "sales_amount": 231.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "火影娇妻村",
+      "game_type": "publisher",
+      "sales_amount": 196.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "魅惑前线",
+      "game_type": "publisher",
+      "sales_amount": 70.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "淫乱斗罗",
+      "game_type": "publisher",
+      "sales_amount": 60.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "欢迎来到实力至上主义的教室：红色奏鸣曲（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 15.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "我和她（女医师）的诊察日志",
+      "game_type": "solo",
+      "sales_amount": 15.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "困在自己的游戏里（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 15.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 9.9,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "隔壁班的可爱女孩～从掌握秘密到亲密互动再到排泄管理～",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 1,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "追逐欲望（Windows/安卓）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 1,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "职场30天",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 1,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "离家出走少女模拟器（Windows）",
+      "game_type": "publisher",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "炼金术士任务炼金术的材料果然是精液的冒险RPG",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "满车率300%≒（Windows）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "沙漠王国与奴隶猎手",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "欸！！！！潜入搜查官",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "枪与退魔之流浪修女",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "末日避难所性活（Windows/安卓JOI模拟）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 1,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "战令姬拉西亚与失落要塞",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "在末日中堕落的女友（Windows/安卓JOI模拟）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "哥布林巢穴的一日光阴",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "同居百合娘",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "于是，夏天悄然而至。",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 1,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "个子矮小的栗美学姐（Windows/安卓JOI模拟）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 2,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
+      "game_name": "丧尸 NTR",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-07-07",
       "game_name": "AV导演生活！-请拍下各种模样的我-（Windows）",
       "game_type": "solo",
       "sales_amount": 0.0,

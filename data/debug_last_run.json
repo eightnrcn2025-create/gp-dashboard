@@ -1,19 +1,15 @@
 {
-  "run_time": "2026-07-07 18:09:34",
+  "run_time": "2026-07-08 17:47:47",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 67.0,
-      "today_amount": 0.0,
-      "today_orders": 3
+      "yestoday_amount": 15.0,
+      "today_amount": 80.0,
+      "today_orders": 1
     },
     "daily_sales": {
       "count": 29,
       "last3": [
-        {
-          "date": "2026-07-04",
-          "amount": 4.0
-        },
         {
           "date": "2026-07-05",
           "amount": 77.0
@@ -21,34 +17,38 @@
         {
           "date": "2026-07-06",
           "amount": 67.0
+        },
+        {
+          "date": "2026-07-07",
+          "amount": 15.0
         }
       ]
     },
     "userstats_raw": [
       {
         "title": "pv",
-        "yesterday": 30,
-        "today": 415
+        "yesterday": 415,
+        "today": 173
       },
       {
         "title": "uv",
-        "yesterday": 7,
-        "today": 3
+        "yesterday": 3,
+        "today": 8
       },
       {
         "title": "ip",
         "yesterday": 0,
-        "today": 3
+        "today": 8
       },
       {
         "title": "bounce_rate",
-        "yesterday": 0,
-        "today": 0.08
+        "yesterday": 0.06,
+        "today": 0.04
       },
       {
         "title": "visit_avg_time",
-        "yesterday": 960,
-        "today": 12120
+        "yesterday": 12420,
+        "today": 240
       },
       {
         "title": "register_total",
@@ -63,17 +63,17 @@
       {
         "title": "active_user",
         "yesterday": 3,
-        "today": 2
+        "today": 3
       },
       {
         "title": "recharged_count",
-        "yesterday": 1,
-        "today": 0
+        "yesterday": 0,
+        "today": 1
       },
       {
         "title": "recharged_amount",
-        "yesterday": 80,
-        "today": 0
+        "yesterday": 0,
+        "today": 30
       },
       {
         "title": "channel_order_user_count",
@@ -87,24 +87,24 @@
       },
       {
         "title": "arpu",
-        "yesterday": 26.67,
-        "today": 0
+        "yesterday": 0,
+        "today": 10
       },
       {
         "title": "average_order_value",
-        "yesterday": 80,
-        "today": 0
+        "yesterday": 0,
+        "today": 30
       }
     ],
     "userstats_parsed": {
-      "uv": 7,
-      "pv": 30,
+      "uv": 3,
+      "pv": 415,
       "new_reg": 0,
       "active_users": 3,
-      "paid_users": 1,
-      "recharged_amount": 80.0,
-      "arpu": 26.67,
-      "avg_order_value": 80.0
+      "paid_users": 0,
+      "recharged_amount": 0.0,
+      "arpu": 0.0,
+      "avg_order_value": 0.0
     },
     "playwright": {
       "status": "success",
@@ -118,22 +118,22 @@
           "sales": 15.0
         },
         {
-          "game": "开动了！魅魔小姐～今晚也来榨干你的精液♪饥饿梅蕾的连续搾精～（Windows/安卓）",
-          "sales": 9.9
+          "game": "困在自己的游戏里（Windows/安卓）",
+          "sales": 15.0
         }
       ],
       "publisher_top5": [
         {
           "game": "欲界圣姬",
-          "sales": 280.0
-        },
-        {
-          "game": "魅惑前线",
-          "sales": 175.0
+          "sales": 231.0
         },
         {
           "game": "火影娇妻村",
-          "sales": 160.0
+          "sales": 196.0
+        },
+        {
+          "game": "魅惑前线",
+          "sales": 70.0
         }
       ],
       "views_top5": [
@@ -150,7 +150,7 @@
           "views": 3
         }
       ],
-      "detail_rows_count": 28
+      "detail_rows_count": 27
     }
   }
 }
