@@ -1,110 +1,15 @@
 {
-  "run_time": "2026-07-11 17:08:19",
+  "run_time": "2026-07-12 17:11:12",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 76.92,
+      "yestoday_amount": 0.0,
       "today_amount": 0.0,
-      "today_orders": 2
+      "today_orders": 0
     },
-    "daily_sales": {
-      "count": 29,
-      "last3": [
-        {
-          "date": "2026-07-08",
-          "amount": 80.0
-        },
-        {
-          "date": "2026-07-09",
-          "amount": 77.0
-        },
-        {
-          "date": "2026-07-10",
-          "amount": 76.92
-        }
-      ]
-    },
-    "userstats_raw": [
-      {
-        "title": "pv",
-        "yesterday": 462,
-        "today": 275
-      },
-      {
-        "title": "uv",
-        "yesterday": 15,
-        "today": 8
-      },
-      {
-        "title": "ip",
-        "yesterday": 0,
-        "today": 23
-      },
-      {
-        "title": "bounce_rate",
-        "yesterday": 0.03,
-        "today": 0
-      },
-      {
-        "title": "visit_avg_time",
-        "yesterday": 28400,
-        "today": 1080
-      },
-      {
-        "title": "register_total",
-        "yesterday": "150107",
-        "today": "150107"
-      },
-      {
-        "title": "register_new",
-        "yesterday": 0,
-        "today": 0
-      },
-      {
-        "title": "active_user",
-        "yesterday": 7,
-        "today": 5
-      },
-      {
-        "title": "recharged_count",
-        "yesterday": 2,
-        "today": 0
-      },
-      {
-        "title": "recharged_amount",
-        "yesterday": 130,
-        "today": 0
-      },
-      {
-        "title": "channel_order_user_count",
-        "yesterday": "0",
-        "today": "0"
-      },
-      {
-        "title": "channel_order_amount",
-        "yesterday": 0,
-        "today": 0
-      },
-      {
-        "title": "arpu",
-        "yesterday": 18.57,
-        "today": 0
-      },
-      {
-        "title": "average_order_value",
-        "yesterday": 65,
-        "today": 0
-      }
-    ],
-    "userstats_parsed": {
-      "uv": 15,
-      "pv": 462,
-      "new_reg": 0,
-      "active_users": 7,
-      "paid_users": 2,
-      "recharged_amount": 130.0,
-      "arpu": 18.57,
-      "avg_order_value": 65.0
+    "error": {
+      "msg": "'total_amount'",
+      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 471, in fetch_admin_api\n    result[\"daily_sales\"] = [\n                            ^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 472, in <listcomp>\n    {\"date\": row[\"order_date\"], \"amount\": to_num(row[\"total_amount\"])}\n                                                 ~~~^^^^^^^^^^^^^^^^\nKeyError: 'total_amount'\n"
     },
     "playwright": {
       "status": "success",
@@ -132,8 +37,8 @@
           "sales": 91.0
         },
         {
-          "game": "欲界圣姬",
-          "sales": 84.0
+          "game": "淫乱斗罗",
+          "sales": 14.0
         }
       ],
       "views_top5": [
@@ -142,11 +47,11 @@
           "views": 6
         },
         {
-          "game": "青楼大掌柜",
-          "views": 4
+          "game": "魅惑前线",
+          "views": 5
         },
         {
-          "game": "困在自己的游戏里（Windows/安卓）",
+          "game": "青楼大掌柜",
           "views": 3
         }
       ],
