@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-07-12 17:11:12",
+  "run_time": "2026-07-13 18:02:23",
   "steps": {
     "login": "ok",
     "orders_recent": {
@@ -30,14 +30,14 @@
       "publisher_top5": [
         {
           "game": "火影娇妻村",
-          "sales": 168.0
+          "sales": 138.0
         },
         {
           "game": "魅惑前线",
           "sales": 91.0
         },
         {
-          "game": "淫乱斗罗",
+          "game": "欲界圣姬",
           "sales": 14.0
         }
       ],
@@ -55,7 +55,7 @@
           "views": 3
         }
       ],
-      "detail_rows_count": 26
+      "detail_rows_count": 25
     }
   }
 }
