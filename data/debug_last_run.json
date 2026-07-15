@@ -1,5 +1,5 @@
 {
-  "run_time": "2026-07-14 17:23:34",
+  "run_time": "2026-07-15 17:26:16",
   "steps": {
     "login": "ok",
     "orders_recent": {
@@ -19,26 +19,26 @@
           "sales": 20.92
         },
         {
-          "game": "困在自己的游戏里（Windows/安卓）",
-          "sales": 15.0
+          "game": "满车率300%≒（Windows）",
+          "sales": 0.0
         },
         {
-          "game": "满车率300%≒（Windows）",
+          "game": "追逐欲望（Windows/安卓）",
           "sales": 0.0
         }
       ],
       "publisher_top5": [
         {
-          "game": "火影娇妻村",
-          "sales": 108.0
-        },
-        {
           "game": "魅惑前线",
           "sales": 91.0
         },
         {
-          "game": "欲界圣姬",
-          "sales": 14.0
+          "game": "火影娇妻村",
+          "sales": 42.0
+        },
+        {
+          "game": "哥布林巢穴的一日光阴",
+          "sales": 0.0
         }
       ],
       "views_top5": [
@@ -48,14 +48,14 @@
         },
         {
           "game": "魅惑前线",
-          "views": 5
+          "views": 6
         },
         {
-          "game": "青楼大掌柜",
-          "views": 3
+          "game": "魅与深渊",
+          "views": 4
         }
       ],
-      "detail_rows_count": 25
+      "detail_rows_count": 23
     }
   }
 }
