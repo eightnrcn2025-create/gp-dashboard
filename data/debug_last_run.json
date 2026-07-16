@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-07-15 17:26:16",
+  "run_time": "2026-07-16 17:35:19",
   "steps": {
     "login": "ok",
     "orders_recent": {
       "yestoday_amount": 0.0,
-      "today_amount": 0.0,
+      "today_amount": 8.0,
       "today_orders": 0
     },
     "error": {
@@ -19,22 +19,22 @@
           "sales": 20.92
         },
         {
-          "game": "满车率300%≒（Windows）",
-          "sales": 0.0
+          "game": "拉纳大师",
+          "sales": 8.0
         },
         {
-          "game": "追逐欲望（Windows/安卓）",
+          "game": "满车率300%≒（Windows）",
           "sales": 0.0
         }
       ],
       "publisher_top5": [
         {
           "game": "魅惑前线",
-          "sales": 91.0
+          "sales": 56.0
         },
         {
-          "game": "火影娇妻村",
-          "sales": 42.0
+          "game": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
+          "sales": 0.0
         },
         {
           "game": "哥布林巢穴的一日光阴",
@@ -43,15 +43,15 @@
       ],
       "views_top5": [
         {
-          "game": "欲界圣姬",
-          "views": 6
-        },
-        {
           "game": "魅惑前线",
-          "views": 6
+          "views": 5
         },
         {
-          "game": "魅与深渊",
+          "game": "青楼大掌柜",
+          "views": 4
+        },
+        {
+          "game": "欲界圣姬",
           "views": 4
         }
       ],
