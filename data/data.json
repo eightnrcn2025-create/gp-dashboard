@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-07-16 17:36:14",
-  "data_date": "2026-07-15",
-  "update_time": "2026-07-16 17:36:14",
+  "last_updated": "2026-07-17 17:20:38",
+  "data_date": "2026-07-16",
+  "update_time": "2026-07-17 17:20:38",
   "kpi": {
     "today_sales": 0.0,
     "yesterday_sales": 80.0,
@@ -336,7 +336,7 @@
       "amount": 76.92
     }
   ],
-  "monthly_total": 957.82,
+  "monthly_total": 949.82,
   "active_games": 23,
   "traffic_stats": {
     "pv": 0,
@@ -542,10 +542,31 @@
       "conversion": 0
     },
     {
+      "date": "2026-04-09",
+      "game": "所有游戏（汇总）",
+      "traffic": 3816,
+      "sales": 3383.67,
+      "conversion": 0
+    },
+    {
       "date": "2026-04-08",
       "game": "所有游戏（汇总）",
       "traffic": 3673,
       "sales": 2412.51,
+      "conversion": 0
+    },
+    {
+      "date": "2026-04-08",
+      "game": "所有游戏（汇总）",
+      "traffic": 3673,
+      "sales": 2412.51,
+      "conversion": 0
+    },
+    {
+      "date": "2026-04-07",
+      "game": "所有游戏（汇总）",
+      "traffic": 3426,
+      "sales": 3330.67,
       "conversion": 0
     },
     {
@@ -563,6 +584,20 @@
       "conversion": 0
     },
     {
+      "date": "2026-04-06",
+      "game": "所有游戏（汇总）",
+      "traffic": 4483,
+      "sales": 4208.76,
+      "conversion": 0
+    },
+    {
+      "date": "2026-04-05",
+      "game": "所有游戏（汇总）",
+      "traffic": 5620,
+      "sales": 5102.22,
+      "conversion": 0
+    },
+    {
       "date": "2026-04-05",
       "game": "所有游戏（汇总）",
       "traffic": 5620,
@@ -574,6 +609,20 @@
       "game": "所有游戏（汇总）",
       "traffic": 5978,
       "sales": 4350.85,
+      "conversion": 0
+    },
+    {
+      "date": "2026-04-04",
+      "game": "所有游戏（汇总）",
+      "traffic": 5978,
+      "sales": 4350.85,
+      "conversion": 0
+    },
+    {
+      "date": "2026-04-03",
+      "game": "所有游戏（汇总）",
+      "traffic": 4744,
+      "sales": 4153.63,
       "conversion": 0
     },
     {
