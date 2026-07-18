@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-07-17 17:20:38",
-  "data_date": "2026-07-16",
-  "update_time": "2026-07-17 17:20:38",
+  "last_updated": "2026-07-18 17:08:00",
+  "data_date": "2026-07-17",
+  "update_time": "2026-07-18 17:08:00",
   "kpi": {
-    "today_sales": 0.0,
+    "today_sales": 7.0,
     "yesterday_sales": 80.0,
-    "growth_rate": -100.0,
+    "growth_rate": -91.25,
     "total_traffic": 15,
     "conversion_rate": 13.33
   },
@@ -130,14 +130,14 @@
   "solo_game_top5": [
     {
       "rank": 1,
-      "game": "恶魔的石板与被诅咒的犬姬（Windows）",
-      "sales": 20.92,
+      "game": "拉纳大师",
+      "sales": 8.0,
       "growth": 0
     },
     {
       "rank": 2,
-      "game": "拉纳大师",
-      "sales": 8.0,
+      "game": "Ace2！绿帽闯关大冒险",
+      "sales": 7.0,
       "growth": 0
     },
     {
@@ -162,18 +162,12 @@
   "publisher_game_top5": [
     {
       "rank": 1,
-      "game": "魅惑前线",
-      "sales": 56.0,
-      "growth": 0
-    },
-    {
-      "rank": 2,
       "game": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
       "sales": 0.0,
       "growth": 0
     },
     {
-      "rank": 3,
+      "rank": 2,
       "game": "哥布林巢穴的一日光阴",
       "sales": 0.0,
       "growth": 0
@@ -183,26 +177,26 @@
     {
       "rank": 1,
       "game": "魅惑前线",
-      "views": 5
+      "views": 3
     },
     {
       "rank": 2,
-      "game": "青楼大掌柜",
-      "views": 4
+      "game": "欲界圣姬",
+      "views": 3
     },
     {
       "rank": 3,
-      "game": "欲界圣姬",
-      "views": 4
+      "game": "魅与深渊",
+      "views": 2
     },
     {
       "rank": 4,
-      "game": "魅与深渊",
-      "views": 4
+      "game": "妈妈的NTR训练（Windows/安卓）",
+      "views": 2
     },
     {
       "rank": 5,
-      "game": "洛丽塔的救世主～冒险者与淫纹的少女～（Windows）",
+      "game": "成长之事（Windows/安卓）",
       "views": 2
     }
   ],
@@ -336,8 +330,8 @@
       "amount": 76.92
     }
   ],
-  "monthly_total": 949.82,
-  "active_games": 23,
+  "monthly_total": 964.82,
+  "active_games": 22,
   "traffic_stats": {
     "pv": 0,
     "uv": 15,
@@ -345,8 +339,8 @@
     "active_users": 0,
     "paying_users": 0,
     "payment_amount": 0,
-    "order_count": 0,
-    "order_amount": 0.0,
+    "order_count": 1,
+    "order_amount": 7.0,
     "arpu": 0,
     "avg_order_value": 0,
     "ip": 0,
@@ -374,161 +368,154 @@
   ],
   "detail_table": [
     {
-      "date": "2026-07-15",
-      "game": "魅惑前线",
-      "traffic": 5,
-      "sales": 56.0,
-      "conversion": 20.0
-    },
-    {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "隔壁班的可爱女孩～从掌握秘密到亲密互动再到排泄管理～",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "追逐欲望（Windows/安卓）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "职场30天",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "离家出走少女模拟器（Windows）",
-      "traffic": 1,
+      "traffic": 0,
       "sales": 0.0,
-      "conversion": 0.0
+      "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "炼金术士任务炼金术的材料果然是精液的冒险RPG",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "满车率300%≒（Windows）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "沙漠王国与奴隶猎手",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "欸！！！！潜入搜查官",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "枪与退魔之流浪修女",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "末日避难所性活（Windows/安卓JOI模拟）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "拉纳大师",
       "traffic": 1,
       "sales": 8.0,
       "conversion": 100.0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "战令姬拉西亚与失落要塞",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
-      "game": "恶魔的石板与被诅咒的犬姬（Windows）",
-      "traffic": 1,
-      "sales": 20.92,
-      "conversion": 100.0
-    },
-    {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "夏日之王（Windows/安卓）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "在末日中堕落的女友（Windows/安卓JOI模拟）",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "哥布林巢穴的一日光阴",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "同居百合娘",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "于是，夏天悄然而至。",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "个子矮小的栗美学姐（Windows/安卓JOI模拟）",
-      "traffic": 1,
+      "traffic": 0,
       "sales": 0.0,
-      "conversion": 0.0
+      "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
       "game": "丧尸 NTR",
       "traffic": 0,
       "sales": 0.0,
       "conversion": 0
     },
     {
-      "date": "2026-07-15",
+      "date": "2026-07-17",
+      "game": "Ace2！绿帽闯关大冒险",
+      "traffic": 1,
+      "sales": 7.0,
+      "conversion": 100.0
+    },
+    {
+      "date": "2026-07-17",
       "game": "AV导演生活！-请拍下各种模样的我-（Windows）",
       "traffic": 0,
       "sales": 0.0,
@@ -542,31 +529,10 @@
       "conversion": 0
     },
     {
-      "date": "2026-04-09",
-      "game": "所有游戏（汇总）",
-      "traffic": 3816,
-      "sales": 3383.67,
-      "conversion": 0
-    },
-    {
       "date": "2026-04-08",
       "game": "所有游戏（汇总）",
       "traffic": 3673,
       "sales": 2412.51,
-      "conversion": 0
-    },
-    {
-      "date": "2026-04-08",
-      "game": "所有游戏（汇总）",
-      "traffic": 3673,
-      "sales": 2412.51,
-      "conversion": 0
-    },
-    {
-      "date": "2026-04-07",
-      "game": "所有游戏（汇总）",
-      "traffic": 3426,
-      "sales": 3330.67,
       "conversion": 0
     },
     {
@@ -584,20 +550,6 @@
       "conversion": 0
     },
     {
-      "date": "2026-04-06",
-      "game": "所有游戏（汇总）",
-      "traffic": 4483,
-      "sales": 4208.76,
-      "conversion": 0
-    },
-    {
-      "date": "2026-04-05",
-      "game": "所有游戏（汇总）",
-      "traffic": 5620,
-      "sales": 5102.22,
-      "conversion": 0
-    },
-    {
       "date": "2026-04-05",
       "game": "所有游戏（汇总）",
       "traffic": 5620,
@@ -609,20 +561,6 @@
       "game": "所有游戏（汇总）",
       "traffic": 5978,
       "sales": 4350.85,
-      "conversion": 0
-    },
-    {
-      "date": "2026-04-04",
-      "game": "所有游戏（汇总）",
-      "traffic": 5978,
-      "sales": 4350.85,
-      "conversion": 0
-    },
-    {
-      "date": "2026-04-03",
-      "game": "所有游戏（汇总）",
-      "traffic": 4744,
-      "sales": 4153.63,
       "conversion": 0
     },
     {
