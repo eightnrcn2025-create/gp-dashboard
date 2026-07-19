@@ -1,11 +1,11 @@
 {
-  "run_time": "2026-07-18 17:07:04",
+  "run_time": "2026-07-19 17:09:23",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 7.0,
-      "today_amount": 0.0,
-      "today_orders": 1
+      "yestoday_amount": 0.0,
+      "today_amount": 17.0,
+      "today_orders": 0
     },
     "error": {
       "msg": "'total_amount'",
@@ -15,19 +15,23 @@
       "status": "success",
       "solo_top5": [
         {
+          "game": "幽灵庄园",
+          "sales": 17.0
+        },
+        {
           "game": "拉纳大师",
           "sales": 8.0
         },
         {
           "game": "Ace2！绿帽闯关大冒险",
           "sales": 7.0
-        },
-        {
-          "game": "满车率300%≒（Windows）",
-          "sales": 0.0
         }
       ],
       "publisher_top5": [
+        {
+          "game": "离家出走少女模拟器（Windows）",
+          "sales": 0.0
+        },
         {
           "game": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
           "sales": 0.0
@@ -39,19 +43,19 @@
       ],
       "views_top5": [
         {
-          "game": "魅惑前线",
-          "views": 3
-        },
-        {
           "game": "欲界圣姬",
           "views": 3
         },
         {
-          "game": "魅与深渊",
+          "game": "请不要欺负我，大小姐们！",
+          "views": 2
+        },
+        {
+          "game": "妈妈的NTR训练（Windows/安卓）",
           "views": 2
         }
       ],
-      "detail_rows_count": 22
+      "detail_rows_count": 23
     }
   }
 }
