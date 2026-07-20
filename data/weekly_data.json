@@ -4,12 +4,12 @@
       "period": "2026-07-17~2026-07-23",
       "sheet_name": "2026.7.17-7.23",
       "summary": {
-        "total_sales": 7.0,
-        "avg_daily_sales": 1.0,
-        "total_pv": 45,
-        "total_uv": 6,
-        "avg_uv": 0.86,
-        "avg_arpu": 0.3329,
+        "total_sales": 24.0,
+        "avg_daily_sales": 3.43,
+        "total_pv": 165,
+        "total_uv": 9,
+        "avg_uv": 1.29,
+        "avg_arpu": 1.1429,
         "new_users": 0
       },
       "daily": [
@@ -29,16 +29,16 @@
         },
         {
           "date": "2026-07-19",
-          "sales": 0.0,
-          "pv": 11,
-          "uv": 1,
-          "arpu": 0.0
+          "sales": 17.0,
+          "pv": 128,
+          "uv": 3,
+          "arpu": 5.67
         },
         {
           "date": "2026-07-20",
           "sales": 0.0,
-          "pv": 0,
-          "uv": 0,
+          "pv": 3,
+          "uv": 1,
           "arpu": 0.0
         },
         {
@@ -64,8 +64,8 @@
         }
       ],
       "totals": {
-        "sales": 7.0,
-        "uv": 6
+        "sales": 24.0,
+        "uv": 9
       }
     },
     {
@@ -1225,5 +1225,5 @@
       }
     }
   ],
-  "updated_at": "2026-07-19 17:10:20"
+  "updated_at": "2026-07-20 18:12:50"
 }

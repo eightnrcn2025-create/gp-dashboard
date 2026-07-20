@@ -1,11 +1,11 @@
 {
-  "run_time": "2026-07-19 17:09:23",
+  "run_time": "2026-07-20 18:11:54",
   "steps": {
     "login": "ok",
     "orders_recent": {
-      "yestoday_amount": 0.0,
-      "today_amount": 17.0,
-      "today_orders": 0
+      "yestoday_amount": 17.0,
+      "today_amount": 0.0,
+      "today_orders": 1
     },
     "error": {
       "msg": "'total_amount'",
@@ -43,15 +43,15 @@
       ],
       "views_top5": [
         {
-          "game": "欲界圣姬",
-          "views": 3
-        },
-        {
           "game": "请不要欺负我，大小姐们！",
           "views": 2
         },
         {
           "game": "妈妈的NTR训练（Windows/安卓）",
+          "views": 2
+        },
+        {
+          "game": "成长之事（Windows/安卓）",
           "views": 2
         }
       ],
