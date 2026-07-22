@@ -6,9 +6,9 @@
       "summary": {
         "total_sales": 24.0,
         "avg_daily_sales": 3.43,
-        "total_pv": 167,
-        "total_uv": 11,
-        "avg_uv": 1.57,
+        "total_pv": 176,
+        "total_uv": 13,
+        "avg_uv": 1.86,
         "avg_arpu": 1.1429,
         "new_users": 0
       },
@@ -44,8 +44,8 @@
         {
           "date": "2026-07-21",
           "sales": 0.0,
-          "pv": 2,
-          "uv": 2,
+          "pv": 11,
+          "uv": 4,
           "arpu": 0.0
         },
         {
@@ -65,7 +65,7 @@
       ],
       "totals": {
         "sales": 24.0,
-        "uv": 11
+        "uv": 13
       }
     },
     {
@@ -1225,5 +1225,5 @@
       }
     }
   ],
-  "updated_at": "2026-07-21 17:39:38"
+  "updated_at": "2026-07-22 17:35:35"
 }
