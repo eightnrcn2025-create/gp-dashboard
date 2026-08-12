@@ -1,14 +1,16 @@
 {
-  "run_time": "2026-08-11 17:06:29",
+  "run_time": "2026-08-12 17:05:21",
   "steps": {
     "error": {
       "msg": "500 Server Error: Internal Server Error for url: https://admin.gamepark.co/api/auth/admin/login",
       "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 411, in admin_login\n    r.raise_for_status()\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/requests/models.py\", line 1167, in raise_for_status\n    raise HTTPError(http_error_msg, response=self)\nrequests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://admin.gamepark.co/api/auth/admin/login\n"
     },
     "playwright": {
-      "status": "failed",
-      "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n",
-      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 560, in fetch_admin_game_stats\n    page.goto(ADMIN_HOST, wait_until=\"networkidle\", timeout=30000)\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/sync_api/_generated.py\", line 9875, in goto\n    self._sync(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_page.py\", line 560, in goto\n    return await self._main_frame.goto(**locals_to_params(locals()))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_frame.py\", line 156, in goto\n    await self._channel.send(\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 76, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/playwright/_impl/_connection.py\", line 632, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://admin.gamepark.co/\", waiting until \"networkidle\"\n\n"
+      "status": "success",
+      "solo_top5": [],
+      "publisher_top5": [],
+      "views_top5": [],
+      "detail_rows_count": 0
     }
   }
 }
