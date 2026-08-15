@@ -1,5 +1,5 @@
 {
-  "export_time": "2026-08-14 17:03:44",
+  "export_time": "2026-08-15 16:36:52",
   "daily_stats": [
     {
       "date": "2026-04-07",
@@ -1792,6 +1792,20 @@
       "growth_rate": -100.0,
       "conversion_rate": 13.33,
       "created_at": "2026-08-14 17:03:44"
+    },
+    {
+      "date": "2026-08-14",
+      "uv": 15,
+      "pv": 0,
+      "new_users": 0,
+      "active_users": 0,
+      "paying_users": 0,
+      "sales": 0.0,
+      "orders": 0,
+      "arpu": 0.0,
+      "growth_rate": -100.0,
+      "conversion_rate": 13.33,
+      "created_at": "2026-08-15 16:36:52"
     }
   ],
   "game_sales": [
@@ -24941,6 +24955,62 @@
     },
     {
       "data_date": "2026-08-13",
+      "game_name": "哥布林巢穴的一日光阴",
+      "game_type": "publisher",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "幽灵庄园",
+      "game_type": "solo",
+      "sales_amount": 17.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "Ace2！绿帽闯关大冒险",
+      "game_type": "solo",
+      "sales_amount": 7.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "炼金术士任务炼金术的材料果然是精液的冒险RPG",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "满车率300%≒（Windows）",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "早泄侄与不感症婶婶—肉体互换的故事～（Windows）",
+      "game_type": "publisher",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
+      "game_name": "战令姬拉西亚与失落要塞",
+      "game_type": "solo",
+      "sales_amount": 0.0,
+      "uv": 0,
+      "orders": 0
+    },
+    {
+      "data_date": "2026-08-14",
       "game_name": "哥布林巢穴的一日光阴",
       "game_type": "publisher",
       "sales_amount": 0.0,
