@@ -1,9 +1,9 @@
 {
-  "run_time": "2026-10-07 21:12:43",
+  "run_time": "2026-10-08 21:15:14",
   "steps": {
     "error": {
       "msg": "500 Server Error: Internal Server Error for url: https://admin.gamepark.co/api/auth/admin/login",
-      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 411, in admin_login\n    r.raise_for_status()\n  File \"/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/requests/models.py\", line 1167, in raise_for_status\n    raise HTTPError(http_error_msg, response=self)\nrequests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://admin.gamepark.co/api/auth/admin/login\n"
+      "trace": "Traceback (most recent call last):\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 449, in fetch_admin_api\n    headers = admin_login()\n              ^^^^^^^^^^^^^\n  File \"/home/runner/work/gp-dashboard/gp-dashboard/update_data.py\", line 411, in admin_login\n    r.raise_for_status()\n  File \"/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/requests/models.py\", line 1167, in raise_for_status\n    raise HTTPError(http_error_msg, response=self)\nrequests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://admin.gamepark.co/api/auth/admin/login\n"
     },
     "playwright": {
       "status": "success",
